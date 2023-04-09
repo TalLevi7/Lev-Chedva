@@ -1,0 +1,52 @@
+/* Style the table */
+#volunteer-list {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  /* Style the table header */
+  #volunteer-list th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  /* Style the table cells */
+  #volunteer-list td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  /* Style the volunteer details row */
+  .volunteer-details-row {
+    background-color: #f2f2f2;
+  }
+  
+  /* Style the volunteer authorizations row */
+  .volunteer-auth-row {
+    background-color: #d9edf7;
+  }
+  
+  /* Style the "Manage Authorizations" button */
+  button {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  
+  /* Style the checkbox labels */
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  #authorization-filter {
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }

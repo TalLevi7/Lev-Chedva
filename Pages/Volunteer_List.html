@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Volunteer List</title>
+    <link rel="stylesheet" type="text/css" href="../styles/Volunteer_List.css">
+  </head>
+  <body>
+    <header>
+      <h1>Volunteer List</h1>
+    </header>
+    <main>
+
+        <!-- ADD SEARCH BAR!!!! -->
+        <label for="authorization-filter">Filter by Authorization:</label>
+        <select id="authorization-filter">
+          <option value="all">All</option>
+          <option value="manager">Manager</option>
+          <option value="telephone">Telephone</option>
+          <option value="transit">Transit</option>
+          <option value="jeep">Jeep</option>
+        </select>
+        <!-- <select id="authorization-filter" onchange="filterVolunteers()"> -->
+
+
+
+
+
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody id="volunteer-list">
+        </tbody>
+      </table>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="../firebase.js"></script>
+    <script src="../Scripts/Volunteer_List.js"></script>
+  </body>
+</html>
