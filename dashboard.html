@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="Dash_style.css">
+  </head>
+  <body>
+    <h1>Welcome to the Dashboard</h1>
+    <p>Please select an option:</p>
+    <button id="volunteer-btn">I want to volunteer</button>
+    <button id="donate-btn">I want to make a donation</button>
+    <button id="get-donation-btn">I want to get a donation</button>
+<script>
+  const email = localStorage.getItem('email');
+//console.log(email); // "user@example.com"
+        // Get a reference to the "I want to volunteer" button
+          const volunteerBtn = document.getElementById("volunteer-btn");
+          // Add an event listener to the "I want to volunteer" button
+          volunteerBtn.addEventListener("click", () => {
+            // Navigate to the volunteer page with the email address pre-filled
+            window.location.href = `Volenteer_SignUp.html?email=${email}`;
+                    });
+    </script>
+  </body>
+</html>

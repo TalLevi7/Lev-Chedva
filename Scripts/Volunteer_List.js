@@ -1,4 +1,4 @@
-
+;
 let volunteersArray = [];
 const volunteersTable = document.getElementById('volunteer-list');
  const db = firebase.firestore();
@@ -7,7 +7,7 @@ const volunteersTable = document.getElementById('volunteer-list');
 
   async function readVolunteers() {
   // Get the Firestore instance and the "Volunteers" collection
-
+ 
   try {
     // Get all the documents in the "Volunteers" collection
     const snapshot = await volunteersRef.get();
@@ -56,10 +56,9 @@ function preDisplayVolunteers(filter)
 
 
 
-
-
 function DisplayVolunteers(volunteerData)
 {
+  
   const row = document.createElement('tr');
   const nameCell = document.createElement('td');
   nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
@@ -132,14 +131,16 @@ function DisplayVolunteers(volunteerData)
       row.after(detailsRow);
 
       //authorization button;
-    
     const manageAuthButton = document.createElement('button');
-
     manageAuthButton.textContent = 'Manage Authorizations';
     detailsList.appendChild(manageAuthButton);
-
+  let ValidBtn=false;
 // Add a click event listener to the "Manage Authorizations" button
+
 manageAuthButton.addEventListener('click', () => {
+if(ValidBtn==true)
+return;
+
 // Check if the authorizations row already exists
 const authRow = manageAuthButton.parentElement.nextElementSibling;
 if (authRow && authRow.classList.contains('volunteer-auth-row')) {
@@ -190,13 +191,39 @@ submitButton.addEventListener('click', (e) => {
   }).catch((error) => {
     console.error("Error updating document: ", error);
   });
+
+ ValidBtn=false; 
 });
 
 authCell.appendChild(authForm);
 authRow.appendChild(authCell);
 manageAuthButton.parentElement.parentElement.after(authRow);
 }
+ValidBtn=true;
 });
+
+// const DelUserBtn = document.createElement('button');
+// DelUserBtn.textContent = 'Delete User';
+// detailsList.appendChild(DelUserBtn);
+
+// DelUserBtn.addEventListener('click', () => {
+//   const email = volunteerData.email;
+
+//   admin.auth().getUserByEmail(email)
+//     .then((user) => {
+//       const uid = user.uid;
+//       return admin.auth().deleteUser(uid);
+//     })
+//     .then(() => {
+//       console.log('Successfully deleted user');
+//     })
+//     .catch((error) => {
+//       console.error('Error deleting user:', error);
+//     });
+  
+
+// })
+
 
 
 
@@ -238,7 +265,11 @@ window.addEventListener('load', () => {
   });
 });
 
+function DeleteUser(volunteerData)
+{
 
+
+}
 
 
 

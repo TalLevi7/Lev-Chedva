@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../styles/Open_Event_Form_style.css">"
+	<title>Open Events Form</title>
+</head>
+<body>
+	<h1>Open Events Form</h1>
+	<form id="open-events-form">
+		<label for="name">Name of Product:</label>
+		<input type="text" id="name" name="name"><br><br>
+		
+		<label for="type">Type:</label>
+		<select id="type" name="type">
+			<option value="Transport">Transport</option>
+			<option value="Visit">Visit</option>
+			<option value="Other">Other</option>
+		</select><br><br>
+		
+		<label for="urgency">Urgency:</label>
+		<select id="urgency" name="urgency">
+			<option value="Urgent">Urgent</option>
+			<option value="Specific Time">Specific Time</option>
+			<option value="Whoever Can">Whoever Can</option>
+			<option value="Future Reservation">Future Reservation</option>
+		</select><br><br>
+		
+		<label for="size">Size of Product:</label>
+		<select id="size" name="size">
+			<option value="Big">Big</option>
+			<option value="Medium">Medium</option>
+			<option value="Small">Small</option>
+		</select><br><br>
+		
+		<label for="weight">Weight of Product:</label>
+		<select id="weight" name="weight">
+			<option value="Very Heavy">Very Heavy</option>
+			<option value="Heavy">Heavy</option>
+			<option value="Medium">Medium</option>
+			<option value="Light">Light</option>
+		</select><br><br>
+		
+		<label for="jeep">Jeep Unit:</label>
+		<input type="checkbox" id="jeep" name="jeep"><br><br>
+		
+		<label for="contact-name">Contact Name:</label>
+		<input type="text" id="contact-name" name="contact-name"><br><br>
+		
+		<label for="contact-phone">Contact Phone:</label>
+		<input type="text" id="contact-phone" name="contact-phone"><br><br>
+		
+		<label for="address">Address:</label>
+		<input type="text" id="address" name="address"><br><br>
+		
+		<label for="remarks">Remarks:</label>
+		<textarea id="remarks" name="remarks"></textarea><br><br>
+		
+		<input type="submit" value="Submit">
+	</form>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="../firebase.js"></script>
+    <script>
+// Get form elements
+const form = document.querySelector('#open-events-form');
+const nameInput = form.querySelector('#name');
+const typeSelect = form.querySelector('#type');
+const urgencySelect = form.querySelector('#urgency');
+const sizeSelect = form.querySelector('#size');
+const weightSelect = form.querySelector('#weight');
+const jeepCheckbox = form.querySelector('#jeep');
+const contactNameInput = form.querySelector('#contact-name');
+const contactPhoneInput = form.querySelector('#contact-phone');
+const addressInput = form.querySelector('#address');
+const remarksInput = form.querySelector('#remarks');
+
+
+
+// Firestore collection reference
+const openEventsRef = firebase.firestore().collection('Open Events');
+
+// Add submit event listener
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+firebase.firestore().collection("Tools").doc("Events Counter")
+  .get()
+  .then((doc) => {
+    var eventCounter;
+
+    eventCounter = doc.data().Counter;
+    console.log("Event Counter value:", eventCounter);
+    const incrementedCounter = eventCounter + 1;
+    firebase.firestore().collection("Tools").doc("Events Counter").update({ Counter: incrementedCounter });
+    return eventCounter;
+  })
+  .then((eventCounter) => {
+   // Get form values
+  const ProductName = nameInput.value.trim();
+  const type = typeSelect.value;
+  const urgency = urgencySelect.value;
+  const size = sizeSelect.value;
+  const weight = weightSelect.value;
+  const jeepUnit = jeepCheckbox.checked;
+  const contactName = contactNameInput.value.trim();
+  const contactPhone = contactPhoneInput.value.trim();
+  const address = addressInput.value.trim();
+  const remarks = remarksInput.value.trim();
+  const status ="Open";
+  eventCounter=eventCounter+1;
+  // Create new document in Firestore
+  firebase.firestore().collection('Open Events').doc(eventCounter.toString()).set({
+    eventCounter,
+    eventCounter,
+    ProductName,
+    type,
+    urgency,
+    size,
+    weight,
+    jeepUnit,
+    contactName,
+    contactPhone,
+    address,
+    remarks,
+    status,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    console.log('Event added to Firestore');
+    form.reset();
+  })
+  .catch((error) => {
+    console.error('Error adding event to Firestore', error);
+  });
+    
+  })
+  .catch((error) => {
+    console.error("Error getting Events counter document: ", error);
+  });
+
+
+  
+});
+
+</script>
+</body>
+</html>
