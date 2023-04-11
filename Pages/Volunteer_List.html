@@ -5,28 +5,22 @@
     <meta charset="UTF-8">
     <title>Volunteer List</title>
     <link rel="stylesheet" type="text/css" href="../styles/Volunteer_List.css">
+ 
   </head>
-  <body>
+  <body onload="readVolunteers()">
     <header>
       <h1>Volunteer List</h1>
     </header>
     <main>
-
         <!-- ADD SEARCH BAR!!!! -->
         <label for="authorization-filter">Filter by Authorization:</label>
         <select id="authorization-filter">
           <option value="all">All</option>
-          <option value="manager">Manager</option>
-          <option value="telephone">Telephone</option>
-          <option value="transit">Transit</option>
-          <option value="jeep">Jeep</option>
+          <option value="Manager">Manager</option>
+          <option value="Telephone">Telephone</option>
+          <option value="Transit">Transit</option>
+          <option value="Jeep">Jeep</option>
         </select>
-        <!-- <select id="authorization-filter" onchange="filterVolunteers()"> -->
-
-
-
-
-
       <table>
         <thead>
           <tr>
@@ -38,6 +32,7 @@
         <tbody id="volunteer-list">
         </tbody>
       </table>
+      <button id="exportButton">Export as PDF</button>
     </main>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
@@ -45,5 +40,10 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="../firebase.js"></script>
     <script src="../Scripts/Volunteer_List.js"></script>
+
+
+
+
+
   </body>
 </html>
