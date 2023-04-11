@@ -91,19 +91,18 @@ googleSignUpBtn.addEventListener('click', () => {
   });
 
   // Sign up the user with the Google provider
-  firebase.auth().signInWithPopup(provider)
+  firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
     .then((result) => {
       // User signed up successfully
       const user = result.user;
       firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    const userEmail = user.email;
-    localStorage.setItem('email', userEmail);
+        if (user) {
+          const userEmail = user.email;
+          localStorage.setItem('email', userEmail);
           // Redirect to dashboard page
           window.location.href = "../Pages/Volenteer_SignUp.html";
-  }
-});
-
+        }
+      });
     })
     .catch((error) => {
       // Handle sign-up errors
