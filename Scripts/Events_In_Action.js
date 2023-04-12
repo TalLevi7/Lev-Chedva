@@ -157,14 +157,49 @@ function DisplayVolunteers(eventData)
       
     const CloseEvent = document.createElement('button');
     CloseEvent.textContent = 'Close Event';
-    const VolunteerAssisgn = document.createElement('button');
-    VolunteerAssisgn.textContent = 'Assisgn to a Volunteer';
+    const CancelEvent = document.createElement('button');
+    CancelEvent.textContent = 'Cancel Event';
    
     detailsList.appendChild(CloseEvent);
-    detailsList.appendChild(VolunteerAssisgn);  
+    detailsList.appendChild(CancelEvent);  
 
-    CloseEvent.addEventListener('click', () => {})
-    VolunteerAssisgn.addEventListener('click', () => {})
+    CloseEvent.addEventListener('click', () => {
+      if (eventData && eventData.eventCounter) {
+        const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
+        StatusString="closed";
+        docRef.update({
+          status: StatusString
+        }).then(() => {
+          row.remove();
+          detailsRow.remove();
+          firebase.firestore().collection("Closed Events").doc(eventData.eventCounter.toString()).set({eventData});
+          firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString()).delete({eventData});
+
+        }).catch((error) => {
+          console.error("Error updating document: ", error);
+        });
+      } else {
+        console.error("Error: eventData or eventData.eventCounter is undefined");
+      }
+    });
+    
+
+    CancelEvent.addEventListener('click', () => {
+
+      if (eventData && eventData.eventCounter) {
+        const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
+        docRef.delete().then(() => {
+          row.remove();
+          detailsRow.remove();
+
+        }).catch((error) => {
+          console.error("Error updating document: ", error);
+        });
+      } else {
+        console.error("Error: eventData or eventData.eventCounter is undefined");
+      }
+
+    })
 
 
 
