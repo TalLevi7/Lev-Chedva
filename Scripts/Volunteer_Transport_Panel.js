@@ -15,7 +15,9 @@ const eventTable = document.getElementById('eventTable');
     snapshot.forEach((doc) => {
       // If the document exists, add the data to the volunteersArray
       if (doc.exists) {
+        if(doc.data().status=="Open"){
         eventArray.push(doc.data());
+        }
       } else {
         console.log("No such document!");
       }
@@ -42,7 +44,6 @@ function preDisplayData(filter)
 {
   eventTable.innerHTML="";
   eventArray.forEach((eventData) => {
-    console.log(eventData.status);
     if(filter=="all"){
     DisplayData(eventData);
     }else{
@@ -155,57 +156,55 @@ function DisplayData(eventData)
       row.after(detailsRow);
       
       
-    const CloseEvent = document.createElement('button');
-    CloseEvent.textContent = 'Close Event';
-    const CancelEvent = document.createElement('button');
-    CancelEvent.textContent = 'Cancel Event';
-   
-    detailsList.appendChild(CloseEvent);
-    detailsList.appendChild(CancelEvent);  
+    const TakeEvent = document.createElement('button');
+    TakeEvent.textContent = 'Take';
+    detailsList.appendChild(TakeEvent);
+    
 
-    CloseEvent.addEventListener('click', () => {
-      if (eventData && eventData.eventCounter) {
-        if (confirm("Are you sure you want to close this event?")){
+    TakeEvent.addEventListener('click', () => {
+      var user = firebase.auth().currentUser;
+      if (user) {
+        var email = user.email;
+      } else {
+        console.log('No user is signed in.');
+      }  
+      firebase.firestore().collection("Volunteers").doc(email).update({
+        TakenEvents: firebase.firestore.FieldValue.arrayUnion(eventData.eventCounter)
+      })
+      .then(() => {
         const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-        StatusString="closed";
+        StatusString="Taken";
         docRef.update({
           status: StatusString
         }).then(() => {
           row.remove();
           detailsRow.remove();
-          firebase.firestore().collection("Closed Events").doc(eventData.eventCounter.toString()).set({eventData});
-          firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString()).delete({eventData});
-
         }).catch((error) => {
           console.error("Error updating document: ", error);
         });
-      } else {
-        console.error("Error: eventData or eventData.eventCounter is undefined");
-      }
-    }
+
+
+
+
+
+      })
+      .catch((error) => {
+        console.error("Error updating document: ", error);
+      });
+      
+
+
+
+
+
+
+
+
+
+
+
     });
     
-
-    CancelEvent.addEventListener('click', () => {
-
-      if (eventData && eventData.eventCounter) {
-        if (confirm("Are you sure you want to cancel this event?")){
-        const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-        docRef.delete().then(() => {
-          row.remove();
-          detailsRow.remove();
-
-        }).catch((error) => {
-          console.error("Error updating document: ", error);
-        });
-      } else {
-        console.error("Error: eventData or eventData.eventCounter is undefined");
-      }
-    }
-    })
-
-
-
 }  
 
 })

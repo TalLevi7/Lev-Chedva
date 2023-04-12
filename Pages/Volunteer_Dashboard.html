@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <h1>Welcome to the Dashboard</h1>
+    <div id="buttons-container">
+        <button id="transport" class="hidden">transport</button>
+        <button id="telephone" class="hidden">telephone</button>
+        <button id="button3" class="hidden">Button 3</button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="../firebase.js"></script>
+    <script>
+        // Initialize Firebase
+// Get the current user's email
+const userEmail = firebase.auth().currentUser.email;
+
+// Get the "authorizations" field for the current user's email from the "Volunteers" collection
+firebase.firestore().collection("Volunteers").doc(userEmail).get().then((doc) => {
+    if (doc.exists) {
+        const authorizations = doc.data().Authorizations;
+        console.log(authorizations);
+        // Show the buttons based on the authorizations field
+        if (authorizations.includes("transport")) {
+            document.getElementById("transport").classList.remove("hidden");
+        }
+        if (authorizations.includes("telephone")) {
+            document.getElementById("telephone").classList.remove("hidden");
+        }
+        if (authorizations.includes("button3")) {
+            document.getElementById("button3").classList.remove("hidden");
+        }
+    } else {
+        console.log("No such document!");
+    }
+}).catch((error) => {
+    console.log("Error getting document:", error);
+});
+
+
+
+
+
+
+    </script>
+</body>
+</html>

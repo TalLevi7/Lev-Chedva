@@ -42,20 +42,23 @@
         const password = passwordInput.value;
         
         // Log in the user using Firebase Authentication
-        firebase.auth().signInWithEmailAndPassword(email, password)
-          .then((userCredential) => {
-            // Logged in successfully
-            const user = userCredential.user;
-            console.log(user);
-            console.log("Loged in");
-            checkAuthorizationAndRedirect(email);
-          })
-          .catch((error) => {
-            // Handle login errors
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error(errorCode, errorMessage);
-          });
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  .then(() => {
+    return firebase.auth().signInWithEmailAndPassword(email, password);
+  })
+  .then((userCredential) => {
+    // Logged in successfully
+    const user = userCredential.user;
+    console.log(user);
+    console.log("Logged in");
+    checkAuthorizationAndRedirect(email);
+  })
+  .catch((error) => {
+    // Handle login errors
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error(errorCode, errorMessage);
+  });
       });
 
       function signInWithGoogle() {
@@ -75,7 +78,6 @@
 
 function checkAuthorizationAndRedirect(email) {
   
- 
   // Get the document from the "Volunteers" collection based on the provided email
   firebase.firestore().collection("Volunteers").doc(email).get().then((doc) => {
     
@@ -88,7 +90,7 @@ function checkAuthorizationAndRedirect(email) {
         window.location.href = "../Pages/Manager_Panel.html";
       } else {
         // If the "Authorizations" field is not 0, redirect to page B
-        window.location.href = "../Pages/Volenteer_Panel.html";
+        window.location.href = "../Pages/Volunteer_Dashboard.html";
       }
     } else {
       // If the document doesn't exist, log an error and redirect to an error page
