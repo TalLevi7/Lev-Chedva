@@ -2,10 +2,10 @@
 <html>
 <head>
     <link rel="stylesheet" href="../styles/Open_Event_Form_style.css">"
-	<title>Open Events Form</title>
+	<title>Open New Event Form</title>
 </head>
 <body>
-	<h1>Open Events Form</h1>
+	<h1>Open New Event Form</h1>
 	<form id="open-events-form">
 		<label for="name">Name of Product:</label>
 		<input type="text" id="name" name="name"><br><br>
@@ -27,6 +27,7 @@
 		
 		<label for="size">Size of Product:</label>
 		<select id="size" name="size">
+      <option value="Huge">Huge</option>
 			<option value="Big">Big</option>
 			<option value="Medium">Medium</option>
 			<option value="Small">Small</option>
@@ -48,9 +49,12 @@
 		
 		<label for="contact-phone">Contact Phone:</label>
 		<input type="text" id="contact-phone" name="contact-phone"><br><br>
-		
-		<label for="address">Address:</label>
-		<input type="text" id="address" name="address"><br><br>
+	
+    <label for="Source_Address">Source Address:</label>
+		<input type="text" id="Source_Address" name="Source_Address"><br><br>
+
+		<label for="Destination_Address">Destination Address:</label>
+		<input type="text" id="Destination_Address" name="Destination_Address"><br><br>
 		
 		<label for="remarks">Remarks:</label>
 		<textarea id="remarks" name="remarks"></textarea><br><br>
@@ -72,7 +76,8 @@ const weightSelect = form.querySelector('#weight');
 const jeepCheckbox = form.querySelector('#jeep');
 const contactNameInput = form.querySelector('#contact-name');
 const contactPhoneInput = form.querySelector('#contact-phone');
-const addressInput = form.querySelector('#address');
+const Source_addressInput = form.querySelector('#Source_Address');
+const Destination_addressInput = form.querySelector('#Destination_Address');
 const remarksInput = form.querySelector('#remarks');
 
 
@@ -105,7 +110,8 @@ firebase.firestore().collection("Tools").doc("Events Counter")
   const jeepUnit = jeepCheckbox.checked;
   const contactName = contactNameInput.value.trim();
   const contactPhone = contactPhoneInput.value.trim();
-  const address = addressInput.value.trim();
+  const Source_Address = Source_addressInput.value.trim();
+  const Destination_Address = Destination_addressInput.value.trim();
   const remarks = remarksInput.value.trim();
   const status ="Open";
   eventCounter=eventCounter+1;
@@ -121,7 +127,8 @@ firebase.firestore().collection("Tools").doc("Events Counter")
     jeepUnit,
     contactName,
     contactPhone,
-    address,
+    Source_Address,
+    Destination_Address,
     remarks,
     status,
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
