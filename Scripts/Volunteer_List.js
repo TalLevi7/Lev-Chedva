@@ -43,12 +43,14 @@ function preDisplayVolunteers(filter) {
 
 function displayVolunteers(volunteerData) {
   const row = document.createElement('tr');
-  const nameCell = document.createElement('td');
-  nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
   const emailCell = document.createElement('td');
   emailCell.textContent = volunteerData.email;
-  row.appendChild(nameCell);
+  const nameCell = document.createElement('td');
+  
+  nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
+  nameCell.style.textAlign = "right";
   row.appendChild(emailCell);
+  row.appendChild(nameCell);
   volunteersTable.appendChild(row);
 
   row.addEventListener('click', () => {

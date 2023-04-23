@@ -1,3 +1,14 @@
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: right;
+}
+
+h1 {
+  text-align: center;
+}
+
+
+
 /* Center form on page */
 form {
     max-width: 500px;
