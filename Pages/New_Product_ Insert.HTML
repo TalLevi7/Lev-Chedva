@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Product Registration Form</title>
+  <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
+</head>
+<body>
+  <h1>Product Registration Form</h1>
+  <form id="product-form">
+    <label for="category-number">מק"ט:</label>
+    <input type="text" id="category-number" name="category-number" required><br><br>
+
+    <label for="product-name">Product Name:</label>
+    <input type="text" id="product-name" name="product-name" required><br><br>
+
+    <label for="product-description">Product Description:</label>
+    <input type="text" id="product-description" name="product-description" required><br><br>
+
+    <label for="product-price">Product Price:</label>
+    <input type="number" id="product-price" name="product-price" required><br><br>
+
+    <label for="product-quantity">Product Quantity:</label>
+    <input type="number" id="product-quantity" name="product-quantity" required><br><br>
+
+    <input type="submit" value="Register Product">
+  </form>
+
+  <!-- Firebase Firestore SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="../firebase.js"></script>
+  <script>
+    // Get a reference to the Firestore database
+    const db = firebase.firestore();
+
+    // Add an event listener to the form submission
+    const form = document.getElementById('product-form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      // Get the form data
+      const categoryNumber = form.elements['category-number'].value;
+      const productName = form.elements['product-name'].value;
+      const productDescription = form.elements['product-description'].value;
+      const productPrice = form.elements['product-price'].value;
+      const productQuantity = form.elements['product-quantity'].value;
+
+      // Save the product details to Firestore
+      db.collection('inventory').doc(categoryNumber).set({
+  'categorial_number': categoryNumber,
+  'product_name': productName,
+  'product_description': productDescription,
+  'product_price': productPrice,
+  'product_quantity': productQuantity,
+})
+.then(() => {
+  alert('Product registered successfully!');
+  form.reset();
+})
+.catch((error) => {
+  console.error('Error registering product: ', error);
+  alert('Failed to register product.');
+});
+    });
+
+  </script>
+</body>
+</html>

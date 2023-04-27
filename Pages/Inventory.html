@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="he">
+  <head>
+    <meta charset="UTF-8">
+    <title>רשימת מתנדבים</title>
+    <link rel="stylesheet" type="text/css" href="../styles/Volunteer_List.css">
+ 
+  </head>
+  <body onload="readProducts()">
+    <header>
+      <h1>רשימת מוצרים</h1>
+    </header>
+    <main>
+        <!-- ADD SEARCH BAR!!!! -->
+        <label for="authorization-filter">:סנן</label>
+        <select id="authorization-filter">
+          <option value="all">הכל</option>
+          <option value="Manager">מנהל</option>
+          <option value="Telephone">טלפנ/ית</option>
+          <option value="Transit">שינוע</option>
+          <option value="Jeep">ג'יפים</option>
+        </select>
+      <table>
+        <thead>
+          <tr>
+            <th>שם המוצר</th>
+            <th>מק"ט</th>
+          </tr>
+        </thead>
+        <tbody id="product-list">
+        </tbody>
+      </table>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="../firebase.js"></script>
+    <script src="../Scripts/Inventory.js"></script>
+
+
+
+
+
+  </body>
+</html>
