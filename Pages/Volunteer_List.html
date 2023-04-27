@@ -3,36 +3,35 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Volunteer List</title>
+    <title>רשימת מתנדבים</title>
     <link rel="stylesheet" type="text/css" href="../styles/Volunteer_List.css">
  
   </head>
   <body onload="readVolunteers()">
     <header>
-      <h1>Volunteer List</h1>
+      <h1>רשימת מתנדבים</h1>
     </header>
     <main>
         <!-- ADD SEARCH BAR!!!! -->
-        <label for="authorization-filter">Filter by Authorization:</label>
+        <label for="authorization-filter">:סנן</label>
         <select id="authorization-filter">
-          <option value="all">All</option>
-          <option value="Manager">Manager</option>
-          <option value="Telephone">Telephone</option>
-          <option value="Transit">Transit</option>
-          <option value="Jeep">Jeep</option>
+          <option value="all">הכל</option>
+          <option value="Manager">מנהל</option>
+          <option value="Telephone">טלפנ/ית</option>
+          <option value="Transit">שינוע</option>
+          <option value="Jeep">ג'יפים</option>
         </select>
       <table>
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
+            <th>אימייל</th>
+            <th>שם</th>
           </tr>
         </thead>
         <tbody id="volunteer-list">
         </tbody>
       </table>
-      <button id="exportButton">Export as PDF</button>
+      <button id="exportButton">PDF יצא לקובץ</button>
     </main>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>

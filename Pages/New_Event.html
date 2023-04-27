@@ -1,62 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="../styles/Open_Event_Form_style.css">"
-	<title>Open New Event Form</title>
+    <link rel="stylesheet" href="../styles/Open_Event_Form_style.css">
+	<title>טופס יצירת אירוע חדש</title>
 </head>
 <body>
-	<h1>Open New Event Form</h1>
+	<h1>טופס יצירת אירוע חדש</h1>
 	<form id="open-events-form">
-		<label for="name">Name of Product:</label>
+		<label for="name">:שם המוצר</label>
 		<input type="text" id="name" name="name"><br><br>
 		
-		<label for="type">Type:</label>
+		<label for="type">:סוג</label>
 		<select id="type" name="type">
-			<option value="Transport">Transport</option>
-			<option value="Visit">Visit</option>
-			<option value="Other">Other</option>
+      <option value="Empty"></option>
+			<option value="Transport">שינוע</option>
+			<option value="Visit">ביקור</option>
+			<option value="Other">אחר</option>
 		</select><br><br>
 		
-		<label for="urgency">Urgency:</label>
+		<label for="urgency">:דחיפות</label>
 		<select id="urgency" name="urgency">
-			<option value="Urgent">Urgent</option>
-			<option value="Specific Time">Specific Time</option>
-			<option value="Whoever Can">Whoever Can</option>
-			<option value="Future Reservation">Future Reservation</option>
+      <option value="Empty"></option>
+			<option value="Urgent">דחוף</option>
+			<option value="Specific Time">זמן מסויים</option>
+			<option value="Whoever Can">מי שיכול</option>
+			<option value="Future Reservation">בעתיד</option>
 		</select><br><br>
 		
-		<label for="size">Size of Product:</label>
+		<label for="size">:גודל המוצר</label>
 		<select id="size" name="size">
-      <option value="Huge">Huge</option>
-			<option value="Big">Big</option>
-			<option value="Medium">Medium</option>
-			<option value="Small">Small</option>
+      <option value="Empty"></option>
+      <option value="Huge">ענק</option>
+			<option value="Big">גדול</option>
+			<option value="Medium">בינוני</option>
+			<option value="Small">קטן</option>
 		</select><br><br>
 		
-		<label for="weight">Weight of Product:</label>
+		<label for="weight">:משקל המוצר</label>
 		<select id="weight" name="weight">
-			<option value="Very Heavy">Very Heavy</option>
-			<option value="Heavy">Heavy</option>
-			<option value="Medium">Medium</option>
-			<option value="Light">Light</option>
+      <option value="Empty"></option>
+			<option value="Very Heavy">כבד מאד</option>
+			<option value="Heavy">כבד</option>
+			<option value="Medium">לא מאד כבד</option>
+			<option value="Light">קל</option>
 		</select><br><br>
 		
-		<label for="jeep">Jeep Unit:</label>
+		<label for="jeep">יחידת הג'יפים</label>
 		<input type="checkbox" id="jeep" name="jeep"><br><br>
 		
-		<label for="contact-name">Contact Name:</label>
+		<label for="contact-name">:שם איש קשר</label>
 		<input type="text" id="contact-name" name="contact-name"><br><br>
 		
-		<label for="contact-phone">Contact Phone:</label>
+		<label for="contact-phone">:טלפון איש קשר</label>
 		<input type="text" id="contact-phone" name="contact-phone"><br><br>
 	
-    <label for="Source_Address">Source Address:</label>
+    <label for="Source_Address">:כתובת איסוף</label>
 		<input type="text" id="Source_Address" name="Source_Address"><br><br>
 
-		<label for="Destination_Address">Destination Address:</label>
+		<label for="Destination_Address">:כתובת יעד</label>
 		<input type="text" id="Destination_Address" name="Destination_Address"><br><br>
 		
-		<label for="remarks">Remarks:</label>
+		<label for="remarks">:הערות</label>
 		<textarea id="remarks" name="remarks"></textarea><br><br>
 		
 		<input type="submit" value="Submit">

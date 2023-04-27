@@ -25,6 +25,7 @@ body {
     display: block;
     margin-bottom: 10px;
     font-weight: bold;
+    text-align: right;
   }
   
   /* Style the form input fields */
@@ -38,6 +39,7 @@ body {
     margin-bottom: 20px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    
   }
   
   /* Style the form submit button */
