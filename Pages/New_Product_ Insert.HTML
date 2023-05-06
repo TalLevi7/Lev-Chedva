@@ -37,34 +37,45 @@
 
     // Add an event listener to the form submission
     const form = document.getElementById('product-form');
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
+    form.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-      // Get the form data
-      const categoryNumber = form.elements['category-number'].value;
-      const productName = form.elements['product-name'].value;
-      const productDescription = form.elements['product-description'].value;
-      const productPrice = form.elements['product-price'].value;
-      const productQuantity = form.elements['product-quantity'].value;
+  // Get the form data
+  const categoryNumber = form.elements['category-number'].value;
+  const productName = form.elements['product-name'].value;
+  const productDescription = form.elements['product-description'].value;
+  const productPrice = form.elements['product-price'].value;
+  const productQuantity = form.elements['product-quantity'].value;
 
-      // Save the product details to Firestore
-      db.collection('inventory').doc(categoryNumber).set({
-  'categorial_number': categoryNumber,
-  'product_name': productName,
-  'product_description': productDescription,
-  'product_price': productPrice,
-  'product_quantity': productQuantity,
-})
-.then(() => {
-  alert('Product registered successfully!');
-  form.reset();
-})
-.catch((error) => {
-  console.error('Error registering product: ', error);
-  alert('Failed to register product.');
-});
+  // Check if the document with the same category number already exists
+  const docRef = db.collection('inventory').doc(categoryNumber);
+  const docSnapshot = await docRef.get();
+
+  if (docSnapshot.exists) {
+    alert('A product with this category number already exists.');
+    return;
+  }
+
+  // Save the product details to Firestore
+  docRef.set({
+    'categorial_number': categoryNumber,
+    'product_name': productName,
+    'product_description': productDescription,
+    'product_price': productPrice,
+    'product_quantity': productQuantity,
+    'status': "free"
+  })
+    .then(() => {
+      alert('Product registered successfully!');
+      form.reset();
+      // Refresh the page
+      location.reload();
+    })
+    .catch((error) => {
+      console.error('Error registering product: ', error);
+      alert('Failed to register product.');
     });
-
+});
   </script>
 </body>
 </html>

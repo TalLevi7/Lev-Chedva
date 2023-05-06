@@ -3,8 +3,8 @@
 <html lang="he">
   <head>
     <meta charset="UTF-8">
-    <title>רשימת מתנדבים</title>
-    <link rel="stylesheet" type="text/css" href="../styles/Volunteer_List.css">
+    <title>רשימת מוצרים</title>
+    <link rel="stylesheet" type="text/css" href="../styles/Inventory_style.css">
  
   </head>
   <body onload="readProducts()">
@@ -13,19 +13,20 @@
     </header>
     <main>
         <!-- ADD SEARCH BAR!!!! -->
-        <label for="authorization-filter">:סנן</label>
-        <select id="authorization-filter">
-          <option value="all">הכל</option>
-          <option value="Manager">מנהל</option>
-          <option value="Telephone">טלפנ/ית</option>
-          <option value="Transit">שינוע</option>
-          <option value="Jeep">ג'יפים</option>
-        </select>
+        <div id="filter-bar">
+          <label for="filter-select">סנן לפי:</label>
+          <select id="filter-select"></select>
+          <button id="filter-btn">סנן</button>
+          <button id="add-filter-btn">הוספת פילטר חדש</button>
+          <button class="add-product-btn"><a href="../Pages/New_Product_ Insert.HTML">הוספת מוצר חדש</a></button>
+          <input type="text" id="search-input" placeholder="חיפוש לפי שם המוצר...">
+          <button id="search-btn">חפש</button>
+        </div>
       <table>
         <thead>
           <tr>
+            <th>מספר סידורי</th>
             <th>שם המוצר</th>
-            <th>מק"ט</th>
           </tr>
         </thead>
         <tbody id="product-list">

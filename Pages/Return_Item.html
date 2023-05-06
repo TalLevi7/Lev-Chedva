@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/Return_Item.css">
+    <title>החזר מוצר</title>
+</head>
+<body>
+    <input type="text" id="search-input" placeholder="Enter item ID or categorial number..." />
+    <button id="search-by-id-btn">חפש לי ת.ז</button>
+    <button id="search-by-cat-btn">חפש לפי מק"ט</button>
+    <div id="item-data" style="display: none;"></div>
+    <div id="return-details" style="display: none;">
+        <label>שם המחזיר: <input type="text" id="return-name" /></label>
+        <label>מיקום:
+            <select id="return-location">
+            </select>
+        </label>
+        <button id="return-btn">החזר</button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="../firebase.js"></script>
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const searchByIdBtn = document.getElementById('search-by-id-btn');
+        const searchByCatBtn = document.getElementById('search-by-cat-btn');
+        const itemData = document.getElementById('item-data');
+        const returnDetails = document.getElementById('return-details');
+        const returnBtn = document.getElementById('return-btn');
+        const returnName = document.getElementById('return-name');
+        const returnLocation = document.getElementById('return-location');
+
+        let foundItemId = null;
+        let foundItemCategorialNumber = null;
+    async function getLocations() {
+            const locationsRef = firebase.firestore().collection('Tools').doc('Locations');
+            const locationsSnapshot = await locationsRef.get();
+            const locations = locationsSnapshot.data().location;
+
+            locations.forEach(location => {
+                const option = document.createElement('option');
+                option.value = location;
+                option.text = location;
+                returnLocation.add(option);
+            });
+        }
+
+        getLocations();
+
+        async function searchItemById(itemId) {
+            const borrowedItemRef = firebase.firestore().collection('Borrowed Items').doc(itemId);
+            const borrowedItemSnapshot = await borrowedItemRef.get();
+            if (!borrowedItemSnapshot.exists) {
+                alert('Item not found.');
+                return;
+            }
+
+            foundItemId = itemId;
+            foundItemCategorialNumber = borrowedItemSnapshot.data().categorialNumber;
+            const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
+            const inventoryItemSnapshot = await inventoryItemRef.get();
+
+            if (!inventoryItemSnapshot.exists) {
+                alert('Item not found in inventory.');
+                return;
+            }
+
+            displayItemData(inventoryItemSnapshot);
+        }
+
+        async function searchItemByCategorialNumber(categorialNumber) {
+    const inventoryItemRef = firebase.firestore().collection('inventory').doc(categorialNumber);
+    const inventoryItemSnapshot = await inventoryItemRef.get();
+    if (!inventoryItemSnapshot.exists || inventoryItemSnapshot.data().status !== 'borrowed') {
+        alert('Item not found or not borrowed.');
+        return;
+    }
+    foundItemCategorialNumber = categorialNumber;
+    
+    // Search for the number in the "Borrowed Items" collection
+    const borrowedItemsRef = firebase.firestore().collection('Borrowed Items');
+    const querySnapshot = await borrowedItemsRef.where('categorialNumber', '==', categorialNumber).get();
+    if (querySnapshot.empty) {
+        alert('Item not found in the "Borrowed Items" collection.');
+        return;
+    }
+    
+    // Get the first document (assuming there's only one document with this categorial number)
+    const borrowedItemDoc = querySnapshot.docs[0];
+    foundItemId = borrowedItemDoc.id;
+    
+    displayItemData(inventoryItemSnapshot);
+}
+
+    function displayItemData(itemSnapshot) {
+        getLocations();
+        const itemDataText = JSON.stringify(itemSnapshot.data(), null, 2);
+        itemData.innerHTML = `<pre>${itemDataText}</pre>`;
+        itemData.style.display = 'block';
+        returnDetails.style.display = 'block';
+    }
+
+    searchByIdBtn.addEventListener('click', () => {
+        searchItemById(searchInput.value);
+    });
+
+    searchByCatBtn.addEventListener('click', () => {
+        searchItemByCategorialNumber(searchInput.value);
+    });
+
+    returnBtn.addEventListener('click', async () => {
+        if (!foundItemId || !foundItemCategorialNumber) {
+            alert('No item found to return.');
+            return;
+        }
+
+        const currentDate = new Date().toISOString().substring(0, 10);
+        const borrowedArchiveData = {
+            ...foundItemCategorialNumber,
+            name: returnName.value,
+            location: returnLocation.value,
+            returnedDate: currentDate
+        };
+
+        try {
+            const borrowedItemsRef = firebase.firestore().collection('Borrowed Items').doc(foundItemId);
+            const borrowedArchiveRef = firebase.firestore().collection('Borrowed Archive').doc(foundItemId);
+            const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
+
+            await borrowedArchiveRef.set(borrowedArchiveData);
+            await borrowedItemsRef.delete();
+            await inventoryItemRef.update({ status: 'free', location: returnLocation.value });
+
+            alert('Item has been successfully returned.');
+            location.reload();
+        } catch (error) {
+            console.error('Error returning the borrowed item:', error);
+            alert('Failed to return the borrowed item.');
+        }
+    });
+</script>
+</body>
+</html>
