@@ -2,28 +2,45 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Product Registration Form</title>
+  <title>הרשמת מוצר חדש</title>
   <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
 </head>
 <body>
-  <h1>Product Registration Form</h1>
+  <h1>הרשמת מוצר חדש</h1>
+  <button class="square-button"><a href="../Pages/Add_Existing_Product">הכנס מוצר קיים</a></button>
   <form id="product-form">
     <label for="category-number">מק"ט:</label>
     <input type="text" id="category-number" name="category-number" required><br><br>
 
-    <label for="product-name">Product Name:</label>
+    <label for="product-name">שם המוצר:</label>
     <input type="text" id="product-name" name="product-name" required><br><br>
 
-    <label for="product-description">Product Description:</label>
+    <label for="product-description">תיאור המוצר:</label>
     <input type="text" id="product-description" name="product-description" required><br><br>
 
-    <label for="product-price">Product Price:</label>
-    <input type="number" id="product-price" name="product-price" required><br><br>
+    <label for="keywords">מילות מפתח:</label>
+    <input type="text" id="keywords" name="keywords" autocomplete="off" onclick="toggleDropdown(event)" />
+    <div id="keywords-dropdown" class="dropdown" style="display: none;"></div>
+    <br><br>
 
-    <label for="product-quantity">Product Quantity:</label>
+
+    <label for="companion-accessories">מוצרים נלווים:</label>
+    <div id="accessories-container">
+      <input type="text" class="accessory" name="companion-accessories[]" required>
+    </div>
+    <br>
+    <button type="button" id="add-accessory" onclick="addAccessory()">הוסף מוצר נלווה</button>
+    <br><br>
+
+    <label for="remarks">הערות:</label>
+    <input type="text" id="remarks" name="remarks" required><br><br>
+
+    <label for="product-quantity">כמות:</label>
     <input type="number" id="product-quantity" name="product-quantity" required><br><br>
-
-    <input type="submit" value="Register Product">
+    <label for="location">Location:</label>
+    <select id="location" name="location"></select>
+    <br><br>
+    <input type="submit" value="שמור">
   </form>
 
   <!-- Firebase Firestore SDK -->
@@ -34,48 +51,135 @@
   <script>
     // Get a reference to the Firestore database
     const db = firebase.firestore();
+    let counterValue;
+    async function loadData() {
+      // Load and set category number
+      const counterSnapshot = await db.collection('Tools').doc('Categorical Number').get();
+      counterValue = counterSnapshot.data().counter;
+      document.getElementById('category-number').value = counterValue + 1;
+
+      // Load locations
+      const locationSelect = document.getElementById('location');
+      const locationSnapshot = await db.collection('Tools').doc('Locations').get();
+      const locations = locationSnapshot.data().Location;
+
+      locations.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location;
+        option.text = location;
+        locationSelect.add(option);
+      });
+    }
+    loadData();
+
+
+
+    async function loadKeywords() {
+      const keywordsDropdown = document.getElementById('keywords-dropdown');
+      const snapshot = await db.collection('Tools').doc('Keywords').get();
+      const keywords = snapshot.data().keywords;
+
+      keywords.forEach(keyword => {
+        const div = document.createElement('div');
+        div.textContent = keyword;
+        div.onclick = (event) => {
+          event.stopPropagation();
+          addKeyword(keyword);
+        };
+        keywordsDropdown.appendChild(div);
+      });
+    }
+    loadKeywords();
+
+    // Toggle the dropdown visibility
+    function toggleDropdown(event) {
+      event.stopPropagation();
+      const keywordsDropdown = document.getElementById('keywords-dropdown');
+      keywordsDropdown.style.display = keywordsDropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Close the dropdown when clicking outside of it
+    document.body.addEventListener('click', () => {
+      const keywordsDropdown = document.getElementById('keywords-dropdown');
+      keywordsDropdown.style.display = 'none';
+    });
+
+    // Add keyword to the input field
+    function addKeyword(keyword) {
+      const keywordsInput = document.getElementById('keywords');
+      keywordsInput.value = keywordsInput.value ? keywordsInput.value + ', ' + keyword : keyword;
+    }
+    function addAccessory() {
+      const accessoriesContainer = document.getElementById('accessories-container');
+      const accessoryInput = document.createElement('input');
+      accessoryInput.type = 'text';
+      accessoryInput.className = 'accessory';
+      accessoryInput.name = 'companion-accessories[]';
+      accessoryInput.required = true;
+
+      accessoriesContainer.appendChild(document.createElement('br'));
+      accessoriesContainer.appendChild(accessoryInput);
+    }
+
+    // Function to add a new companion accessory input box
+    function addCompanionAccessory() {
+      const container = document.getElementById('companion-accessories-container');
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.name = 'companion-accessories[]';
+      container.appendChild(input);
+    }
 
     // Add an event listener to the form submission
     const form = document.getElementById('product-form');
     form.addEventListener('submit', async (event) => {
-  event.preventDefault();
+      event.preventDefault();
 
-  // Get the form data
-  const categoryNumber = form.elements['category-number'].value;
-  const productName = form.elements['product-name'].value;
-  const productDescription = form.elements['product-description'].value;
-  const productPrice = form.elements['product-price'].value;
-  const productQuantity = form.elements['product-quantity'].value;
+      // Get the form data
+      const categoryNumber = form.elements['category-number'].value;
+      const productName = form.elements['product-name'].value;
+      const productDescription = form.elements['product-description'].value;
+      const keywords = form.elements['keywords'].value;
+      const companionAccessories = Array.from(form.elements['companion-accessories[]']).map(input => input.value);
+      const remarks = form.elements['remarks'].value;
+      const productQuantity = form.elements['product-quantity'].value;
+      
+      // Check if the document with the same category number already exists
+      const docRef = db.collection('inventory').doc(categoryNumber);
+      const docSnapshot = await docRef.get();
 
-  // Check if the document with the same category number already exists
-  const docRef = db.collection('inventory').doc(categoryNumber);
-  const docSnapshot = await docRef.get();
+      if (docSnapshot.exists) {
+        alert('A product with this category number already exists.');
+        return;
+      }
 
-  if (docSnapshot.exists) {
-    alert('A product with this category number already exists.');
-    return;
-  }
+      // Save the product details to Firestore
+      docRef.set({
+        'categorial_number': categoryNumber,
+        'product_name': productName,
+        'product_description': productDescription,
+        'keywords': keywords,
+        'companion_accessories': companionAccessories,
+        'remarks': remarks,
+        'product_quantity': productQuantity,
+        'status': "free"
+      })
+      .then(async () => {
+          // Update the counter in Firestore if the category number is equal to counterValue + 1
+          if (parseInt(categoryNumber) === counterValue + 1) {
+            await db.collection('Tools').doc('Categorical Number').update({ 'counter': counterValue + 1 });
+          }
 
-  // Save the product details to Firestore
-  docRef.set({
-    'categorial_number': categoryNumber,
-    'product_name': productName,
-    'product_description': productDescription,
-    'product_price': productPrice,
-    'product_quantity': productQuantity,
-    'status': "free"
-  })
-    .then(() => {
-      alert('Product registered successfully!');
-      form.reset();
-      // Refresh the page
-      location.reload();
-    })
-    .catch((error) => {
-      console.error('Error registering product: ', error);
-      alert('Failed to register product.');
+          alert('Product registered successfully!');
+          form.reset();
+          // Refresh the page
+          location.reload();
+        })
+        .catch((error) => {
+          console.error('Error registering product: ', error);
+          alert('Failed to register product.');
+        });
     });
-});
   </script>
 </body>
 </html>

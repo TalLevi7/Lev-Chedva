@@ -78,8 +78,9 @@ filter="all";
         displayProducts(ProductData);
         
     } else {
-      let AuthString = ProductData.product_description;
-      if (AuthString.toLowerCase().includes(filter.toLowerCase()))
+      let DescriptionString = ProductData.product_description;
+      let KeywordString=ProductData.keywords.
+      if (DescriptionString.toLowerCase().includes(filter.toLowerCase())||KeywordString.toLowerCase().includes(filter.toLowerCase()))
       displayProducts(ProductData);
     }
   });
@@ -112,43 +113,27 @@ function displayProducts(ProductData) {
       ProductNameItem.textContent = "שם: " + ProductData.product_name;
       const DescriptionItem = document.createElement('li');
       DescriptionItem.textContent = "תיאור: " + ProductData.product_description;
-    //   const emailItem = document.createElement('li');
-    //   emailItem.textContent = "Email: " + ProductData.email;
-    //   const phoneItem = document.createElement('li');
-    //   phoneItem.textContent = "Phone: " + ProductData.phone;
-    //   const addressItem = document.createElement('li');
-    //   addressItem.textContent = "Address: " + ProductData.address;
-    //   const authItem = document.createElement('li');
-    //   authItem.textContent = "Authorizations: " + ProductData.Authorizations;
-    //   const volunteerTypesItem = document.createElement('li');
-    //   volunteerTypesItem.textContent = "Volunteer Types: ";
-    //   const volunteerTypesList = document.createElement('ul');
-    //   ProductData.volunteerTypes.forEach(type => {
-    //     const typeItem = document.createElement('li');
-    //     typeItem.textContent = type;
-    //     volunteerTypesList.appendChild(typeItem);
-    //   });
-    //   volunteerTypesItem.appendChild(volunteerTypesList);
+      const KeywordItem = document.createElement('li');
+      KeywordItem.textContent = "מילות מפתח: " + ProductData.keywords;
+      const QuantityItem = document.createElement('li');
+      QuantityItem.textContent = "כמות: " + ProductData.product_quantity;
+      const RemarksItem = document.createElement('li');
+      RemarksItem.textContent = "הערות: " + ProductData.remarks;
+      const StatusItem = document.createElement('li');
+      StatusItem.textContent = "סטאטוס: " + translateStatus(ProductData.status);
+      const AccessoriesItem = document.createElement('li');
+      AccessoriesItem.textContent = "מוצרים נלווים: "+ProductData.companion_accessories;
 
-    //   const vehiclesItem = document.createElement('li');
-    //   vehiclesItem.textContent = "Vehicles: ";
-    //   const vehiclesList = document.createElement('ul');
-    //   ProductData.vehicles.forEach(vehicle => {
-    //     const vehicleItem = document.createElement('li');
-    //     vehicleItem.textContent = vehicle;
-    //     vehiclesList.appendChild(vehicleItem);
-    //   });
-    //   vehiclesItem.appendChild(vehiclesList);
+  
     
       detailsList.appendChild(ProductNameItem);
       detailsList.appendChild(CatNumItem);
       detailsList.appendChild(DescriptionItem);
-    //   detailsList.appendChild(emailItem);
-    //   detailsList.appendChild(phoneItem);
-    //   detailsList.appendChild(addressItem);
-    //   detailsList.appendChild(authItem);
-    //   detailsList.appendChild(volunteerTypesItem);
-    //   detailsList.appendChild(vehiclesItem);
+      detailsList.appendChild(QuantityItem);
+      detailsList.appendChild(KeywordItem);
+      detailsList.appendChild(RemarksItem);
+      detailsList.appendChild(AccessoriesItem);
+      detailsList.appendChild(StatusItem);
       detailsCell.appendChild(detailsList);
       detailsRow.appendChild(detailsCell);
       row.after(detailsRow);
@@ -185,7 +170,12 @@ function displayProducts(ProductData) {
         const updateProductField = async (catNum, field, newValue) => {
           try {
             const docRef = db.collection("inventory").doc(catNum);
-      
+        
+            // Translate the status back to English if the field is 'status'
+            if (field === "status") {
+              newValue = translateStatusToEnglish(newValue);
+            }
+        
             if (field === "categorial_number") {
               // Update the document name
               await docRef.update({ [field]: newValue });
@@ -198,6 +188,7 @@ function displayProducts(ProductData) {
             throw error;
           }
         };
+        
       
         const updateProductDocName = async (oldCatNum, newCatNum) => {
           try {
@@ -221,6 +212,16 @@ function displayProducts(ProductData) {
       
         makeEditable(ProductNameItem, "product_name");
         makeEditable(CatNumItem, "categorial_number");
+        makeEditable(DescriptionItem, "product_description");
+        makeEditable(KeywordItem, "keywords");
+        makeEditable(RemarksItem, "remarks");
+        makeEditable(AccessoriesItem, "companion_accessories");
+        makeEditable(StatusItem, "status");
+        makeEditable(QuantityItem, "product_quantity");
+        
+
+
+
         // add calls for other category fields as needed
       
         const saveChangesBtn = document.createElement('button');
@@ -231,6 +232,11 @@ function displayProducts(ProductData) {
           ProductNameItem.textContent = "שם: " + ProductData.product_name;
           CatNumItem.textContent = "מספר קטגורי: " + ProductData.categorial_number;
           DescriptionItem.textContent = " תיאור: " + ProductData.product_description;
+          QuantityItem.textContent="כמות: " +ProductData.product_quantity;
+          KeywordItem.textContent="מילות מפתח "+ProductData.keywords;
+          RemarksItem.textContent="הערות: "+ProductData.remarks;
+          AccessoriesItem.textContent=" מוצרים נלווים: "+ProductData.companion_accessories;
+          StatusItem.textContent="סטאטוס: "+ProductData.status;
           // update other category fields as needed
       
           nameCell.textContent = ProductData.product_name;
@@ -292,6 +298,36 @@ async function deleteProductFromFirestore(CatNum) {
 
   
 }
+
+const translateStatus = (status) => {
+  switch (status) {
+    case "free":
+      return "במלאי";
+    case "borrowed":
+      return "מושאל";
+    case "reserved":
+      return "שמור";
+    default:
+      return status;
+
+
+
+
+  }
+};
+
+const translateStatusToEnglish = (status) => {
+  switch (status) {
+    case "במלאי":
+      return "free";
+    case "מושאל":
+      return "borrowed";
+    case "שמור":
+      return "reserved";
+    default:
+      return status;
+  }
+};
 
 
 
