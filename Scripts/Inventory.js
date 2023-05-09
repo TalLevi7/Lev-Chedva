@@ -79,7 +79,7 @@ filter="all";
         
     } else {
       let DescriptionString = ProductData.product_description;
-      let KeywordString=ProductData.keywords.
+      let KeywordString = ProductData.keywords;
       if (DescriptionString.toLowerCase().includes(filter.toLowerCase())||KeywordString.toLowerCase().includes(filter.toLowerCase()))
       displayProducts(ProductData);
     }
@@ -123,7 +123,8 @@ function displayProducts(ProductData) {
       StatusItem.textContent = "סטאטוס: " + translateStatus(ProductData.status);
       const AccessoriesItem = document.createElement('li');
       AccessoriesItem.textContent = "מוצרים נלווים: "+ProductData.companion_accessories;
-
+      const LocationItem = document.createElement('li');
+      LocationItem.textContent = "מיקום:  "+ProductData.location;
   
     
       detailsList.appendChild(ProductNameItem);
@@ -134,16 +135,47 @@ function displayProducts(ProductData) {
       detailsList.appendChild(RemarksItem);
       detailsList.appendChild(AccessoriesItem);
       detailsList.appendChild(StatusItem);
+      detailsList.appendChild(LocationItem);
       detailsCell.appendChild(detailsList);
       detailsRow.appendChild(detailsCell);
+      
       row.after(detailsRow);
     
       const editProductBtn = document.createElement('button');
       editProductBtn.textContent = 'ערוך מוצר';
       detailsList.appendChild(editProductBtn);
       
+      async function updateProductField(catNum, field, newValue) {
+        try {
+          const docRef = db.collection("inventory").doc(catNum);
+      
+          // Translate the status back to English if the field is 'status'
+          if (field === "status") {
+            newValue = translateStatusToEnglish(newValue);
+          }
+      
+          if (field === "categorial_number") {
+            // Update the document name
+            await docRef.update({ [field]: newValue });
+          } else {
+            // Update the field value
+            await docRef.update({ [field]: newValue });
+          }
+        } catch (error) {
+          console.error("Error updating document:", error);
+          throw error;
+        }
+      }
+      
+
+
+      let ValidSaveBtn=false;
       editProductBtn.addEventListener('click', () => {
+       
         const makeEditable = (item, field) => {
+          if (field === 'location') {
+            createLocationDropdown(item);
+          }
           const [label, value] = item.textContent.split(": ");
           const editableValue = document.createElement("span");
           editableValue.contentEditable = true;
@@ -167,27 +199,27 @@ function displayProducts(ProductData) {
           });
         };
       
-        const updateProductField = async (catNum, field, newValue) => {
-          try {
-            const docRef = db.collection("inventory").doc(catNum);
+        // const updateProductField = async (catNum, field, newValue) => {
+        //   try {
+        //     const docRef = db.collection("inventory").doc(catNum);
         
-            // Translate the status back to English if the field is 'status'
-            if (field === "status") {
-              newValue = translateStatusToEnglish(newValue);
-            }
+        //     // Translate the status back to English if the field is 'status'
+        //     if (field === "status") {
+        //       newValue = translateStatusToEnglish(newValue);
+        //     }
         
-            if (field === "categorial_number") {
-              // Update the document name
-              await docRef.update({ [field]: newValue });
-            } else {
-              // Update the field value
-              await docRef.update({ [field]: newValue });
-            }
-          } catch (error) {
-            console.error("Error updating document:", error);
-            throw error;
-          }
-        };
+        //     if (field === "categorial_number") {
+        //       // Update the document name
+        //       await docRef.update({ [field]: newValue });
+        //     } else {
+        //       // Update the field value
+        //       await docRef.update({ [field]: newValue });
+        //     }
+        //   } catch (error) {
+        //     console.error("Error updating document:", error);
+        //     throw error;
+        //   }
+        // };
         
       
         const updateProductDocName = async (oldCatNum, newCatNum) => {
@@ -216,17 +248,21 @@ function displayProducts(ProductData) {
         makeEditable(KeywordItem, "keywords");
         makeEditable(RemarksItem, "remarks");
         makeEditable(AccessoriesItem, "companion_accessories");
-        makeEditable(StatusItem, "status");
         makeEditable(QuantityItem, "product_quantity");
-        
+        createLocationDropdown(LocationItem, updateProductField, ProductData);
+        createStatusDropdown(StatusItem, updateProductField, ProductData);
 
 
-
-        // add calls for other category fields as needed
-      
         const saveChangesBtn = document.createElement('button');
-        saveChangesBtn.textContent = 'Save Changes';
+        saveChangesBtn.textContent = 'שמור שינויים';
+        // add calls for other category fields as needed
+       
+
+        if(ValidSaveBtn==false)
+        {
         detailsList.appendChild(saveChangesBtn);
+        ValidSaveBtn=true;
+        }
       
         saveChangesBtn.addEventListener('click', () => {
           ProductNameItem.textContent = "שם: " + ProductData.product_name;
@@ -236,20 +272,22 @@ function displayProducts(ProductData) {
           KeywordItem.textContent="מילות מפתח "+ProductData.keywords;
           RemarksItem.textContent="הערות: "+ProductData.remarks;
           AccessoriesItem.textContent=" מוצרים נלווים: "+ProductData.companion_accessories;
-          StatusItem.textContent="סטאטוס: "+ProductData.status;
+          StatusItem.textContent="סטאטוס: "+translateStatus(ProductData.status);
+          LocationItem.textContent = "מיקום: " + ProductData.location;
+
           // update other category fields as needed
       
           nameCell.textContent = ProductData.product_name;
           CatNum.textContent = ProductData.categorial_number;
           // update other table cells as needed
-      
           detailsList.removeChild(saveChangesBtn);
+          ValidSaveBtn=false;
         });
       });
       
       
 
-      const deleteProductBtn = document.createElement('button');
+    const deleteProductBtn = document.createElement('button');
 deleteProductBtn.textContent = 'מחק מוצר';
 detailsList.appendChild(deleteProductBtn);
 
@@ -329,8 +367,56 @@ const translateStatusToEnglish = (status) => {
   }
 };
 
-
-
-// readProducts();    
+readProducts();    
    
+async function createLocationDropdown(item, updateProductField, ProductData) {
+  const [label, value] = item.textContent.split(": ");
+  const locationSelect = document.createElement("select");
 
+  // Load locations
+  const locationSnapshot = await db.collection('Tools').doc('Locations').get();
+  const locations = locationSnapshot.data().Location; // Change this line
+
+  locations.forEach(location => {
+    const option = document.createElement('option');
+    option.value = location;
+    option.text = location;
+    if (location === value.trim()) {
+      option.selected = true;
+    }
+    locationSelect.add(option);
+  });
+
+  item.innerHTML = `${label}: `;
+  item.appendChild(locationSelect);
+  locationSelect.addEventListener("change", async () => {
+    const newValue = locationSelect.value;
+    await updateProductField(ProductData.categorial_number, "location", newValue);
+    ProductData.location = newValue;
+  });
+}
+
+async function createStatusDropdown(item, updateProductField, ProductData) {
+  const [label, value] = item.textContent.split(": ");
+  const statusSelect = document.createElement("select");
+
+  const statuses = ['במלאי', 'מושאל', 'שמור'];
+
+  statuses.forEach(status => {
+    const option = document.createElement('option');
+    option.value = status;
+    option.text = status;
+    if (status === value.trim()) {
+      option.selected = true;
+    }
+    statusSelect.add(option);
+  });
+
+  item.innerHTML = `${label}: `;
+  item.appendChild(statusSelect);
+  statusSelect.addEventListener("change", async () => {
+    const newValue = statusSelect.value;
+    await updateProductField(ProductData.categorial_number, "status", translateStatusToEnglish(newValue));
+    ProductData.status = newValue;
+  });
+}

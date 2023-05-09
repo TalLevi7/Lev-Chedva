@@ -26,14 +26,14 @@
 
     <label for="companion-accessories">מוצרים נלווים:</label>
     <div id="accessories-container">
-      <input type="text" class="accessory" name="companion-accessories[]" required>
+      <input type="text" class="accessory" name="companion-accessories[]" >
     </div>
     <br>
     <button type="button" id="add-accessory" onclick="addAccessory()">הוסף מוצר נלווה</button>
     <br><br>
 
     <label for="remarks">הערות:</label>
-    <input type="text" id="remarks" name="remarks" required><br><br>
+    <input type="text" id="remarks" name="remarks"><br><br>
 
     <label for="product-quantity">כמות:</label>
     <input type="number" id="product-quantity" name="product-quantity" required><br><br>
@@ -143,6 +143,7 @@
       const companionAccessories = Array.from(form.elements['companion-accessories[]']).map(input => input.value);
       const remarks = form.elements['remarks'].value;
       const productQuantity = form.elements['product-quantity'].value;
+      const locationVal =form.elements['location'].value;
       
       // Check if the document with the same category number already exists
       const docRef = db.collection('inventory').doc(categoryNumber);
@@ -162,7 +163,9 @@
         'companion_accessories': companionAccessories,
         'remarks': remarks,
         'product_quantity': productQuantity,
-        'status': "free"
+        'status': "free",
+        'location':locationVal
+        
       })
       .then(async () => {
           // Update the counter in Firestore if the category number is equal to counterValue + 1
