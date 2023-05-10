@@ -76,10 +76,11 @@ filter="all";
   ProductsArray.forEach((ProductData) => {
     if (filter === "all") {
         displayProducts(ProductData);
-        
     } else {
       let DescriptionString = ProductData.product_description;
       let KeywordString = ProductData.keywords;
+      let LocationString=ProductData.location;
+
       if (DescriptionString.toLowerCase().includes(filter.toLowerCase())||KeywordString.toLowerCase().includes(filter.toLowerCase()))
       displayProducts(ProductData);
     }
@@ -199,27 +200,7 @@ function displayProducts(ProductData) {
           });
         };
       
-        // const updateProductField = async (catNum, field, newValue) => {
-        //   try {
-        //     const docRef = db.collection("inventory").doc(catNum);
-        
-        //     // Translate the status back to English if the field is 'status'
-        //     if (field === "status") {
-        //       newValue = translateStatusToEnglish(newValue);
-        //     }
-        
-        //     if (field === "categorial_number") {
-        //       // Update the document name
-        //       await docRef.update({ [field]: newValue });
-        //     } else {
-        //       // Update the field value
-        //       await docRef.update({ [field]: newValue });
-        //     }
-        //   } catch (error) {
-        //     console.error("Error updating document:", error);
-        //     throw error;
-        //   }
-        // };
+  
         
       
         const updateProductDocName = async (oldCatNum, newCatNum) => {

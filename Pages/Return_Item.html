@@ -9,11 +9,11 @@
 </head>
 <body>
     <input type="text" id="search-input" placeholder="Enter item ID or categorial number..." />
-    <button id="search-by-id-btn">חפש לי ת.ז</button>
+    <button id="search-by-id-btn">חפש לפי ת.ז</button>
     <button id="search-by-cat-btn">חפש לפי מק"ט</button>
     <div id="item-data" style="display: none;"></div>
     <div id="return-details" style="display: none;">
-        <label>שם המחזיר: <input type="text" id="return-name" /></label>
+        <label>"שם המתנדב" <input type="text" id="return-name" /></label>
         <label>מיקום:
             <select id="return-location">
             </select>
@@ -39,7 +39,7 @@
     async function getLocations() {
             const locationsRef = firebase.firestore().collection('Tools').doc('Locations');
             const locationsSnapshot = await locationsRef.get();
-            const locations = locationsSnapshot.data().location;
+            const locations = locationsSnapshot.data().Location;
 
             locations.forEach(location => {
                 const option = document.createElement('option');
@@ -49,7 +49,6 @@
             });
         }
 
-        getLocations();
 
         async function searchItemById(itemId) {
             const borrowedItemRef = firebase.firestore().collection('Borrowed Items').doc(itemId);
@@ -96,14 +95,55 @@
     displayItemData(inventoryItemSnapshot);
 }
 
-    function displayItemData(itemSnapshot) {
-        getLocations();
-        const itemDataText = JSON.stringify(itemSnapshot.data(), null, 2);
-        itemData.innerHTML = `<pre>${itemDataText}</pre>`;
-        itemData.style.display = 'block';
-        returnDetails.style.display = 'block';
-    }
+function displayItemData(itemSnapshot) {
+    getLocations();
+    const item = itemSnapshot.data();
 
+    const detailsList = document.createElement('ul');
+
+    const CatNumItem = document.createElement('li');
+    CatNumItem.textContent = "מס סידורי: " + item.categorial_number;
+
+    const ProductNameItem = document.createElement('li');
+    ProductNameItem.textContent = "שם: " + item.product_name;
+
+    const DescriptionItem = document.createElement('li');
+    DescriptionItem.textContent = "תיאור: " + item.product_description;
+
+    const KeywordItem = document.createElement('li');
+    KeywordItem.textContent = "מילות מפתח: " + item.keywords;
+
+    const QuantityItem = document.createElement('li');
+    QuantityItem.textContent = "כמות: " + item.product_quantity;
+
+    const RemarksItem = document.createElement('li');
+    RemarksItem.textContent = "הערות: " + item.remarks;
+
+    const StatusItem = document.createElement('li');
+    StatusItem.textContent = "סטאטוס: " + item.status; // Replace with your translation function if needed
+
+    const AccessoriesItem = document.createElement('li');
+    AccessoriesItem.textContent = "מוצרים נלווים: " + item.companion_accessories;
+
+    const LocationItem = document.createElement('li');
+    LocationItem.textContent = "מיקום: " + item.location;
+
+    detailsList.appendChild(CatNumItem);
+    detailsList.appendChild(ProductNameItem);
+    detailsList.appendChild(DescriptionItem);
+    detailsList.appendChild(KeywordItem);
+    detailsList.appendChild(QuantityItem);
+    detailsList.appendChild(RemarksItem);
+    detailsList.appendChild(StatusItem);
+    detailsList.appendChild(AccessoriesItem);
+    detailsList.appendChild(LocationItem);
+
+    itemData.innerHTML = '';
+    itemData.appendChild(detailsList);
+
+    itemData.style.display = 'block';
+    returnDetails.style.display = 'block';
+}
     searchByIdBtn.addEventListener('click', () => {
         searchItemById(searchInput.value);
     });
@@ -113,35 +153,36 @@
     });
 
     returnBtn.addEventListener('click', async () => {
-        if (!foundItemId || !foundItemCategorialNumber) {
-            alert('No item found to return.');
-            return;
-        }
+    if (!foundItemId || !foundItemCategorialNumber) {
+        alert('No item found to return.');
+        return;
+    }
 
-        const currentDate = new Date().toISOString().substring(0, 10);
+    try {
+        const borrowedItemsRef = firebase.firestore().collection('Borrowed Items').doc(foundItemId);
+        const borrowedItemSnapshot = await borrowedItemsRef.get();
+        const borrowedItemData = borrowedItemSnapshot.data();
+
         const borrowedArchiveData = {
-            ...foundItemCategorialNumber,
-            name: returnName.value,
-            location: returnLocation.value,
-            returnedDate: currentDate
+            ...borrowedItemData,
+            returnedDate: new Date().toISOString().substring(0, 10)
         };
 
-        try {
-            const borrowedItemsRef = firebase.firestore().collection('Borrowed Items').doc(foundItemId);
-            const borrowedArchiveRef = firebase.firestore().collection('Borrowed Archive').doc(foundItemId);
-            const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
+        const borrowedArchiveRef = firebase.firestore().collection('Borrowed Archive').doc(foundItemCategorialNumber);
+        const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
 
-            await borrowedArchiveRef.set(borrowedArchiveData);
-            await borrowedItemsRef.delete();
-            await inventoryItemRef.update({ status: 'free', location: returnLocation.value });
+        await borrowedArchiveRef.set(borrowedArchiveData);
+        await borrowedItemsRef.delete();
+        await inventoryItemRef.update({ status: 'free', location: returnLocation.value });
 
-            alert('Item has been successfully returned.');
-            location.reload();
-        } catch (error) {
-            console.error('Error returning the borrowed item:', error);
-            alert('Failed to return the borrowed item.');
-        }
-    });
+        alert('Item has been successfully returned.');
+        location.reload();
+    } catch (error) {
+        console.error('Error returning the borrowed item:', error);
+        alert('Failed to return the borrowed item.');
+    }
+});
+
 </script>
 </body>
 </html>
