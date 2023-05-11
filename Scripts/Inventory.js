@@ -2,6 +2,7 @@ let ProductsArray = [];
 const ProductsTable = document.getElementById('product-list');
 const db = firebase.firestore();
 const ProductsRef = db.collection("inventory");
+
 const filterBar = document.getElementById("filter-bar");
 document.getElementById('add-filter-btn').addEventListener('click', addFilter);
 document.getElementById('search-btn').addEventListener('click', searchBarProducts);
@@ -66,6 +67,7 @@ async function searchAcrossCollection(searchTerm) { // CHANGE HERE
 }
 
 
+
 async function readProducts() {
   try {
     const snapshot = await ProductsRef.get();
@@ -79,7 +81,6 @@ async function readProducts() {
   } catch (error) {
     console.log("Error getting documents:", error);
   }
-
 
 
   preDisplayProducts("all");
@@ -107,12 +108,14 @@ filter="all";
       let LocationString=ProductData.location;
 
       if (DescriptionString.toLowerCase().includes(filter.toLowerCase())||KeywordString.toLowerCase().includes(filter.toLowerCase()))
+
       displayProducts(ProductData);
     }
   });
 }
 
 function displayProducts(ProductData) {
+
   const row = document.createElement('tr');
   const CatNum = document.createElement('td');
   CatNum.textContent = ProductData.categorial_number;
@@ -134,6 +137,7 @@ function displayProducts(ProductData) {
       detailsCell.colSpan = 8;
       const detailsList = document.createElement('ul');
       const CatNumItem = document.createElement('li');
+
       CatNumItem.textContent = " מס סידורי: " + ProductData.categorial_number;
       const ProductNameItem = document.createElement('li');
       ProductNameItem.textContent = "שם: " + ProductData.product_name;
@@ -165,12 +169,14 @@ function displayProducts(ProductData) {
       detailsCell.appendChild(detailsList);
       detailsRow.appendChild(detailsCell);
       
+
       row.after(detailsRow);
     
       const editProductBtn = document.createElement('button');
       editProductBtn.textContent = 'ערוך מוצר';
       detailsList.appendChild(editProductBtn);
       
+
       async function updateProductField(catNum, field, newValue) {
         try {
           const docRef = db.collection("inventory").doc(catNum);
@@ -207,6 +213,7 @@ function displayProducts(ProductData) {
           if (field === 'location') {
             createLocationDropdown(item);
           }
+
           const [label, value] = item.textContent.split(": ");
           const editableValue = document.createElement("span");
           editableValue.contentEditable = true;
@@ -214,6 +221,7 @@ function displayProducts(ProductData) {
           item.innerHTML = `${label}: `;
           item.appendChild(editableValue);
           editableValue.addEventListener("blur", async () => {
+
             const newValue = editableValue.textContent.trim();
             try {
               await updateProductField(ProductData.categorial_number, field, newValue);
@@ -223,6 +231,7 @@ function displayProducts(ProductData) {
               } else {
                 ProductData[field] = newValue;
               }
+
               item.innerHTML = `${label}: ${newValue}`;
             } catch (error) {
               console.error("Error updating document:", error);
@@ -230,6 +239,7 @@ function displayProducts(ProductData) {
           });
         };
       
+
   
         
       
@@ -249,12 +259,14 @@ function displayProducts(ProductData) {
             }
           } catch (error) {
             console.error("Error updating document name:", error);
+
             throw error;
           }
         };
       
         makeEditable(ProductNameItem, "product_name");
         makeEditable(CatNumItem, "categorial_number");
+
         makeEditable(DescriptionItem, "product_description");
         makeEditable(KeywordItem, "keywords");
         makeEditable(RemarksItem, "remarks");
@@ -431,3 +443,5 @@ async function createStatusDropdown(item, updateProductField, ProductData) {
     ProductData.status = newValue;
   });
 }
+
+

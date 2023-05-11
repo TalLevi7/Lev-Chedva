@@ -2,15 +2,18 @@
 <html>
 <head>
   <meta charset="UTF-8">
+
   <title>הרשמת מוצר חדש</title>
   <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
 </head>
 <body>
   <h1>הרשמת מוצר חדש</h1>
   <button class="square-button"><a href="../Pages/Add_Existing_Product">הכנס מוצר קיים</a></button>
+
   <form id="product-form">
     <label for="category-number">מק"ט:</label>
     <input type="text" id="category-number" name="category-number" required><br><br>
+
 
     <label for="product-name">שם המוצר:</label>
     <input type="text" id="product-name" name="product-name" required><br><br>
@@ -133,12 +136,14 @@
     // Add an event listener to the form submission
     const form = document.getElementById('product-form');
     form.addEventListener('submit', async (event) => {
+
       event.preventDefault();
 
       // Get the form data
       const categoryNumber = form.elements['category-number'].value;
       const productName = form.elements['product-name'].value;
       const productDescription = form.elements['product-description'].value;
+
       const keywords = form.elements['keywords'].value;
       const companionAccessories = Array.from(form.elements['companion-accessories[]']).map(input => input.value);
       const remarks = form.elements['remarks'].value;
@@ -183,6 +188,7 @@
           alert('Failed to register product.');
         });
     });
-  </script>
+
+
 </body>
 </html>
