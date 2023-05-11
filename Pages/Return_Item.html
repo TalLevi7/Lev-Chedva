@@ -13,6 +13,8 @@
     <button id="search-by-cat-btn">חפש לפי מק"ט</button>
     <div id="item-data" style="display: none;"></div>
     <div id="return-details" style="display: none;">
+        <div id="accessories-list" style="display: none;"></div>
+        <label>כמות: <input type="number" id="return-quantity" /></label>
         <label>"שם המתנדב" <input type="text" id="return-name" /></label>
         <label>מיקום:
             <select id="return-location">
@@ -33,7 +35,7 @@
         const returnBtn = document.getElementById('return-btn');
         const returnName = document.getElementById('return-name');
         const returnLocation = document.getElementById('return-location');
-
+        const accessoriesListDiv = document.getElementById('accessories-list');
         let foundItemId = null;
         let foundItemCategorialNumber = null;
     async function getLocations() {
@@ -54,7 +56,7 @@
             const borrowedItemRef = firebase.firestore().collection('Borrowed Items').doc(itemId);
             const borrowedItemSnapshot = await borrowedItemRef.get();
             if (!borrowedItemSnapshot.exists) {
-                alert('Item not found.');
+                alert('המוצר לא נמצא.');
                 return;
             }
 
@@ -64,7 +66,7 @@
             const inventoryItemSnapshot = await inventoryItemRef.get();
 
             if (!inventoryItemSnapshot.exists) {
-                alert('Item not found in inventory.');
+                alert('המוצר אינו נמצא במלאי');
                 return;
             }
 
@@ -75,7 +77,7 @@
     const inventoryItemRef = firebase.firestore().collection('inventory').doc(categorialNumber);
     const inventoryItemSnapshot = await inventoryItemRef.get();
     if (!inventoryItemSnapshot.exists || inventoryItemSnapshot.data().status !== 'borrowed') {
-        alert('Item not found or not borrowed.');
+        alert('המוצר לא נמצא או אינו מושאל');
         return;
     }
     foundItemCategorialNumber = categorialNumber;
@@ -84,7 +86,7 @@
     const borrowedItemsRef = firebase.firestore().collection('Borrowed Items');
     const querySnapshot = await borrowedItemsRef.where('categorialNumber', '==', categorialNumber).get();
     if (querySnapshot.empty) {
-        alert('Item not found in the "Borrowed Items" collection.');
+        alert('המוצר אינו נמצא במוצרים מושאלים');
         return;
     }
     
@@ -123,10 +125,29 @@ function displayItemData(itemSnapshot) {
     StatusItem.textContent = "סטאטוס: " + item.status; // Replace with your translation function if needed
 
     const AccessoriesItem = document.createElement('li');
-    AccessoriesItem.textContent = "מוצרים נלווים: " + item.companion_accessories;
+    AccessoriesItem.textContent = "מוצרים נלווים: ";
+    const accessories = item.companion_accessories;
+    if (accessories) {
+        accessories.forEach(keyword => {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'accessory-' + keyword.trim();
+            checkbox.name = 'accessory';
+            checkbox.value = keyword.trim();
+            checkbox.checked = true;
 
+            const label = document.createElement('label');
+            label.htmlFor = 'accessory-' + keyword.trim();
+            label.appendChild(document.createTextNode(keyword.trim()));
+
+            AccessoriesItem.appendChild(checkbox);
+            AccessoriesItem.appendChild(label);
+        });
+    }
     const LocationItem = document.createElement('li');
     LocationItem.textContent = "מיקום: " + item.location;
+
+
 
     detailsList.appendChild(CatNumItem);
     detailsList.appendChild(ProductNameItem);
@@ -137,6 +158,7 @@ function displayItemData(itemSnapshot) {
     detailsList.appendChild(StatusItem);
     detailsList.appendChild(AccessoriesItem);
     detailsList.appendChild(LocationItem);
+    detailsList.appendChild(AccessoriesItem);
 
     itemData.innerHTML = '';
     itemData.appendChild(detailsList);
@@ -163,17 +185,38 @@ function displayItemData(itemSnapshot) {
         const borrowedItemSnapshot = await borrowedItemsRef.get();
         const borrowedItemData = borrowedItemSnapshot.data();
 
+        // Update companion_accessories and quantity based on checkboxes and input
+        const accessoryCheckboxes = document.getElementsByName('accessory');
+        let updatedCompanionAccessories = [];
+        for (let i = 0; i < accessoryCheckboxes.length; i++) {
+            if (accessoryCheckboxes[i].checked) {
+                updatedCompanionAccessories.push(accessoryCheckboxes[i].value);
+            } else {
+                updatedCompanionAccessories.push(accessoryCheckboxes[i].value + '-missing');
+            }
+        }
+
+        const returnQuantity = document.getElementById('return-quantity');
+        let updatedQuantity = parseInt(returnQuantity.value);
+
         const borrowedArchiveData = {
             ...borrowedItemData,
-            returnedDate: new Date().toISOString().substring(0, 10)
+            returnedDate: new Date().toISOString().substring(0, 10),
+            companion_accessories: updatedCompanionAccessories,  // Update the companion_accessories field
+            quantity: updatedQuantity  // Update the quantity field
         };
 
         const borrowedArchiveRef = firebase.firestore().collection('Borrowed Archive').doc(foundItemCategorialNumber);
         const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
 
+        // You might want to get the current quantity from the inventory first, and then add the returned quantity to it
+        const inventoryItemSnapshot = await inventoryItemRef.get();
+        const currentQuantity = inventoryItemSnapshot.data().product_quantity;
+        updatedQuantity += currentQuantity;
+
         await borrowedArchiveRef.set(borrowedArchiveData);
         await borrowedItemsRef.delete();
-        await inventoryItemRef.update({ status: 'free', location: returnLocation.value });
+        await inventoryItemRef.update({ status: 'free', location: returnLocation.value, companion_accessories: updatedCompanionAccessories, product_quantity: updatedQuantity });
 
         alert('Item has been successfully returned.');
         location.reload();
@@ -182,6 +225,8 @@ function displayItemData(itemSnapshot) {
         alert('Failed to return the borrowed item.');
     }
 });
+
+
 
 </script>
 </body>

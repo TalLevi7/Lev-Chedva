@@ -29,16 +29,41 @@ db.collection('Tools').doc('search-filters')
     });
   });
 
-async function searchBarProducts() {
-  const searchInput = document.getElementById('search-input').value;
-  preDisplayProducts(searchInput);
-}
+  async function searchBarProducts() {
+    const searchInput = document.getElementById('search-input').value;
+    searchAcrossCollection(searchInput); // CHANGE HERE
+  }
+
 
 async function searchFilterProducts() {
   const selectedFilter = document.getElementById('filter-select').value;
  preDisplayProducts(selectedFilter);
 }
 
+
+async function searchAcrossCollection(searchTerm) { // CHANGE HERE
+  ProductsArray = []; // Clear the array before search
+  try {
+    const snapshot = await ProductsRef.get();
+    snapshot.forEach((doc) => {
+      if (doc.exists) {
+        const data = doc.data();
+        // Check if the search term exists in any field of the document
+        for (let key in data) {
+          if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+            ProductsArray.push(data);
+            break;
+          }
+        }
+      } else {
+        console.log("No such document!");
+      }
+    });
+  } catch (error) {
+    console.log("Error getting documents:", error);
+  }
+  preDisplayProducts("all");
+}
 
 
 async function readProducts() {
@@ -153,6 +178,11 @@ function displayProducts(ProductData) {
           // Translate the status back to English if the field is 'status'
           if (field === "status") {
             newValue = translateStatusToEnglish(newValue);
+          }
+      
+          // If the field is 'companion_accessories', convert the string to an array // CHANGE HERE
+          if (field === "companion_accessories") {
+            newValue = newValue.split(',').map(item => item.trim());
           }
       
           if (field === "categorial_number") {
