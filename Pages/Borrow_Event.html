@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../styles/Borrow_Event.css">
+    <title>השאלת מוצר</title>
+</head>
+<body>
+    <input type="text" id="search-input" placeholder="הכנס מספר סידורי" />
+    <button id="search-btn">חפש</button>
+    <div id="item-data" style="display: none;"></div>
+    <div id="item-details" style="display: none;">
+      <label>שם האיש קשר <input type="text" id="contact-name" /></label>
+      <label>טלפון איש קשר<input type="text" id="contact-phone" /></label>
+      <label>טלפון איש קשר נוסף<input type="text" id="contact-phone2" /></label>
+      <label>ת.ז איש קשר <input type="text" id="contact-id" /></label>
+      <label>שם המטופל <input type="text" id="patient-name" /></label>
+      <label>כתובת<input type="text" id="address" /></label>
+      <label>משאיל מתאריך <input type="date" id="borrowing-from" /></label>
+      <label>משאיל עד לתאריך <input type="date" id="borrowing-until" /></label>
+      <label>שם המתנדב<input type="text" id="loaning_volunteer" /></label>
+      <button id="save-btn">השאל</button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="../firebase.js"></script>
+    <script>
+
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-btn');
+const itemData = document.getElementById('item-data');
+const itemDetails = document.getElementById('item-details');
+const saveBtn = document.getElementById('save-btn');
+const contactName = document.getElementById('contact-name');
+const contactPhone = document.getElementById('contact-phone');
+const contactPhone2 = document.getElementById('contact-phone');
+const contactId = document.getElementById('contact-id');
+const patientName = document.getElementById('patient-name');
+const borrowingFrom = document.getElementById('borrowing-from');
+const borrowingUntil = document.getElementById('borrowing-until');
+const address = document.getElementById('address');
+const loaning_volunteer = document.getElementById('loaning_volunteer');
+
+searchBtn.addEventListener('click', async () => {
+  const itemName = searchInput.value;
+  const itemRef = firebase.firestore().collection('inventory').doc(itemName);
+
+  const itemSnapshot = await itemRef.get();
+  if (itemSnapshot.exists && itemSnapshot.data().status === 'free') {
+    itemDetails.style.display = 'block';
+/// change for what you want to see
+const item = itemSnapshot.data();
+
+
+const detailsList = document.createElement('ul');
+
+const CatNumItem = document.createElement('li');
+CatNumItem.textContent = "מס סידורי: " + item.categorial_number;
+
+const ProductNameItem = document.createElement('li');
+ProductNameItem.textContent = "שם: " + item.product_name;
+
+const DescriptionItem = document.createElement('li');
+DescriptionItem.textContent = "תיאור: " + item.product_description;
+
+const KeywordItem = document.createElement('li');
+KeywordItem.textContent = "מילות מפתח: " + item.keywords;
+
+const QuantityItem = document.createElement('li');
+QuantityItem.textContent = "כמות: " + item.product_quantity;
+
+const RemarksItem = document.createElement('li');
+RemarksItem.textContent = "הערות: " + item.remarks;
+
+const StatusItem = document.createElement('li');
+StatusItem.textContent = "סטאטוס: " + item.status; // Replace with your translation function if needed
+
+const AccessoriesItem = document.createElement('li');
+AccessoriesItem.textContent = "מוצרים נלווים: " + item.companion_accessories;
+
+const LocationItem = document.createElement('li');
+LocationItem.textContent = "מיקום: " + item.location;
+
+detailsList.appendChild(CatNumItem);
+detailsList.appendChild(ProductNameItem);
+detailsList.appendChild(DescriptionItem);
+detailsList.appendChild(KeywordItem);
+detailsList.appendChild(QuantityItem);
+detailsList.appendChild(RemarksItem);
+detailsList.appendChild(StatusItem);
+detailsList.appendChild(AccessoriesItem);
+detailsList.appendChild(LocationItem);
+
+itemData.appendChild(detailsList);
+
+    itemData.style.display = 'block';
+
+    const currentDate = new Date();
+    const defaultBorrowingUntil = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+    borrowingUntil.value = defaultBorrowingUntil.toISOString().substring(0, 10);
+    borrowingFrom.value = defaultBorrowingUntil.toISOString().substring(0, 10);
+  } else {
+    alert('Item not found or not available.');
+  }
+});
+
+saveBtn.addEventListener('click', async () => {
+
+  const itemName = searchInput.value;
+  console.log(itemName);
+  const itemRef = firebase.firestore().collection('inventory').doc(itemName);
+  const borrowedItemsRef = firebase.firestore().collection('Borrowed Items').doc(contactId.value);
+
+  const currentDate = new Date().toISOString().substring(0, 10);
+  const borrowedItemData = {
+    contactName: contactName.value,
+    contactPhone: contactPhone.value,
+    contactPhone2:contactPhone2.value,
+    contactId: contactId.value,
+    patientName: patientName.value,
+    borrowingFrom:borrowingFrom.value,
+    borrowingUntil: borrowingUntil.value,
+    categorialNumber:itemName,
+    address:address.value,
+    loaning_volunteer:loaning_volunteer.value
+  };
+
+  try {
+    await borrowedItemsRef.set(borrowedItemData);
+    await itemRef.update({ status: 'borrowed' });
+    alert('Item has been successfully saved.');
+    location.reload();
+  } catch (error) {
+    console.error('Error saving the borrowed item:', error);
+    alert('Failed to save the borrowed item.');
+  }
+});
+
+
+
+
+    </script>
+</body>
+</html>
