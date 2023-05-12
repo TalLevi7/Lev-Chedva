@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>עדכון כמות מוצר קיים</title>
+  <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
+</head>
+<body>
+  <h1>עדכון כמות מוצר קיים</h1>
+
+  <form id="search-form">
+    <label for="category-number">מק"ט:</label>
+    <input type="text" id="category-number" name="category-number" required><br><br>
+    <button type="button" onclick="searchProduct()">חפש מוצר</button>
+  </form>
+  <hr>
+  <form id="update-form" style="display:none;">
+    <label for="product-name">שם המוצר:</label>
+    <input type="text" id="product-name" name="product-name" readonly><br><br>
+
+    <label for="product-description">תיאור המוצר:</label>
+    <input type="text" id="product-description" name="product-description" readonly><br><br>
+
+    <label for="product-quantity">כמות נוכחית:</label>
+    <input type="number" id="product-quantity" name="product-quantity" readonly><br><br>
+
+    <label for="quantity-update">כמות להוסיף:</label>
+    <input type="number" id="quantity-update" name="quantity-update" required><br><br>
+
+    <input type="submit" value="עדכן כמות">
+  </form>
+
+  <!-- Firebase Firestore SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="../firebase.js"></script>
+  <script>
+    // Get a reference to the Firestore database
+    const db = firebase.firestore();
+
+    async function searchProduct() {
+      const categoryNumber = document.getElementById('category-number').value;
+      const docRef = db.collection('inventory').doc(categoryNumber);
+      const docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        document.getElementById('product-name').value = docSnapshot.data().product_name;
+        document.getElementById('product-description').value = docSnapshot.data().product_description;
+        document.getElementById('product-quantity').value = docSnapshot.data().product_quantity;
+        document.getElementById('update-form').style.display = 'block';
+      } else {
+        alert('No product found with this category number.');
+      }
+    }
+
+    // Add an event listener to the form submission
+    const form = document.getElementById('update-form');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      // Get the form data
+      const categoryNumber = document.getElementById('category-number').value;
+      const quantityUpdate = form.elements['quantity-update'].value;
+
+      // Check if the document with the same category number exists
+      const docRef = db.collection('inventory').doc(categoryNumber);
+      const docSnapshot = await docRef.get();
+
+      if (!docSnapshot.exists) {
+        alert('No product found with this category number.');
+        return;
+      }
+
+      // Update the product quantity in Firestore
+      docRef.update({
+        'product_quantity': docSnapshot.data().product_quantity + parseInt(quantityUpdate)
+      })
+      .then(() => {
+          alert('Product quantity updated successfully!');
+          form.reset();
+          // Refresh the page
+          location.reload();
+        })
+        .catch((error) => {
+          console.error('Error updating product quantity: ', error);
+          alert('Failed to update product quantity.');
+        });
+    });
+  </script>
+</body>
+</html>
+

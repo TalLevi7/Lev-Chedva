@@ -1,0 +1,120 @@
+
+/* General styling */
+body {
+  font-family: Arial, sans-serif;
+  direction: rtl;
+}
+
+header {
+  text-align: center;
+  background-color: #f1f1f1;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Filter bar */
+#filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#filter-bar label,
+#filter-bar select,
+#filter-bar input,
+#filter-bar button {
+  margin-bottom: 10px;
+}
+
+#filter-select,
+#search-input {
+  padding: 5px;
+}
+
+#search-input {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+/* Product table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+
+}
+
+th,
+td {
+
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: right;
+}
+
+th {
+  background-color: #f1f1f1;
+}
+
+tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+
+/* Product details row */
+.product-details-row {
+  background-color: #f1f1f1;
+}
+
+.product-details-row ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.product-details-row li {
+  margin-bottom: 5px;
+}
+
+/* Buttons */
+button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+/* Add/Delete/Edit Buttons */
+.add-product-btn,
+#add-filter-btn,
+#filter-btn,
+.deleteProductBtn,
+.editProductBtn,
+.saveChangesBtn {
+  background-color: #008CBA;
+}
+
+#add-product-btn:hover,
+#add-filter-btn:hover,
+#filter-btn:hover,
+.deleteProductBtn:hover,
+.editProductBtn:hover,
+.saveChangesBtn:hover {
+  background-color: #0073ad;
+
+}

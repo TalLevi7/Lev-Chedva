@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../styles/Borrow_Event.css">
+    <title>השאלת מוצר</title>
+</head>
+<body>
+    <input type="text" id="search-input" placeholder="הכנס מספר סידורי" />
+    <button id="search-btn">חפש</button>
+    <div id="item-data" style="display: none;"></div>
+    <div id="item-details" style="display: none;">
+      <label>שם האיש קשר <input type="text" id="contact-name" /></label>
+      <label>טלפון איש קשר<input type="text" id="contact-phone" /></label>
+      <label>טלפון איש קשר נוסף<input type="text" id="contact-phone2" /></label>
+      <label>ת.ז איש קשר <input type="text" id="contact-id" /></label>
+      <label>שם המטופל <input type="text" id="patient-name" /></label>
+      <label>כתובת<input type="text" id="address" /></label>
+      <label>משאיל מתאריך <input type="date" id="borrowing-from" /></label>
+      <label>משאיל עד לתאריך <input type="date" id="borrowing-until" /></label>
+      <label>שם המתנדב<input type="text" id="loaning_volunteer" /></label>
+      <label>כמות להשאלה<input type="number" id="borrowing-quantity" /></label>
+      <button id="save-btn">השאל</button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="../firebase.js"></script>
+    <script>
+      const searchInput = document.getElementById('search-input');
+      const searchBtn = document.getElementById('search-btn');
+      const itemData = document.getElementById('item-data');
+      const itemDetails = document.getElementById('item-details');
+      const saveBtn = document.getElementById('save-btn');
+      const contactName = document.getElementById('contact-name');
+      const contactPhone = document.getElementById('contact-phone');
+      const contactPhone2 = document.getElementById('contact-phone2');
+      const contactId = document.getElementById('contact-id');
+      const patientName = document.getElementById('patient-name');
+      const borrowingFrom = document.getElementById('borrowing-from');
+      const borrowingUntil = document.getElementById('borrowing-until');
+      const address = document.getElementById('address');
+      const loaning_volunteer = document.getElementById('loaning_volunteer');
+      const borrowingQuantity = document.getElementById('borrowing-quantity');
+      
+      let borrowCounter = null;
+      let borrowCounterRef = firebase.firestore().collection('Tools').doc('Events Counter');
+      
+      // Get borrow counter
+      async function getBorrowCounter() {
+        const doc = await borrowCounterRef.get();
+        if (!doc.exists) {
+          console.log('No such document!');
+        } else {
+          borrowCounter = doc.data()['borrow counter'];
+        }
+      }
+      
+      getBorrowCounter();
+      
+      searchBtn.addEventListener('click', async () => {
+          const itemName = searchInput.value;
+          const itemRef = firebase.firestore().collection('inventory').doc(itemName);
+      
+          const itemSnapshot = await itemRef.get();
+          if (itemSnapshot.exists && itemSnapshot.data().status === 'free') {
+              itemDetails.style.display = 'block';
+              const item = itemSnapshot.data();
+              // Populate item details here...
+          } else {
+              alert('Item not found or not available.');
+          }
+      });
+      
+      saveBtn.addEventListener('click', async () => {
+          const itemName = searchInput.value;
+          const itemRef = firebase.firestore().collection('inventory').doc(itemName);
+          const borrowedItemsRef = firebase.firestore().collection('Borrowed Items').doc(contactId.value);
+          const borrowTicketsRef = firebase.firestore().collection('Borrow Tickets').doc(borrowCounter.toString());
+          
+          const itemSnapshot = await itemRef.get();
+          if (!itemSnapshot.exists || itemSnapshot.data().product_quantity <= 0) {
+              alert('Item not in inventory.');
+              return;
+          }
+      
+          const newQuantity = itemSnapshot.data().product_quantity - borrowingQuantity.value;
+          if(newQuantity<0){
+              alert("אין מספיק כמות במלאי");
+              return;
+          }
+          const newStatus = newQuantity > 0 ? 'free' : 'none';
+          
+          const borrowedItemData = {
+              product_name:itemSnapshot.data().product_name,
+              contactName: contactName.value,
+              contactPhone: contactPhone.value,
+              contactPhone2: contactPhone2.value,
+              contactId: contactId.value,
+              patientName: patientName.value,
+              borrowingFrom: borrowingFrom.value,
+              borrowingUntil: borrowingUntil.value,
+              categorialNumber: itemName,
+              address: address.value,
+              loaning_volunteer: loaning_volunteer.value,
+              quantity: borrowingQuantity.value
+          };
+      
+          try {
+              await borrowedItemsRef.get().then((docSnapshot) => {
+                  if (docSnapshot.exists) {
+                      borrowedItemsRef.update({
+                          borrowTickets: firebase.firestore.FieldValue.arrayUnion(borrowCounter)
+                      });
+                  } else {
+                      borrowedItemsRef.set({
+                          borrowTickets: [borrowCounter]
+                      });
+                  }
+              });
+      
+              await borrowTicketsRef.set(borrowedItemData);
+              await itemRef.update({ status: newStatus, product_quantity: newQuantity });
+              await borrowCounterRef.update({ 'borrow counter': borrowCounter + 1 });
+              alert('Item has been successfully saved.');
+              location.reload();
+          } catch (error) {
+            console.error('Error saving the borrowed item:', error);
+        alert('Failed to save the borrowed item.');
+    }
+});
+</script>
+</body>
+</html>
+
+      

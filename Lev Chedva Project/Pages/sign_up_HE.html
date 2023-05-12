@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang = "he">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../styles/SignUp_style_HE.css">
+    <title>הירשם</title>
+  </head>
+  <body>
+    <h1>הירשם</h1>
+    <form id="signup-form">
+      <label for="email">אימייל:</label>
+      <input type="email" id="email" name="email" required>
+      <label for="password">סיסמא:</label>
+      <input type="password" id="password" name="password" required>
+      <button type="submit">הירשם</button>
+    </form>
+
+    <button id="google-signup-btn">
+      <img src="../Pics/icons8-google-48.png" alt="Google icon">
+    </button>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="../firebase.js"></script>
+    <script src="google-signup.js"></script>
+    <script>
+   
+
+      
+      // Get references to the email and password input fields
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      
+      // Get a reference to the sign-up form
+      const signUpForm = document.getElementById("signup-form");
+      
+      // Add an event listener to the sign-up form
+      signUpForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        
+        // Get the email and password values from the form
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        
+        // Sign up the user using Firebase Authentication
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  .then(() => {
+    // New sign-in will be persisted with session persistence.
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        // Signed up successfully
+        const user = userCredential.user;
+        console.log(user);
+          console.log("User data stored successfully.");
+          console.log("");
+          localStorage.setItem('email', email);
+          // Redirect to dashboard page
+          window.location.href = "../Pages/Volenteer_SignUp_HE.html";
+
+      })
+      .catch((error) => {
+        // Handle sign-up errors
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(errorCode, errorMessage);
+      });
+  })
+  .catch((error) => {
+    // Handle setting persistence errors
+    console.error("Error setting persistence: ", error);
+  });
+      });
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+      
+const googleSignUpBtn = document.getElementById('google-signup-btn');
+
+// Add an event listener to the Google sign-up button
+googleSignUpBtn.addEventListener('click', () => {
+  // Create a new Google provider object
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  // Set the language of the sign-in popup
+  provider.setCustomParameters({
+    prompt: 'select_account',
+    language: 'en'
+  });
+
+  // Sign up the user with the Google provider
+  firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+    .then((result) => {
+      // User signed up successfully
+      const user = result.user;
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          const userEmail = user.email;
+          localStorage.setItem('email', userEmail);
+          // Redirect to dashboard page
+          window.location.href = "../Pages/Volenteer_SignUp_HE.html";
+        }
+      });
+    })
+    .catch((error) => {
+      // Handle sign-up errors
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorCode, errorMessage);
+    });
+});
+
+
+
+    </script>
+  </body>
+</html>

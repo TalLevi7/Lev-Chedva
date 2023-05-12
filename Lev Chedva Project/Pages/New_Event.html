@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../styles/Open_Event_Form_style.css">
+	<title>טופס יצירת אירוע חדש</title>
+</head>
+<body>
+	<h1>טופס יצירת אירוע חדש</h1>
+	<form id="open-events-form">
+		<label for="name">:שם המוצר</label>
+		<input type="text" id="name" name="name"><br><br>
+		
+		<label for="type">:סוג</label>
+		<select id="type" name="type">
+      <option value="Empty"></option>
+			<option value="Transport">שינוע</option>
+			<option value="Visit">ביקור</option>
+			<option value="Other">אחר</option>
+		</select><br><br>
+		
+		<label for="urgency">:דחיפות</label>
+		<select id="urgency" name="urgency">
+      <option value="Empty"></option>
+			<option value="Urgent">דחוף</option>
+			<option value="Specific Time">זמן מסויים</option>
+			<option value="Whoever Can">מי שיכול</option>
+			<option value="Future Reservation">בעתיד</option>
+		</select><br><br>
+		
+		<label for="size">:גודל המוצר</label>
+		<select id="size" name="size">
+      <option value="Empty"></option>
+      <option value="Huge">ענק</option>
+			<option value="Big">גדול</option>
+			<option value="Medium">בינוני</option>
+			<option value="Small">קטן</option>
+		</select><br><br>
+		
+		<label for="weight">:משקל המוצר</label>
+		<select id="weight" name="weight">
+      <option value="Empty"></option>
+			<option value="Very Heavy">כבד מאד</option>
+			<option value="Heavy">כבד</option>
+			<option value="Medium">לא מאד כבד</option>
+			<option value="Light">קל</option>
+		</select><br><br>
+		
+		<label for="jeep">יחידת הג'יפים</label>
+		<input type="checkbox" id="jeep" name="jeep"><br><br>
+		
+		<label for="contact-name">:שם איש קשר</label>
+		<input type="text" id="contact-name" name="contact-name"><br><br>
+		
+		<label for="contact-phone">:טלפון איש קשר</label>
+		<input type="text" id="contact-phone" name="contact-phone"><br><br>
+	
+    <label for="Source_Address">:כתובת איסוף</label>
+		<input type="text" id="Source_Address" name="Source_Address"><br><br>
+
+		<label for="Destination_Address">:כתובת יעד</label>
+		<input type="text" id="Destination_Address" name="Destination_Address"><br><br>
+		
+		<label for="remarks">:הערות</label>
+		<textarea id="remarks" name="remarks"></textarea><br><br>
+		
+		<input type="submit" value="Submit">
+	</form>
+	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="../firebase.js"></script>
+    <script>
+// Get form elements
+const form = document.querySelector('#open-events-form');
+const nameInput = form.querySelector('#name');
+const typeSelect = form.querySelector('#type');
+const urgencySelect = form.querySelector('#urgency');
+const sizeSelect = form.querySelector('#size');
+const weightSelect = form.querySelector('#weight');
+const jeepCheckbox = form.querySelector('#jeep');
+const contactNameInput = form.querySelector('#contact-name');
+const contactPhoneInput = form.querySelector('#contact-phone');
+const Source_addressInput = form.querySelector('#Source_Address');
+const Destination_addressInput = form.querySelector('#Destination_Address');
+const remarksInput = form.querySelector('#remarks');
+
+
+
+// Firestore collection reference
+const openEventsRef = firebase.firestore().collection('Open Events');
+
+// Add submit event listener
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+firebase.firestore().collection("Tools").doc("Events Counter")
+  .get()
+  .then((doc) => {
+    var eventCounter;
+
+    eventCounter = doc.data().Counter;
+    console.log("Event Counter value:", eventCounter);
+    const incrementedCounter = eventCounter + 1;
+    firebase.firestore().collection("Tools").doc("Events Counter").update({ Counter: incrementedCounter });
+    return eventCounter;
+  })
+  .then((eventCounter) => {
+   // Get form values
+  const ProductName = nameInput.value.trim();
+  const type = typeSelect.value;
+  const urgency = urgencySelect.value;
+  const size = sizeSelect.value;
+  const weight = weightSelect.value;
+  const jeepUnit = jeepCheckbox.checked;
+  const contactName = contactNameInput.value.trim();
+  const contactPhone = contactPhoneInput.value.trim();
+  const Source_Address = Source_addressInput.value.trim();
+  const Destination_Address = Destination_addressInput.value.trim();
+  const remarks = remarksInput.value.trim();
+  const status ="Open";
+  eventCounter=eventCounter+1;
+  // Create new document in Firestore
+  firebase.firestore().collection('Open Events').doc(eventCounter.toString()).set({
+    eventCounter,
+    eventCounter,
+    ProductName,
+    type,
+    urgency,
+    size,
+    weight,
+    jeepUnit,
+    contactName,
+    contactPhone,
+    Source_Address,
+    Destination_Address,
+    remarks,
+    status,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  })
+  .then(() => {
+    console.log('Event added to Firestore');
+    form.reset();
+  })
+  .catch((error) => {
+    console.error('Error adding event to Firestore', error);
+  });
+    
+  })
+  .catch((error) => {
+    console.error("Error getting Events counter document: ", error);
+  });
+
+
+  
+});
+
+</script>
+</body>
+</html>
