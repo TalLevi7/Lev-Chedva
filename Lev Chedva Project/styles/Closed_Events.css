@@ -1,0 +1,50 @@
+body {
+    background-color: white;
+    color: black;
+    direction: rtl;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid red;
+    text-align: right;
+}
+
+th {
+    background-color: red;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 5px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td, table th {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}

@@ -139,61 +139,84 @@
 
 async function searchItemByCategorialNumber(categorialNumber) {
   
-    foundItemCategorialNumber = categorialNumber;
+  foundItemCategorialNumber = categorialNumber;
 
-    // Search for the categorialNumber in the "Borrow Tickets" collection
-    const borrowedTicketsRef = firebase.firestore().collection('Borrow Tickets');
-    const querySnapshot = await borrowedTicketsRef.where('categorialNumber', '==', categorialNumber).get();
-    if (querySnapshot.empty) {
-        alert('המוצר אינו נמצא בכרטיסי המושאלים');
-        return;
-    }
+  // Search for the categorialNumber in the "Borrow Tickets" collection
+  const borrowedTicketsRef = firebase.firestore().collection('Borrow Tickets');
+  const querySnapshot = await borrowedTicketsRef.where('categorialNumber', '==', categorialNumber).get();
+  if (querySnapshot.empty) {
+      alert('המוצר אינו נמצא בכרטיסי המושאלים');
+      return;
+  }
 
-    const buttonContainer = document.getElementById('buttonContainer');  // Replace 'buttonContainer' with the ID of your container
+  const buttonContainer = document.getElementById('buttonContainer');
 
-    // Loop over each document and create a button for it
-    for (let doc of querySnapshot.docs) {
-        const ticket = doc.id;
-        const ticketButton = document.createElement('button');
-        ticketButton.textContent = ticket; 
+  // Create the table
+  const table = document.createElement('table');
+  buttonContainer.appendChild(table);
 
-        ticketButton.addEventListener('click', async () => {
-            const ticketSnapshot = await doc.ref.get();
+  // Loop over each document and create a button for it
+  for (let doc of querySnapshot.docs) {
+      const ticket = doc.id;
+      const ticketButton = document.createElement('button');
+      ticketButton.textContent = ticket;
 
-            if (ticketSnapshot.exists) {
-                // Check if the details are currently displayed
-                if (itemData.style.display === 'block') {
-                    // If they are, hide them
-                    itemData.style.display = 'none';
-                } else {
-                    // If they're not, display the ticket data
-                    await displayItemData(ticketSnapshot);
+      // Create a row and a cell for the button
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      row.appendChild(cell);
+      table.appendChild(row);
 
-                    // Create a "Choose" button
-                    const chooseButton = document.createElement('button');
-                    chooseButton.textContent = "בחר";
-                    chooseButton.addEventListener('click', () => {
-                        returnDetails.style.display = 'block';
-                        ChosenTicket = ticket;
-                    });
+      // Append the button to the cell instead of the button container
+      cell.appendChild(ticketButton);
 
-                    // Append the "Choose" button to the ticket data
-                    itemData.appendChild(chooseButton);
-                    // Show the details
-                    itemData.style.display = 'block';
-                }
-            } else {
-                alert('No data found for this ticket.');
-            }
-        });
+      // Create a div that will contain the details and the choose button
+      const detailsContainer = document.createElement('div');
+      detailsContainer.style.display = 'none';
+      cell.appendChild(detailsContainer);
 
-        // Append the button to the button container
-        buttonContainer.appendChild(ticketButton);
-    }
+      ticketButton.addEventListener('click', async () => {
+          const ticketSnapshot = await doc.ref.get();
+
+          if (ticketSnapshot.exists) {
+              // Check if the details are currently displayed
+              if (detailsContainer.style.display === 'block') {
+                  // If they are, hide them
+                  detailsContainer.style.display = 'none';
+              } else {
+                  // If they're not, display the ticket data
+                  await displayItemData(ticketSnapshot, detailsContainer);
+
+                  // Create a "Choose" button
+                  const chooseButton = document.createElement('button');
+                  chooseButton.textContent = "בחר";
+                  // Create a new return-details div for this item
+                  const returnDetails = document.createElement('div');
+                  // Copy the content of the original return-details div to this new div
+                  returnDetails.innerHTML = document.getElementById('return-details').innerHTML;
+                  returnDetails.style.display = 'none';
+                  const returnButton = returnDetails.querySelector('#return-btn');
+            returnButton.addEventListener('click', async () => {
+                returnItem();
+});
+                  chooseButton.addEventListener('click', () => {
+                      returnDetails.style.display = 'block';
+                      ChosenTicket = ticket;
+                  });
+                  // Append the "Choose" button and the return-details div to the details container
+                  detailsContainer.appendChild(chooseButton);
+                  detailsContainer.appendChild(returnDetails);
+                  detailsContainer.style.display = 'block';
+              }
+          } else {
+              alert('No data found for this ticket.');
+          }
+      });
+  }
 }
 
 
- async function displayItemData(itemSnapshot) {
+ async function displayItemData(itemSnapshot,container) {
         console.log()
         const borrowedItemsRef = firebase.firestore().collection('inventory').doc(itemSnapshot.data().categorialNumber);
         const borrowedItemSnapshot = await borrowedItemsRef.get();
@@ -256,9 +279,11 @@ async function searchItemByCategorialNumber(categorialNumber) {
     detailsList.appendChild(AccessoriesItem);
     detailsList.appendChild(ContactNameItem);
     detailsList.appendChild(AccessoriesItem);
-    itemData.innerHTML = '';
-    itemData.appendChild(detailsList);
-    itemData.style.display = 'block';
+    container.innerHTML = '';
+    container.appendChild(detailsList);
+    container.style.display = 'block';
+    container.innerHTML = '';
+    container.appendChild(detailsList);
 }
    
 searchByIdBtn.addEventListener('click', () => {
@@ -282,7 +307,10 @@ searchByCatBtn.addEventListener('click', () => {
     // Execute the search function
     searchItemByCategorialNumber(searchInput.value);
 });
-    returnBtn.addEventListener('click', async () => {
+
+
+    
+async function returnItem() {
     try {
         console.log(ChosenTicket);
         const borrowedTicketsRef = firebase.firestore().collection('Borrow Tickets').doc(ChosenTicket);
@@ -353,7 +381,7 @@ searchByCatBtn.addEventListener('click', () => {
         console.error('Error returning the borrowed item:', error);
         alert('Failed to return the borrowed item.');
     }
-});
+}
 
 </script>
 </body>

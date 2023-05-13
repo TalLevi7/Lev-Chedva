@@ -85,7 +85,7 @@ function checkAuthorizationAndRedirect(email) {
       // If the document exists, get the "Authorizations" field
       const authorizations = doc.data().Authorizations;
       
-      if (authorizations == 0) {
+      if (authorizations == "0") {
         // If the "Authorizations" field is 0, redirect to page A
         window.location.href = "../Pages/Manager_Panel.html";
       } else {
