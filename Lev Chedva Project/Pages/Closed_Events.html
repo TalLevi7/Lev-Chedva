@@ -1,115 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Closed Events</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .details-row {
-            display: none;
-        }
-    </style>
+    <title>Events Display</title>
+    <link rel="stylesheet" href="../styles/Closed_Events.css">
 </head>
 <body>
-    <table id="events-table">
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Timestamp</th>
-                <th>Event Counter</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Events will be dynamically populated here -->
-        </tbody>
-    </table>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <div id="eventContainer"></div>
+
+     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
     <script>
-  const table = document.getElementById('events-table');
+var db = firebase.firestore();
 
-function createTableCell(text) {
-  const cell = document.createElement('td');
-  cell.textContent = text;
-  return cell;
-}
+async function fetchAndDisplayEvents() {
+    const eventsRef = db.collection('Closed Events');
+    const snapshot = await eventsRef.get();
 
-function toggleDetails(eventId) {
-  const detailsRow = document.getElementById(`details-${eventId}`);
-  detailsRow.classList.toggle('hidden');
-}
+    const eventContainer = document.getElementById('eventContainer');
+    const table = document.createElement('table');
+    eventContainer.appendChild(table);
 
-function populateEventsTable(events) {
-  const tableBody = table.querySelector('tbody');
-  
-  events.forEach(event => {
-    const row = document.createElement('tr');
-    
-    const productName = createTableCell(event.ProductName);
-    const timestamp = createTableCell(event.timestamp);
-    const eventCounter = createTableCell(event.eventCounter);
-    
-    row.appendChild(productName);
-    row.appendChild(timestamp);
-    row.appendChild(eventCounter);
-    
-    // Create details row
-    const detailsRow = document.createElement('tr');
-    detailsRow.classList.add('hidden');
-    detailsRow.setAttribute('id', `details-${event.id}`);
-    
-    const detailsCell = document.createElement('td');
-    detailsCell.setAttribute('colspan', '3');
-    
-    const detailsContent = document.createElement('div');
-    detailsContent.textContent = `Details for Event ${event.id}`;
-    
-    detailsCell.appendChild(detailsContent);
-    detailsRow.appendChild(detailsCell);
-    
-    // Add click event listener to toggle details
-    row.addEventListener('click', () => {
-      toggleDetails(event.id);
+    // Create table headers
+    const headers = ['מספר אירוע ', 'שם מוצר', 'תאריך'];
+    const headerRow = document.createElement('tr');
+    headers.forEach(headerText => {
+        const header = document.createElement('th');
+        header.textContent = headerText;
+        headerRow.appendChild(header);
     });
-    
-    // Append rows to the table body
-    tableBody.appendChild(row);
-    tableBody.appendChild(detailsRow);
-  });
-}
+    table.appendChild(headerRow);
 
-// Fetch closed events from Firestore
-const closedEventsRef = firebase.firestore().collection('Closed Events');
-closedEventsRef.get().then(snapshot => {
-  const events = [];
-  snapshot.forEach(doc => {
-    const event = doc.data();
-    event.id = doc.id;
-    events.push(event);
-  });
-  
-  // Populate the table with events data
-  populateEventsTable(events);
-})
-.catch(error => {
-  console.error('Error fetching closed events:', error);
+    snapshot.forEach(doc => {
+    const data = doc.data();
+
+    const row = document.createElement('tr');
+
+    // Access the nested properties within eventData
+    let productName = data.eventData.ProductName;
+    let eventCounter = data.eventData.eventCounter;
+    let timestamp = data.eventData.timestamp;
+    
+    // Check if timestamp exists
+    let dateString = '';
+    if (timestamp) {
+        // Convert timestamp to a date string in day/month/year format
+        const date = timestamp.toDate();
+        dateString = date.toLocaleDateString();
+    }
+
+    // Create cells for each data
+    const eventCounterCell = document.createElement('td');
+    const productNameCell = document.createElement('td');
+    const dateCell = document.createElement('td');
+
+    eventCounterCell.textContent = eventCounter;
+    productNameCell.textContent = productName;
+    dateCell.textContent = dateString;
+
+    // Append cells to the row
+    row.appendChild(eventCounterCell);
+    row.appendChild(productNameCell);
+    row.appendChild(dateCell);
+
+    // Append row to the table
+    table.appendChild(row);
+
+    // Create a details row and a details cell for each event
+    const detailsRow = document.createElement('tr');
+    const detailsCell = document.createElement('td');
+    detailsCell.colSpan = headers.length;  // Let the details cell span all columns
+    detailsRow.appendChild(detailsCell);
+        // Create a details row and a details cell for each even
+        let eventData = data.eventData;
+        const detailsList = document.createElement('ul');
+        const ProductNameItem = document.createElement('li');
+      ProductNameItem.textContent = "שם המוצר:  " + eventData.ProductName;
+      const CatNumItem = document.createElement('li');
+      CatNumItem.textContent = "מספר סידורי: " + eventData.catgorial_number;
+      const QuantityItem = document.createElement('li');
+      QuantityItem.textContent = "כמות: " + eventData.quantity;
+      const AdressItem = document.createElement('li');
+      
+      AdressItem.textContent = "כתובת: " + eventData.address;
+      const ContactNameItem = document.createElement('li');
+      ContactNameItem.textContent = "שם האיש קשר: " + eventData.contactName;
+      const ContactPhoneItem = document.createElement('li');
+      ContactPhoneItem.textContent = "טלפון איש קשר " + eventData.contactPhone;
+      const RemarksItem = document.createElement('li');
+      RemarksItem.textContent = "הערות: " + eventData.remarks;
+      //const timestamp = eventData.timestamp.seconds * 1000; // convert seconds to milliseconds
+      const date = new Date(eventData.timestamp.seconds * 1000);
+      const PostTimeItem = document.createElement('li');
+      PostTimeItem.textContent = "הועלה ב: " + date;
+      const TypeItem = document.createElement('li');
+      TypeItem.textContent = "סוג: " + eventData.type;
+      const SizeItem = document.createElement('li');
+      SizeItem.textContent = "גודל: " + eventData.size;
+      const UrgencyItem = document.createElement('li');
+      UrgencyItem.textContent = "דחיפות: " + eventData.urgency;
+      const WeightItem = document.createElement('li');
+      WeightItem.textContent = "משקל: " + eventData.weight;
+      const JeepItem = document.createElement('li');
+      JeepItem.textContent = "ג'יפים " + eventData.jeepUnit;
+
+      detailsList.appendChild(ProductNameItem);
+      detailsList.appendChild(CatNumItem);
+      detailsList.appendChild(QuantityItem);
+      detailsList.appendChild(AdressItem);
+      detailsList.appendChild(ContactNameItem);
+      detailsList.appendChild(ContactPhoneItem);
+      detailsList.appendChild(RemarksItem);
+      detailsList.appendChild(PostTimeItem);
+      detailsList.appendChild(TypeItem);
+      detailsList.appendChild(SizeItem);
+      detailsList.appendChild(UrgencyItem);
+      detailsList.appendChild(WeightItem);
+      detailsList.appendChild(JeepItem);
+      detailsCell.appendChild(detailsList);
+      detailsRow.appendChild(detailsCell);
+      row.after(detailsRow);
+      
+
+      detailsCell.style.display = 'none';
+
+// Add a click event listener to the row
+row.addEventListener('click', () => {
+    if (detailsCell.style.display === 'block') {
+        detailsCell.style.display = 'none';
+    } else {
+        detailsCell.style.display = 'block';
+    }
 });
+
+// Append details row to the table
+table.appendChild(detailsRow);
+});
+}
+fetchAndDisplayEvents();
+
+
+
+
+
+
 
 
 
     </script>
-    
 </body>
 </html>

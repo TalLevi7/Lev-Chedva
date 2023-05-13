@@ -1,8 +1,6 @@
 
 body {
 	font-family: Arial, sans-serif;
-	background-image: url("../Pictures/pic1.jpg");
-	background-size: cover;
 }
 
 h1 {
@@ -16,13 +14,12 @@ form {
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
-	background-color: white;
 }
 
 label {
 	display: inline-block;
 	width: 200px;
-	text-align: left;
+	text-align: right;
 	margin-right: 20px;
 }
 
