@@ -3,6 +3,7 @@ body {
 	font-family: Arial, sans-serif;
 	background-image: url("../Pictures/pic1.jpg");
 	background-size: cover;
+
 }
 
 h1 {
@@ -21,9 +22,24 @@ form {
 
 label {
 	display: inline-block;
-	width: 200px;
-	text-align: left;
-	margin-right: 20px;
+	text-align: right;
+    float: right;
+}
+
+.form_labels {
+    width: 100%;
+    margin-left: 295px;
+}
+.form_fill_boxes {
+    float:right;
+    width: 100%
+}
+ .radio_checks {
+    float:right;
+}
+.radio_labels{
+    float:right;
+    width: 90%
 }
 
 input[type="text"],
@@ -50,8 +66,10 @@ input[type="button"] {
 	border-radius: 5px;
 	font-size: 16px;
 	cursor: pointer;
+    margin-left: 200px;    
 }
 
 input[type="button"]:hover {
 	background-color: #3e8e41;
+
 }
