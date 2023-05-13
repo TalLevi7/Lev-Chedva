@@ -8,7 +8,7 @@
 </head>
 <body>
   <h1>הרשמת מוצר חדש</h1>
-  <button class="square-button"><a href="../Pages/Add_Existing_Product">הכנס מוצר קיים</a></button>
+  <button class="square-button"><a href="../Pages/Add_Existing_Product.html">הכנס מוצר קיים</a></button>
 
   <form id="product-form">
     <label for="category-number">מק"ט:</label>
@@ -147,7 +147,7 @@
       const keywords = form.elements['keywords'].value;
       const companionAccessories = Array.from(form.elements['companion-accessories[]']).map(input => input.value);
       const remarks = form.elements['remarks'].value;
-      const productQuantity = form.elements['product-quantity'].value;
+      const productQuantity = parseInt(form.elements['product-quantity'].value); // Convert to number
       const locationVal =form.elements['location'].value;
       
       // Check if the document with the same category number already exists
@@ -189,6 +189,6 @@
         });
     });
 
-
+  </script>
 </body>
 </html>

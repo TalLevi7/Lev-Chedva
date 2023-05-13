@@ -17,7 +17,7 @@
   }
   
   header {
-    background-color: #333;
+    background-color: rgb(253, 56, 56);
     color: #fff;
     padding: 20px;
   }
@@ -93,7 +93,6 @@
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: rgb(246, 179, 179);
     height: 500px;
   }
 
@@ -106,6 +105,14 @@
     text-align: center;
   }
 
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: 500px;
+  }
+
   .contact {
     display: flex;
     height: 500px;
@@ -113,7 +120,15 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: aqua;
+    background-color: rgb(253, 56, 56);
+  }
+
+  #contact-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 90%;
   }
 
   .activities {
@@ -123,7 +138,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: rgb(179, 0, 255);
+    background-color: rgb(253, 56, 56);
   }
   
   .diff {
@@ -131,7 +146,7 @@
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: rgb(92, 191, 46);
+    background-color: rgb(253, 56, 56);
     height: 500px;
   }
 
@@ -140,6 +155,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    height: 90%;
   }
 
   .features h2 {
@@ -193,6 +209,29 @@
       background-color: red;
       color: white;
     }
+
+    .gallery-item {
+      display: flex;
+      flex-direction: column;
+      background-color: #f1f1f1;
+      padding: 30px;
+      margin:20px;
+      width: 50%;
+      margin-right: 20px;
+      border-radius: 5px;
+      text-align: center;
+      align-items: center;
+      justify-content:center ;
+      height: 100%;
+      }
+
+      #gallery-options {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 90%;
+      }
     
     footer {
     background-color: #333;

@@ -368,7 +368,10 @@ const translateStatus = (status) => {
       return "מושאל";
     case "reserved":
       return "שמור";
-    default:
+    case "none":
+      return "חסר במלאי";
+    
+      default:
       return status;
 
 
@@ -385,12 +388,14 @@ const translateStatusToEnglish = (status) => {
       return "borrowed";
     case "שמור":
       return "reserved";
+    case "חסר במלאי":
+      return "none";
     default:
       return status;
   }
 };
 
-readProducts();    
+// readProducts();    
    
 async function createLocationDropdown(item, updateProductField, ProductData) {
   const [label, value] = item.textContent.split(": ");
