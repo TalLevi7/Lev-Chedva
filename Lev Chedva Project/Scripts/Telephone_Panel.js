@@ -19,16 +19,13 @@ async function fetchAndDisplayBorrowedItems() {
     for (let doc of snapshot.docs) {
         const data = doc.data();
         const borrowedItems = data.borrowTickets;
-        let shouldShowDoc = false; // This variable will be true if at least one ticket matches the date requirement
+        let shouldShowDoc = false; 
 
-        // Use a for...of loop here so we can use 'await' inside it
         for (let item of borrowedItems) {
             const itemRef = db.collection('Borrow Tickets').doc(item.toString());
             const itemData = (await itemRef.get()).data();
 
-            // Check if the 'borrowingUntil' date falls within the range
             const borrowingUntilDate = new Date(itemData.borrowingUntil);
-          
 
             if (borrowingUntilDate <= inputDate && borrowingUntilDate >= currentDate) {
                 shouldShowDoc = true;
@@ -37,62 +34,46 @@ async function fetchAndDisplayBorrowedItems() {
         }
 
         if (shouldShowDoc) {
-            // Create row for each doc
             const row = document.createElement('tr');
-        
-            // Create cell for document ID
+
             const idCell = document.createElement('td');
             idCell.textContent = doc.data().Name;
             row.appendChild(idCell);
-        
-            // Create cell for contact button
+
             const buttonCell = document.createElement('td');
             const contactButton = document.createElement('button');
             contactButton.textContent = 'יצרתי קשר';
-        
-            // Add contact button to its cell
+
             buttonCell.appendChild(contactButton);
-        
-            // Add button cell to the row
             row.appendChild(buttonCell);
-        
-            // Create cell for lastTalk field
+
             const contactCell = document.createElement('td');
             if (data.lastTalk) {
-                // If 'lastTalk' field exists, display its value
                 contactCell.textContent =  "נוצר קשר בתאריך:"+data.lastTalk;
             }
             row.appendChild(contactCell);
-        
-            // Add functionality to the contact button
+
             contactButton.addEventListener('click', async () => {
-                const currentDate = new Date().toLocaleDateString(); // Get current date in local format
+                const currentDate = new Date().toLocaleDateString();
                 contactCell.textContent = currentDate;
-        
-                // Update the 'lastTalk' field in Firestore
                 await borrowedItemsRef.doc(doc.id).update({
                     lastTalk: currentDate
                 });
             });
-        
-            // Add row to the table body
+
             tableBody.appendChild(row);
-        
-            // Create a details row and cell for each doc
+
             const detailsRow = document.createElement('tr');
             const detailsCell = document.createElement('td');
             detailsCell.colSpan = 3;
         
-            // Create a nested table for the details
             const detailsTable = document.createElement('table');
             detailsCell.appendChild(detailsTable);
             detailsRow.appendChild(detailsCell);
             tableBody.appendChild(detailsRow);
-        
-            // Hide details by default
+
             detailsRow.style.display = 'none';
-        
-            // Show/hide details on click
+
             row.addEventListener('click', () => {
                 if (detailsRow.style.display === 'none') {
                     detailsRow.style.display = '';
@@ -100,17 +81,38 @@ async function fetchAndDisplayBorrowedItems() {
                     detailsRow.style.display = 'none';
                 }
             });
-        
-            // Fetch and display all tickets of the doc
+
             for (let item of borrowedItems) {
                 const itemRef = db.collection('Borrow Tickets').doc(item.toString());
                 const itemData = (await itemRef.get()).data();
                 displayTicketRow(detailsTable, itemData, item.toString());
             }
+
+            // Remarks cell
+            const remarksCell = document.createElement('td');
+            const remarksInput = document.createElement('textarea');
+            remarksInput.type = 'text';
+            remarksInput.value = doc.data().remarks || '';
+            remarksInput.style.width = '200px';
+            remarksInput.style.height = '50px';
+            remarksInput.style.textAlign = 'right'; // Align text to the right
+            remarksInput.style.overflow = 'auto';
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'שמור';
+
+            remarksCell.appendChild(remarksInput);
+            remarksCell.appendChild(saveButton);
+            row.appendChild(remarksCell);
+
+            saveButton.addEventListener('click', async () => {
+                await borrowedItemsRef.doc(doc.id).update({
+                    remarks: remarksInput.value
+                });
+            });
         }
-        
     }
 }
+
 
 
 

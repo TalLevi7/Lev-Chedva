@@ -45,31 +45,14 @@
         });
     
         async function searchAndDisplayBorrowedTickets(searchValue) {
-            const borrowedTicketsRef = db.collection('Borrow Tickets');
-            let docs;
-    
-            // If searchValue is not empty, get documents based on conditions
-            if (searchValue !== '') {
-                const queries = [
-                    borrowedTicketsRef.where('product_name', '==', searchValue),
-                    borrowedTicketsRef.where('contactName', '==', searchValue),
-                    borrowedTicketsRef.where('address', '==', searchValue),
-                    borrowedTicketsRef.where('borrowingFrom', '==', searchValue),
-                    borrowedTicketsRef.where('borrowingUntil', '==', searchValue),
-                    borrowedTicketsRef.where('categorialNumber', '==', searchValue),
-                    borrowedTicketsRef.where('contactId', '==', searchValue),
-                    borrowedTicketsRef.where('contactPhone', '==', searchValue),
-                    borrowedTicketsRef.where('contactPhone2', '==', searchValue),
-                    borrowedTicketsRef.where('quantity', '==', searchValue),
-                    borrowedTicketsRef.where('patientName', '==', searchValue),
-                    borrowedTicketsRef.where('loaning_volunteer', '==', searchValue)
-                ];
-    
-                const snapshots = await Promise.all(queries.map(query => query.get()));
-                docs = [].concat(...snapshots.map(snap => snap.docs));
-            } else {
-                docs = (await borrowedTicketsRef.get()).docs;
-            }
+    const borrowedTicketsRef = db.collection('Borrow Tickets');
+    let docs;
+
+    if (searchValue !== '') {
+        docs = await searchAcrossCollection(searchValue, borrowedTicketsRef); // Include borrowedTicketsRef as an argument
+    } else {
+        docs = (await borrowedTicketsRef.get()).docs;
+    }
     
 
     
@@ -205,7 +188,29 @@ function translateToHebrew(data) {
     return data;
 }
 
+async function searchAcrossCollection(searchTerm, borrowedTicketsRef) { 
+    let matchedDocs = []; 
+    try {
+        const snapshot = await borrowedTicketsRef.get();
+        snapshot.forEach((doc) => {
+            if (doc.exists) {
+                const data = doc.data();
+                for (let key in data) {
+                    if (typeof data[key] === 'string' && data[key].toLowerCase().includes(searchTerm.toLowerCase())) {
+                        matchedDocs.push(doc); // push the whole document instead of just the data
+                        break;
+                    }
+                }
+            } else {
+                console.log("No such document!");
+            }
+        });
+    } catch (error) {
+        console.log("Error getting documents:", error);
+    }
 
+    return matchedDocs; // Return the matched documents
+}
 
 </script>
 </body>
