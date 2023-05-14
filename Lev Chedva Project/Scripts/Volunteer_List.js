@@ -3,6 +3,7 @@ const volunteersTable = document.getElementById('volunteer-list');
 const db = firebase.firestore();
 const volunteersRef = db.collection("Volunteers");
 const filterBar = document.getElementById("authorization-filter");
+const searchInput = document.getElementById("search-input");
 
 async function readVolunteers() {
   try {
@@ -26,11 +27,28 @@ filterBar.addEventListener("change", function() {
   preDisplayVolunteers(selectedValue);
 });
 
-function preDisplayVolunteers(filter) {
+searchInput.addEventListener("input", function() {
+  const searchTerm = searchInput.value.trim();
+  searchAcrossCollection(searchTerm);
+});
+
+async function searchAcrossCollection(searchTerm) {
+  volunteersTable.innerHTML = "";
+  const filteredVolunteers = volunteersArray.filter((volunteerData) => {
+    const fullName = `${volunteerData.firstName} ${volunteerData.lastName}`.toLowerCase();
+    const email = volunteerData.email.toLowerCase();
+    const id =volunteerData.ID;
+    const phone=volunteerData.phone;
+    return fullName.includes(searchTerm.toLowerCase()) || email.includes(searchTerm.toLowerCase())||id.includes(searchTerm.toLowerCase())||phone.includes(searchTerm.toLowerCase());
+  });
+  preDisplayVolunteers("all", filteredVolunteers);
+}
+
+function preDisplayVolunteers(filter, volunteers = volunteersArray) {
   volunteersTable.innerHTML = "";
   if (filter === "Manager") filter = '0';
 
-  volunteersArray.forEach((volunteerData) => {
+  volunteers.forEach((volunteerData) => {
     if (filter === "all") {
       displayVolunteers(volunteerData);
     } else {
@@ -41,15 +59,12 @@ function preDisplayVolunteers(filter) {
   });
 }
 
+
 function displayVolunteers(volunteerData) {
   const row = document.createElement('tr');
-  const emailCell = document.createElement('td');
-  emailCell.textContent = volunteerData.email;
   const nameCell = document.createElement('td');
-  
   nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
   nameCell.style.textAlign = "right";
-  row.appendChild(emailCell);
   row.appendChild(nameCell);
   volunteersTable.appendChild(row);
 
@@ -64,21 +79,21 @@ function displayVolunteers(volunteerData) {
       detailsCell.colSpan = 8;
       const detailsList = document.createElement('ul');
       const firstNameItem = document.createElement('li');
-      firstNameItem.textContent = "First Name: " + volunteerData.firstName;
+      firstNameItem.textContent = "שם פרטי: " + volunteerData.firstName;
       const lastNameItem = document.createElement('li');
-      lastNameItem.textContent = "Last Name: " + volunteerData.lastName;
+      lastNameItem.textContent = "שם משפחה : " + volunteerData.lastName;
       const IDItem = document.createElement('li');
-      IDItem.textContent = "ID: " + volunteerData.ID;
+      IDItem.textContent = "ת.ז. : " + volunteerData.ID;
       const emailItem = document.createElement('li');
-      emailItem.textContent = "Email: " + volunteerData.email;
+      emailItem.textContent = "אימייל: " + volunteerData.email;
       const phoneItem = document.createElement('li');
-      phoneItem.textContent = "Phone: " + volunteerData.phone;
+      phoneItem.textContent = "טלפון: " + volunteerData.phone;
       const addressItem = document.createElement('li');
-      addressItem.textContent = "Address: " + volunteerData.address;
+      addressItem.textContent = "כתובת: " + volunteerData.address;
       const authItem = document.createElement('li');
-      authItem.textContent = "Authorizations: " + volunteerData.Authorizations;
+      authItem.textContent = "הרשאות: " + volunteerData.Authorizations;
       const volunteerTypesItem = document.createElement('li');
-      volunteerTypesItem.textContent = "Volunteer Types: ";
+      volunteerTypesItem.textContent = "סוגי התנדבות: ";
       const volunteerTypesList = document.createElement('ul');
       volunteerData.volunteerTypes.forEach(type => {
         const typeItem = document.createElement('li');
@@ -88,7 +103,7 @@ function displayVolunteers(volunteerData) {
       volunteerTypesItem.appendChild(volunteerTypesList);
 
       const vehiclesItem = document.createElement('li');
-      vehiclesItem.textContent = "Vehicles: ";
+      vehiclesItem.textContent = "רכבים: ";
       const vehiclesList = document.createElement('ul');
       volunteerData.vehicles.forEach(vehicle => {
         const vehicleItem = document.createElement('li');
@@ -111,7 +126,7 @@ function displayVolunteers(volunteerData) {
       row.after(detailsRow);
     
       const manageAuthButton = document.createElement('button');
-      manageAuthButton.textContent = 'Manage Authorizations';
+      manageAuthButton.textContent = 'נהל הרשאות';
       detailsList.appendChild(manageAuthButton);
       let validBtn = false;
     
@@ -129,12 +144,23 @@ function displayVolunteers(volunteerData) {
           authCell.colSpan = 8;
           const authForm = document.createElement('form');
           const authCheckboxes = [
-            { name: 'Manager', value: '0' },
-            { name: 'Volunteer_Manager', value: 'Volunteer_Manager' },
-            { name: 'Transit', value: 'Transit' },
-            { name: 'Telephone', value: 'Telephone' },
-            { name: 'Telephone_Manager', value: 'Telephone_Manager' },
-            { name: 'General', value: 'General' }
+            { name: 'מנהל', value: '000' },
+            { name: 'כללי', value: '01' },
+            { name: 'אירוע חדש', value: '10' },
+            { name: 'אירועים פתוחים כללי', value: '11' },
+            { name: 'אירועים פתוחים מתנדב', value: '12' },
+            { name: 'אירועים של המתנדב', value: '13' },
+            { name: 'אירועים סגורים', value: '14' },
+            { name: 'סטטיסטיקה למתנדב', value: '15' },
+            { name: 'הוספת מוצר', value: '20' },
+            { name: 'החזרת מוצר', value: '21' },
+            { name: ' השאלת מוצר', value: '22' },
+            { name: ' צפייה במלאי', value: '23' },
+            { name: 'מוצרים מושאלים', value: '24' },
+            { name: 'פאנל טלפניות', value: '30' },
+            
+
+
           ];
           authCheckboxes.forEach(cb => {
             const cbLabel = document.createElement('label');
@@ -150,7 +176,7 @@ function displayVolunteers(volunteerData) {
             authForm.appendChild(cbLabel);
           });
           const submitButton = document.createElement('button');
-          submitButton.textContent = 'Submit';
+          submitButton.textContent = 'שמור';
           authForm.appendChild(submitButton);
           submitButton.addEventListener('click', (e) => {
             e.preventDefault();
@@ -177,7 +203,7 @@ function displayVolunteers(volunteerData) {
       });
     
       const editUserBtn = document.createElement('button');
-      editUserBtn.textContent = 'Edit User';
+      editUserBtn.textContent = 'ערוך פרטי משתמש';
       detailsList.appendChild(editUserBtn);
     
       editUserBtn.addEventListener('click', () => {
@@ -218,15 +244,15 @@ function displayVolunteers(volunteerData) {
         makeEditable(addressItem, "address");
     
         const saveChangesBtn = document.createElement('button');
-        saveChangesBtn.textContent = 'Save Changes';
+        saveChangesBtn.textContent = 'שמור שינויים';
         detailsList.appendChild(saveChangesBtn);
     
         saveChangesBtn.addEventListener('click', () => {
-          firstNameItem.textContent = "First Name: " + volunteerData.firstName;
-          lastNameItem.textContent = "Last Name: " + volunteerData.lastName;
-          emailItem.textContent = "Email: " + volunteerData.email;
-          phoneItem.textContent = "Phone: " + volunteerData.phone;
-          addressItem.textContent = "Address: " + volunteerData.address;
+          firstNameItem.textContent = "שם פרטי: " + volunteerData.firstName;
+          lastNameItem.textContent = "שם משפחה: " + volunteerData.lastName;
+          emailItem.textContent = "אימייל: " + volunteerData.email;
+          phoneItem.textContent = "טלפון: " + volunteerData.phone;
+          addressItem.textContent = "כתובת: " + volunteerData.address;
     
           nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
           emailCell.textContent = volunteerData.email;
@@ -234,9 +260,37 @@ function displayVolunteers(volunteerData) {
           detailsList.removeChild(saveChangesBtn);
         });
       });
+      //...
+
+// Add this inside displayVolunteers function where the other buttons are being created
+
+const deleteUserBtn = document.createElement('button');
+deleteUserBtn.textContent = 'מחק משתמש';
+detailsList.appendChild(deleteUserBtn);
+
+deleteUserBtn.addEventListener('click', async () => {
+  if (confirm('אתה בטוח שאתה רוצה למחוק משתמש זה?')) {
+    try {
+      const docRef = db.collection("Volunteers").doc(volunteerData.email);
+      await docRef.delete();
+      row.parentElement.removeChild(row);
+      if (row.nextElementSibling && row.nextElementSibling.classList.contains('volunteer-details-row')) {
+        row.parentElement.removeChild(row.nextElementSibling);
+      }
+      volunteersArray = volunteersArray.filter(volunteer => volunteer.email !== volunteerData.email);
+    } catch (error) {
+      console.error("Error removing document: ", error);
+    }
+  }
+});
+
+//...
+
+
+
+
     }
   });
 }
-
-readVolunteers();    
+   
     

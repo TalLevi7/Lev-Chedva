@@ -74,8 +74,9 @@
 
       // Update the product quantity in Firestore
       docRef.update({
-        'product_quantity': docSnapshot.data().product_quantity + parseInt(quantityUpdate)
-      })
+    'product_quantity': parseInt(docSnapshot.data().product_quantity) + parseInt(quantityUpdate)
+})
+
       .then(() => {
           alert('Product quantity updated successfully!');
           form.reset();

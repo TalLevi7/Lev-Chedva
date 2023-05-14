@@ -1,68 +1,85 @@
-* {
-  font-family: Arial, Helvetica, sans-serif;
+body {
+  background-color: #fff;
+  color: #900;
+  font-family: 'Arial', sans-serif;
+  direction: rtl;
 }
 
-h1 {
+header {
+  background-color: #900;
+  color: #fff;
+  padding: 20px;
   text-align: center;
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+h1 {
+  font-size: 2em;
 }
 
+main {
+  margin: 20px;
+}
 
-/* Style the table */
-#volunteer-list {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  /* Style the table header */
-  #volunteer-list th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    text-align: left;
-    padding: 8px;
-  }
-  
-  /* Style the table cells */
-  #volunteer-list td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  /* Style the volunteer details row */
-  .volunteer-details-row {
-    background-color: #f2f2f2;
-  }
-  
-  /* Style the volunteer authorizations row */
-  .volunteer-auth-row {
-    background-color: #d9edf7;
-  }
-  
-  /* Style the "Manage Authorizations" button */
-  button {
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    padding: 8px;
-    cursor: pointer;
-    margin-top: 8px;
-  }
-  
-  /* Style the checkbox labels */
-  label {
-    display: block;
-    margin-bottom: 8px;
-  }
-  
-  #authorization-filter {
-    padding: 0.5em;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    text-align: right;
-  }
+input[type="text"], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 2px solid #900;
+  border-radius: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid #900;
+  padding: 15px;
+  text-align: right;
+}
+
+th {
+  background-color: #900;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+button {
+  background-color: #900;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border: none;
+}
+
+.volunteer-details-row {
+  background-color: #ffdddd;
+}
+
+.volunteer-details-row ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.volunteer-auth-row {
+  background-color: #ffeeee;
+}
+
+.volunteer-auth-row form {
+  display: flex;
+  flex-direction: column;
+}
+
+.volunteer-auth-row form label {
+  margin-bottom: 10px;
+}

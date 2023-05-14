@@ -15,7 +15,7 @@
       <label>שם האיש קשר <input type="text" id="contact-name" /></label>
       <label>טלפון איש קשר<input type="text" id="contact-phone" /></label>
       <label>טלפון איש קשר נוסף<input type="text" id="contact-phone2" /></label>
-      <label>ת.ז איש קשר <input type="text" id="contact-id" /></label>
+      <label>ת.ז איש קשר <input type="text" id="contact-id" required/></label>
       <label>שם המטופל <input type="text" id="patient-name" /></label>
       <label>כתובת<input type="text" id="address" /></label>
       <label>משאיל מתאריך <input type="date" id="borrowing-from" /></label>
@@ -62,18 +62,60 @@
       getBorrowCounter();
       
       searchBtn.addEventListener('click', async () => {
-          const itemName = searchInput.value;
-          const itemRef = firebase.firestore().collection('inventory').doc(itemName);
-      
-          const itemSnapshot = await itemRef.get();
-          if (itemSnapshot.exists && itemSnapshot.data().status === 'free') {
-              itemDetails.style.display = 'block';
-              const item = itemSnapshot.data();
-              // Populate item details here...
-          } else {
-              alert('Item not found or not available.');
-          }
-      });
+    const itemName = searchInput.value;
+    console.log('Searching for:', itemName); // Debugging line
+
+    const itemRef = firebase.firestore().collection('inventory').doc(itemName);
+
+    const itemSnapshot = await itemRef.get();
+    console.log('Item snapshot:', itemSnapshot); // Debugging line
+
+    if (itemSnapshot.exists && itemSnapshot.data().status === 'free') {
+        itemDetails.style.display = 'block';
+        const item = itemSnapshot.data();
+        console.log('Item:', item); // Debugging line
+
+        let hebrewLabels = {
+            categorial_number:'מספר סידורי',
+            status: 'סטאטוס',
+            keywords: 'מילות מפתח',
+            product_description: 'תיאור מוצר',
+            product_name: 'שם המוצר',
+            remarks: 'הערות',
+            product_quantity : 'כמות במלאי',
+            companion_accessories: 'מוצרים נלווים',
+            location: 'מיקום',
+            free: 'במלאי'
+
+        };
+
+        let statusTranslations = {
+        'free': 'במלאי',
+        'borrowed': 'מושאל',
+        'none': 'אין במלאי',
+        'reserved': 'שמור'
+};
+
+        let detailsList = document.getElementById('item-data');
+        detailsList.innerHTML = '';
+        detailsList.style.display = 'block'; // Make the item data list visible
+
+        for (let [key, value] of Object.entries(item)) {
+    let label = hebrewLabels[key] ? hebrewLabels[key] : key;
+
+    if (key === 'status') {
+        value = statusTranslations[value] ? statusTranslations[value] : value;
+    }
+
+    const listItem = document.createElement('li');
+    listItem.textContent = `${label}: ${value}`;
+    detailsList.appendChild(listItem);
+}
+    } else {
+        alert('Item not found or not available.');
+    }
+});
+
       
       saveBtn.addEventListener('click', async () => {
           const itemName = searchInput.value;
@@ -113,11 +155,15 @@
               await borrowedItemsRef.get().then((docSnapshot) => {
                   if (docSnapshot.exists) {
                       borrowedItemsRef.update({
-                          borrowTickets: firebase.firestore.FieldValue.arrayUnion(borrowCounter)
+                          borrowTickets: firebase.firestore.FieldValue.arrayUnion(borrowCounter),
+                          ID: contactId.value,
+                        Name: contactName.value
                       });
                   } else {
                       borrowedItemsRef.set({
-                          borrowTickets: [borrowCounter]
+                          borrowTickets: [borrowCounter],
+                          ID: contactId.value,
+                        Name: contactName.value
                       });
                   }
               });
@@ -126,10 +172,25 @@
               await itemRef.update({ status: newStatus, product_quantity: newQuantity });
               await borrowCounterRef.update({ 'borrow counter': borrowCounter + 1 });
               alert('Item has been successfully saved.');
-              location.reload();
           } catch (error) {
             console.error('Error saving the borrowed item:', error);
         alert('Failed to save the borrowed item.');
+    }
+
+
+    let answer = window.confirm('האם תרצה להשאיל מוצר נוסף');
+    if (answer) {
+        // If the user clicked "Yes"
+        // Clear the search input field to allow for a new search
+        searchInput.value = '';
+        borrowingQuantity.value=
+        // Hide item data and details
+        itemData.style.display = 'none';
+        itemDetails.style.display = 'none';
+    } else {
+        // If the user clicked "No"
+        // Refresh the page
+        location.reload();
     }
 });
 </script>
