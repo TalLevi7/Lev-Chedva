@@ -86,7 +86,7 @@
         // Create row for each doc
         const row = document.createElement('tr');
         const cell1 = document.createElement('td');
-        cell1.textContent = doc.id;
+        cell1.textContent =data.categorialNumber;
         row.appendChild(cell1);
 
         const inventoryRef = db.collection('inventory').doc(data.categorialNumber);
