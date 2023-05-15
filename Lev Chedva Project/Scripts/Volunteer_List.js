@@ -84,6 +84,8 @@ function displayVolunteers(volunteerData) {
       lastNameItem.textContent = "שם משפחה : " + volunteerData.lastName;
       const IDItem = document.createElement('li');
       IDItem.textContent = "ת.ז. : " + volunteerData.ID;
+      const BirthdayItem = document.createElement('li');
+      BirthdayItem.textContent = "תאריך לידה : " + volunteerData.BirthDate;
       const emailItem = document.createElement('li');
       emailItem.textContent = "אימייל: " + volunteerData.email;
       const phoneItem = document.createElement('li');
@@ -115,6 +117,7 @@ function displayVolunteers(volunteerData) {
       detailsList.appendChild(firstNameItem);
       detailsList.appendChild(lastNameItem);
       detailsList.appendChild(IDItem);
+      detailsList.appendChild(BirthdayItem);
       detailsList.appendChild(emailItem);
       detailsList.appendChild(phoneItem);
       detailsList.appendChild(addressItem);
@@ -242,6 +245,7 @@ function displayVolunteers(volunteerData) {
         makeEditable(emailItem, "email");
         makeEditable(phoneItem, "phone");
         makeEditable(addressItem, "address");
+        makeEditable(BirthdayItem, "BirthDate");
     
         const saveChangesBtn = document.createElement('button');
         saveChangesBtn.textContent = 'שמור שינויים';
@@ -253,6 +257,8 @@ function displayVolunteers(volunteerData) {
           emailItem.textContent = "אימייל: " + volunteerData.email;
           phoneItem.textContent = "טלפון: " + volunteerData.phone;
           addressItem.textContent = "כתובת: " + volunteerData.address;
+          BirthdayItem.textContent = "תאריך לידה: " + volunteerData.BirthDate;
+    
     
           nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
           emailCell.textContent = volunteerData.email;
