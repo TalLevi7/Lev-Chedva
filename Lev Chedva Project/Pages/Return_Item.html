@@ -8,7 +8,7 @@
     <title>החזר מוצר</title>
 </head>
 <body>
-    <input type="text" id="search-input" placeholder="Enter item ID or categorial number..." />
+    <input type="text" id="search-input" placeholder="הכנס ת.ז.או מספר סידורי של המוצר" />
     <button id="search-by-id-btn">חפש לפי ת.ז</button>
     <button id="search-by-cat-btn">חפש לפי מק"ט</button>
     <div id="buttonContainer"></div>
@@ -16,7 +16,7 @@
     <div id="return-details" style="display: none;">
         <div id="accessories-list" style="display: none;"></div>
         <label>כמות: <input type="number" id="return-quantity" /></label>
-        <label>"שם המתנדב" <input type="text" id="return-name" /></label>
+        <label>"שם המתנדב <input type="text" id="return-name" /></label>
         <label>מיקום:
             <select id="return-location">
             </select>
@@ -55,83 +55,89 @@
 
         getLocations();
 
-        async function searchItemById(itemId) {
-    const borrowedItemsRef = firebase.firestore().collection('Borrowed Items');
-    const docSnapshot = await borrowedItemsRef.doc(itemId).get();
+   async function searchItemById(itemId) {
 
-    if (!docSnapshot.exists) {
-        alert('המוצר לא נמצא.');
-        return;
-    }
-
-    const item = docSnapshot.data();
-    const tickets = item.borrowTickets.map(String);   
-
-    // Get a reference to the container where you want to append the ticket buttons
-    const buttonContainer = document.getElementById('buttonContainer');
-    buttonContainer.style.display = 'flex';
-    buttonContainer.style.flexDirection = 'column-reverse';
-
-    // Create a table
-    const table = document.createElement('table');
-    buttonContainer.appendChild(table);
-
-    // Loop over each ticket and create a button for it
-    for (let ticket of tickets) {
-        // Create a row and a cell for each ticket
-        const row = document.createElement('tr');
-        const cell = document.createElement('td');
-
-        // Create a button for each ticket
-        const ticketButton = document.createElement('button');
-        const ticketRef = firebase.firestore().collection('Borrow Tickets').doc(ticket);
-        const ticketSnapshot = await ticketRef.get();
-
-        if (ticketSnapshot.exists) {
-            const ticketData = ticketSnapshot.data();
-            ticketButton.textContent = `${ticketData.categorialNumber} - ${ticketData.product_name}`;
-        } else {
-            console.log('No data found for this ticket.');
-            continue;
-        }
-
-        ticketButton.addEventListener('click', async () => {
-            const itemDataRow = document.createElement('tr');
-            const itemDataCell = document.createElement('td');
-
-            const returnDetailsRow = document.createElement('tr');
-            const returnDetailsCell = document.createElement('td');
-
-            // Create a "Choose" button
-            const chooseButton = document.createElement('button');
-            chooseButton.textContent = "בחר";
-            chooseButton.addEventListener('click', () => {
-                returnDetails.style.display = 'block';
-                ChosenTicket = ticket;
-            });
-
-            // Append the "Choose" button to the ticket data cell
-            itemDataCell.appendChild(chooseButton);
-
-            // Add the new cells to the rows
-            itemDataRow.appendChild(itemDataCell);
-            returnDetailsRow.appendChild(returnDetailsCell);
-
-            // Add the new rows to the table
-            table.appendChild(itemDataRow);
-            table.appendChild(returnDetailsRow);
-
-            await displayItemData(ticketSnapshot);
-        });
-
-        // Append the button to the cell and the cell to the row
-        cell.appendChild(ticketButton);
-        row.appendChild(cell);
-
-        // Append the row to the table
-        table.appendChild(row);
-    }
+// Search for the itemId in the "Borrowed Items" collection
+const borrowedItemsRef = firebase.firestore().collection('Borrowed Items');
+const docSnapshot = await borrowedItemsRef.doc(itemId).get();
+if (!docSnapshot.exists) {
+  alert('המוצר לא נמצא.');
+  return;
 }
+
+const item = docSnapshot.data();
+const tickets = item.borrowTickets.map(String);
+
+const buttonContainer = document.getElementById('buttonContainer');
+
+// Create the header
+const header = document.createElement('h3');
+header.textContent = `${item.Name} - ${item.ID}`;
+buttonContainer.appendChild(header);
+
+// Create the table
+const table = document.createElement('table');
+buttonContainer.appendChild(table);
+   
+// Loop over each ticket and create a button for it
+for (let ticket of tickets) {
+    const ticketRef = firebase.firestore().collection('Borrow Tickets').doc(ticket);
+    const ticketSnapshot = await ticketRef.get();  
+    const ticketButton = document.createElement('button');
+    ticketButton.textContent = ticketSnapshot.data().product_name;
+
+    // Create a row and a cell for the button
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    row.appendChild(cell);
+    table.appendChild(row);
+
+    // Append the button to the cell instead of the button container
+    cell.appendChild(ticketButton);
+
+    // Create a div that will contain the details and the choose button
+    const detailsContainer = document.createElement('div');
+    detailsContainer.style.display = 'none';
+    cell.appendChild(detailsContainer);
+
+    ticketButton.addEventListener('click', async () => {
+        if (ticketSnapshot.exists) {
+            // Check if the details are currently displayed
+            if (detailsContainer.style.display === 'block') {
+                // If they are, hide them
+                detailsContainer.style.display = 'none';
+            } else {
+                // If they're not, display the ticket data
+                await displayItemData(ticketSnapshot, detailsContainer);
+
+                // Create a "Choose" button
+                const chooseButton = document.createElement('button');
+                chooseButton.textContent = "בחר";
+                // Create a new return-details div for this item
+                const returnDetails = document.createElement('div');
+                // Copy the content of the original return-details div to this new div
+                returnDetails.innerHTML = document.getElementById('return-details').innerHTML;
+                returnDetails.style.display = 'none';
+                const returnButton = returnDetails.querySelector('#return-btn');
+                returnButton.addEventListener('click', async () => {
+                    returnItem();
+                });
+                chooseButton.addEventListener('click', () => {
+                    returnDetails.style.display = 'block';
+                    ChosenTicket = ticket;
+                });
+                // Append the "Choose" button and the return-details div to the details container
+                detailsContainer.appendChild(chooseButton);
+                detailsContainer.appendChild(returnDetails);
+                detailsContainer.style.display = 'block';
+            }
+        } else {
+            alert('No data found for this ticket.');
+        }
+    });
+}
+}
+
 
 
 
@@ -150,6 +156,14 @@ async function searchItemByCategorialNumber(categorialNumber) {
   }
 
   const buttonContainer = document.getElementById('buttonContainer');
+<<<<<<< HEAD
+=======
+  const header = document.createElement('h3');
+  const inventoryItemsRef = firebase.firestore().collection('inventory');
+    const docSnapshot = await inventoryItemsRef.doc(categorialNumber).get();
+    header.textContent = `${docSnapshot.data().product_name} - ${categorialNumber}`;
+    buttonContainer.appendChild(header);
+>>>>>>> refs/remotes/origin/main
 
   // Create the table
   const table = document.createElement('table');
@@ -159,7 +173,11 @@ async function searchItemByCategorialNumber(categorialNumber) {
   for (let doc of querySnapshot.docs) {
       const ticket = doc.id;
       const ticketButton = document.createElement('button');
+<<<<<<< HEAD
       ticketButton.textContent = ticket;
+=======
+      ticketButton.textContent = doc.data().contactName +" "+doc.data().contactId;
+>>>>>>> refs/remotes/origin/main
 
       // Create a row and a cell for the button
       const row = document.createElement('tr');

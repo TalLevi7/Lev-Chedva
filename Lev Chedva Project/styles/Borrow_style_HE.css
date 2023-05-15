@@ -1,0 +1,75 @@
+
+body {
+	font-family: Arial, sans-serif;
+	background-image: url("../Pictures/pic1.jpg");
+	background-size: cover;
+
+}
+
+h1 {
+	text-align: center;
+	margin-top: 30px;
+}
+
+form {
+	margin: 0 auto;
+	max-width: 500px;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	background-color: white;
+}
+
+label {
+	display: inline-block;
+	text-align: right;
+    float: right;
+}
+
+.form_labels {
+    width: 100%;
+    margin-left: 295px;
+}
+.form_fill_boxes {
+    float:right;
+    width: 100%
+}
+ .radio_checks {
+    float:right;
+}
+.radio_labels{
+    float:right;
+    width: 90%
+}
+
+input[type="text"],
+input[type="tel"],
+textarea {
+	padding: 5px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 16px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+input[type="radio"] {
+	margin-right: 10px;
+}
+
+input[type="button"] {
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+    margin-left: 200px;    
+}
+
+input[type="button"]:hover {
+	background-color: #3e8e41;
+
+}

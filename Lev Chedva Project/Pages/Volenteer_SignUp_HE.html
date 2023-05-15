@@ -37,15 +37,15 @@
         
         <label for="volunteer-types">?איך היית רוצה להתנדב</label>
         <div id="volunteer-types">
-          <input type="checkbox" id="Volunteer_Type1" name="Volunteer_Type" value="Transport">
+          <input type="checkbox" id="Volunteer_Type1" name="Volunteer_Type" value="שינוע">
           <label for="Volunteer_Type1">שינוע</label>
-          <input type="checkbox" id="Volunteer_Type2" name="Volunteer_Type" value="Telephone Operator">
+          <input type="checkbox" id="Volunteer_Type2" name="Volunteer_Type" value="טלפן">
           <label for="Volunteer_Type2">טלפנ/ית</label>
-          <input type="checkbox" id="Volunteer_Type3" name="Volunteer_Type" value="Jeep Unit">
+          <input type="checkbox" id="Volunteer_Type3" name="Volunteer_Type" value="ג'יפים">
           <label for="Volunteer_Type3">יחידת הג'יפים</label>
-          <input type="checkbox" id="Volunteer_Type4" name="Volunteer_Type" value="Helping in the distribution center">
+          <input type="checkbox" id="Volunteer_Type4" name="Volunteer_Type" value="עזרה כללית">
           <label for="Volunteer_Type4">עזרה במרכז הפצה</label>
-          <input type="checkbox" id="Volunteer_Type5" name="Volunteer_Type" value="Emergency Contact">
+          <input type="checkbox" id="Volunteer_Type5" name="Volunteer_Type" value="איש קשר לשעת חירום">
           <label for="Volunteer_Type5">איש קשר לשעת חירום</label>
         </div>
         <button type="submit">צור מתנדב</button>
@@ -107,7 +107,7 @@
         
 
         // Store the Volunteer object in Firestore
-        firebase.firestore().collection("Volunteers").doc(email).set({
+        firebase.firestore().collection("Volunteers Waiting").doc(email).set({
         firstName,
         lastName,
         ID,
