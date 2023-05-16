@@ -2,23 +2,23 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Borrow Form</title>
+	<title>Borrow Form</title>ד</title>
 	<link rel="stylesheet" type="text/css" href="../styles/Borrow_style.css">
 </head>
 <body>
 	<form>
-		<h1>Borrow application</h1>
-		<label for="contact-name">Contact Name:</label>
-		<input type="text" id="contact-name" name="contact-name" required><br><br>
+        <h1>Borrow Form</h1>
+		<label class = "form_labels" for="contact-name">Contacts Full Name:</label>
+		<input class = "form_fill_boxes" type="text" id="contact-name" name="contact-name"><br><br>
 		
-		<label for="contact-number">Contact Number:</label>
-		<input type="tel" id="contact-number" name="contact-number" required><br><br>
+		<label class = "form_labels" for="contact-number">Contacts Phone Number:</label>
+		<input class = "form_fill_boxes" type="tel" id="contact-number" name="contact-number"><br><br>
 		
-		<label for="patient-name">Name of Patient:</label>
-		<input type="text" id="patient-name" name="patient-name" required><br><br>
+		<label class = "form_labels" for="patient-name">Patiant's Name:</label>
+		<input class = "form_fill_boxes" type="text" id="patient-name" name="patient-name" ><br><br>
 		
-		<label for="patient-number">Patient's Phone Number:</label>
-		<input type="tel" id="patient-number" name="patient-number" required><br><br>
+		<label class = "form_labels" for="patient-number">Patiant's Phone Number:</label>
+		<input class = "form_fill_boxes" type="tel" id="patient-number" name="patient-number" ><br><br>
 		
 		<label for="cell-number">Cell Phone Number:</label>
 		<input type="tel" id="cell-number" name="cell-number" required><br><br>
@@ -43,9 +43,7 @@ const contactNameInput = document.getElementById("contact-name");
 const contactNumberInput = document.getElementById("contact-number");
 const patientNameInput = document.getElementById("patient-name");
 const patientNumberInput = document.getElementById("patient-number");
-const cellNumberInput = document.getElementById("cell-number");
 const addressInput = document.getElementById("address");
-const deliveryTypeInput = document.getElementsByName("delivery-type");
 
 // Function to submit form data to Firestore
 function submitData() {
@@ -54,17 +52,10 @@ function submitData() {
   const contactNumber = contactNumberInput.value;
   const patientName = patientNameInput.value;
   const patientNumber = patientNumberInput.value;
-  const cellNumber = cellNumberInput.value;
   const address = addressInput.value;
-  let deliveryType = "";
-  
+ 
 // Loop through the delivery type options and check which one is selected
-for (let i = 0; i < deliveryTypeInput.length; i++) {
-if (deliveryTypeInput[i].checked) {
-deliveryType = deliveryTypeInput[i].value;
-break;
-}
-}
+
 
 // Save the form data to Firestore
 db.collection("Borrow_List").add({
@@ -72,9 +63,7 @@ contact_name: contactName,
 contact_number: contactNumber,
 patient_name: patientName,
 patient_number: patientNumber,
-cell_number: cellNumber,
 address: address,
-delivery_type: deliveryType
 })
 .then(() => {
 console.log("Form data saved successfully!");
@@ -83,10 +72,8 @@ contactNameInput.value = "";
 contactNumberInput.value = "";
 patientNameInput.value = "";
 patientNumberInput.value = "";
-cellNumberInput.value = "";
 addressInput.value = "";
-deliveryTypeInput[0].checked = false;
-deliveryTypeInput[1].checked = false;
+
 })
 .catch((error) => {
 console.error("Error saving form data: ", error);

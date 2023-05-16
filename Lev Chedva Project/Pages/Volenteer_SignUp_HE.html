@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="../styles/Volenteer_Style_HE.css">
     <title>יצירת מתנדב חדש</title>
   </head>
-  <body>
+  <body dir="rtl">
     <h1>יצירת מתנדב חדש</h1>
     <form id="volunteer-form">
         <label for="firstName">:שם פרטי</label>
@@ -36,19 +36,31 @@
         <div id="vehicleInputs"></div>
         
         <label for="volunteer-types">?איך היית רוצה להתנדב</label>
-        <div id="volunteer-types">
-          <input type="checkbox" id="Volunteer_Type1" name="Volunteer_Type" value="שינוע">
-          <label for="Volunteer_Type1">שינוע</label>
-          <input type="checkbox" id="Volunteer_Type2" name="Volunteer_Type" value="טלפן">
-          <label for="Volunteer_Type2">טלפנ/ית</label>
-          <input type="checkbox" id="Volunteer_Type3" name="Volunteer_Type" value="ג'יפים">
-          <label for="Volunteer_Type3">יחידת הג'יפים</label>
-          <input type="checkbox" id="Volunteer_Type4" name="Volunteer_Type" value="עזרה כללית">
-          <label for="Volunteer_Type4">עזרה במרכז הפצה</label>
-          <input type="checkbox" id="Volunteer_Type5" name="Volunteer_Type" value="איש קשר לשעת חירום">
-          <label for="Volunteer_Type5">איש קשר לשעת חירום</label>
-        </div>
-        <button type="submit">צור מתנדב</button>
+        <div id="volunteer-types" style="text-align: right; width: 100%; display: block;">
+          <div class="checkbox-wrapper">
+              <label for="Volunteer_Type1">שינוע</label>
+              <input type="checkbox" id="Volunteer_Type1" name="Volunteer_Type" value="שינוע">
+          </div>
+          <div class="checkbox-wrapper">
+              <label for="Volunteer_Type2">טלפנ/ית</label>
+              <input type="checkbox" id="Volunteer_Type2" name="Volunteer_Type" value="טלפן">
+          </div>
+          <div class="checkbox-wrapper">
+              <label for="Volunteer_Type3">יחידת הג'יפים</label>
+              <input type="checkbox" id="Volunteer_Type3" name="Volunteer_Type" value="ג'יפים">
+          </div>
+          <div class="checkbox-wrapper">
+              <label for="Volunteer_Type4">עזרה במרכז הפצה</label>
+              <input type="checkbox" id="Volunteer_Type4" name="Volunteer_Type" value="עזרה כללית">
+          </div>
+          <div class="checkbox-wrapper">
+              <label for="Volunteer_Type5">איש קשר לשעת חירום</label>
+              <input type="checkbox" id="Volunteer_Type5" name="Volunteer_Type" value="איש קשר לשעת חירום">
+          </div>
+      </div>
+      <button type="submit">צור מתנדב</button>
+      
+      
     </form>
         
     
@@ -74,8 +86,9 @@
     for (let i = 1; i <= numVehicles; i++) {
       const label = document.createElement("label");
       label.setAttribute("for", `vehicle${i}`);
-      label.textContent = `Vehicle ${i} Number:`;
+      label.textContent = `: הכנס מספר רכב ${i} `;
       const input = document.createElement("input");
+      input.style.width = '100px';
       input.setAttribute("type", "text");
       input.setAttribute("id", `vehicle${i}`);
       input.setAttribute("name", `vehicle${i}`);
@@ -98,6 +111,8 @@
         const phone = document.getElementById("phone").value;
         const EmergencyContactName = document.getElementById("EmergencyContactName").value;
         const EmergencyContactPhone = document.getElementById("EmergencyContactPhone").value;
+        const BirthDate=document.getElementById("BirthDate").value;
+        
         
 
 
@@ -111,6 +126,7 @@
         firstName,
         lastName,
         ID,
+        BirthDate,
         email,
         address,
         phone,
