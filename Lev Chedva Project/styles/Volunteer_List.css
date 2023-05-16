@@ -83,3 +83,14 @@ button {
 .volunteer-auth-row form label {
   margin-bottom: 10px;
 }
+
+.checkbox-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  margin-right: 10px;
+}

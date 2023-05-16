@@ -76,6 +76,7 @@
       label.setAttribute("for", `vehicle${i}`);
       label.textContent = `Vehicle ${i} Number:`;
       const input = document.createElement("input");
+      input.style.width = '100px';
       input.setAttribute("type", "text");
       input.setAttribute("id", `vehicle${i}`);
       input.setAttribute("name", `vehicle${i}`);
