@@ -6,8 +6,8 @@
 	<link rel="stylesheet" type="text/css" href="../styles/Borrow_style.css">
 </head>
 <body>
-	<h1>Borrow Form</h1>
 	<form>
+		<h1>Borrow application</h1>
 		<label for="contact-name">Contact Name:</label>
 		<input type="text" id="contact-name" name="contact-name" required><br><br>
 		
@@ -25,12 +25,6 @@
 		
 		<label for="address">Address:</label>
 		<textarea id="address" name="address" required></textarea><br><br>
-		
-		<label for="delivery-type">Delivery Type:</label>
-		<input type="radio" id="self-pickup" name="delivery-type" value="self-pickup" required>
-		<label for="self-pickup">Self Pick Up</label>
-		<input type="radio" id="delivery" name="delivery-type" value="delivery" required>
-		<label for="delivery">Delivery</label><br><br>
 		
 		<input type="button" value="Submit" onclick="submitData()">
 	</form>
