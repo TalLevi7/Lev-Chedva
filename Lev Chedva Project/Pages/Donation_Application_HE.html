@@ -2,23 +2,23 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-    <link rel="stylesheet" href="../styles/Donation_style.css">
-	<title>Donation Form</title>
+    <link rel="stylesheet" href="../styles/Donation_style_HE.css">
+	<title>טופס תרומת ציוד</title>
 </head>
 <body>
 	<form>
-    <h1>Donation Form</h1>
+    <h1>טופס תרומת ציוד רפואי</h1>
     <br><br>
-		<label for="name">Name:</label>
+		<label for="name">:שם</label>
 		<input type="text" id="name" name="name"><br><br>
 		
-		<label for="Phone Number">Phone Number:</label>
+		<label for="Phone Number">:מספר טלפון</label>
 		<input type="tel" id="Phone Number" name="Phone Number"><br><br>
 		
-		<label for="Product">Donation Product:</label>
+		<label for="Product">:ציוד לתרומה</label>
 		<input type="text" id="Product" name="Product"><br><br>
 		
-		<input type="button" value="Submit" onclick="submitData()">
+		<input type="button" value="שלח" onclick="submitData()">
 	</form>
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>

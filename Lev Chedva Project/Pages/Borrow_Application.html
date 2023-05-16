@@ -20,9 +20,12 @@
 		<label class = "form_labels" for="patient-number">Patiant's Phone Number:</label>
 		<input class = "form_fill_boxes" type="tel" id="patient-number" name="patient-number" ><br><br>
 		
-		<label class = "form_labels" for="address">Address:</label>
-		<textarea class = "form_fill_boxes" id="address" name="address" ></textarea><br><br>
-		          
+		<label for="cell-number">Cell Phone Number:</label>
+		<input type="tel" id="cell-number" name="cell-number" required><br><br>
+		
+		<label for="address">Address:</label>
+		<textarea id="address" name="address" required></textarea><br><br>
+		
 		<input type="button" value="Submit" onclick="submitData()">
 	</form>
 	
