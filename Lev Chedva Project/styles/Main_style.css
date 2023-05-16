@@ -156,6 +156,7 @@ nav ul li a {
   justify-content: center;
   align-items: center;
   height: 90%;
+  background-color: rgb(253, 56, 56);
 }
 
 .features h2 {
