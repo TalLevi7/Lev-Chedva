@@ -40,7 +40,7 @@
 
     <label for="product-quantity">כמות:</label>
     <input type="number" id="product-quantity" name="product-quantity" required><br><br>
-    <label for="location">Location:</label>
+    <label for="location">מחסן:</label>
     <select id="location" name="location"></select>
     <br><br>
     <input type="submit" value="שמור">
@@ -113,16 +113,28 @@
       keywordsInput.value = keywordsInput.value ? keywordsInput.value + ', ' + keyword : keyword;
     }
     function addAccessory() {
-      const accessoriesContainer = document.getElementById('accessories-container');
-      const accessoryInput = document.createElement('input');
-      accessoryInput.type = 'text';
-      accessoryInput.className = 'accessory';
-      accessoryInput.name = 'companion-accessories[]';
-      accessoryInput.required = true;
+  const accessoriesContainer = document.getElementById('accessories-container');
+  const accessoryDiv = document.createElement('div');
+  accessoryDiv.className = 'accessory-div';
 
-      accessoriesContainer.appendChild(document.createElement('br'));
-      accessoriesContainer.appendChild(accessoryInput);
-    }
+  const accessoryInput = document.createElement('input');
+  accessoryInput.type = 'text';
+  accessoryInput.className = 'accessory';
+  accessoryInput.name = 'companion-accessories[]';
+  accessoryInput.required = true;
+
+  const delButton = document.createElement('button');
+  delButton.textContent = 'הסר מוצר';
+  delButton.className = 'delButton';
+  delButton.type = 'button';
+  delButton.addEventListener('click', () => accessoryDiv.remove());
+
+  accessoryDiv.appendChild(accessoryInput);
+  accessoryDiv.appendChild(delButton);
+  accessoriesContainer.appendChild(accessoryDiv);
+}
+
+
 
     // Function to add a new companion accessory input box
     function addCompanionAccessory() {
@@ -145,7 +157,15 @@
       const productDescription = form.elements['product-description'].value;
 
       const keywords = form.elements['keywords'].value;
-      const companionAccessories = Array.from(form.elements['companion-accessories[]']).map(input => input.value);
+      let companionAccessories = form.elements['companion-accessories[]'];
+  // Check if companionAccessories is an instance of RadioNodeList
+  if (!(companionAccessories instanceof RadioNodeList)) {
+    // If not, convert it to an array with that one element
+    companionAccessories = [companionAccessories.value];
+  } else {
+    // Otherwise, map over the RadioNodeList to get the values
+    companionAccessories = Array.from(companionAccessories).map(input => input.value);
+  }
       const remarks = form.elements['remarks'].value;
       const productQuantity = parseInt(form.elements['product-quantity'].value); // Convert to number
       const locationVal =form.elements['location'].value;

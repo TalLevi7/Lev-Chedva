@@ -87,21 +87,46 @@ document.getElementById('delete-location').addEventListener('click', async () =>
 
 
 document.getElementById('save-message').addEventListener('click', async () => {
-const messageText = document.getElementById('message-text').value;
-const header = document.getElementById('header').value;
-if (messageText.trim() && header.trim()) {
-const messageData = {
-message: messageText.trim(),
-timestamp: firebase.firestore.Timestamp.now()
-};
-await db.collection('messages').doc(header).set(messageData);
-    alert('הודעה נשמרה בהצלחה');
-    document.getElementById('message-text').value = '';
-    document.getElementById('header').value = '';
-} else {
-    alert('הודעה לא תקנית');
-}
+    const messageText = document.getElementById('message-text').value;
+    const header = document.getElementById('header').value;
+
+    // Retrieve the checkbox values
+    const checkboxes = ['checkbox1', 'checkbox2', 'checkbox3', 'checkbox4'];
+    const messageAuthorizations = checkboxes.map(id => {
+        const checkbox = document.getElementById(id);
+        return checkbox.checked ? checkbox.value : null;
+    }).filter(value => value !== null);
+
+    if (messageText.trim() && header.trim()) {
+        const messageData = {
+            header:header.trim(),
+            message: messageText.trim(),
+            messageAuthorizations,  // Save checkbox values
+            timestamp: firebase.firestore.Timestamp.now()
+        };
+
+        // Fetch the "Message Counter" from "Events Counter" document in "Tools" collection
+        const counterDocRef = db.collection('Tools').doc('Events Counter');
+        const counterDoc = await counterDocRef.get();
+        let messageCounter = counterDoc.data().MessageCounter;
+        
+        // Save the message with the incremented counter value as the doc id
+        const messageId = String(messageCounter);
+        await db.collection('messages').doc(messageId).set(messageData);
+        
+        // Update the "Message Counter" field by incrementing it
+        await counterDocRef.update({ MessageCounter: firebase.firestore.FieldValue.increment(1) });
+
+        alert('הודעה נשמרה בהצלחה');
+        document.getElementById('message-text').value = '';
+        document.getElementById('header').value = '';
+    } else {
+        alert('הודעה לא תקנית');
+    }
 });
+
+
+
 
 const showMessageBtn = document.getElementById('show-messages');
 const messageListDiv = document.getElementById('message-list');
@@ -115,6 +140,7 @@ const messagesSnapshot = await messagesRef.orderBy('timestamp', 'desc').get();
 messagesSnapshot.forEach(messageDoc => {
     const messageData = messageDoc.data();
     const messageId = messageDoc.id;
+
     createMessageElement(messageId, messageData);
 });
 }
@@ -128,7 +154,7 @@ function createMessageElement(messageId, messageData) {
     headerDiv.classList.add('message-header');
 
     const headerText = document.createElement('h3');
-    headerText.textContent = messageId;
+    headerText.textContent = messageData.header;
     headerDiv.appendChild(headerText);
 
     const dateText = document.createElement('p');
@@ -155,7 +181,6 @@ function createMessageElement(messageId, messageData) {
     editTextBtn.textContent = 'ערוך גוף ההודעה';
     editTextBtn.addEventListener('click', () => editMessage(messageId));
     contentDiv.appendChild(editTextBtn);
-
     messageDiv.appendChild(contentDiv);
 
     headerDiv.addEventListener('click', () => {
@@ -193,75 +218,106 @@ function populateLocationsDropdown(locations) {
 }
 
 
-async function editHeader(messageId) {
+function editHeader(messageId) {
     const messageDiv = document.getElementById(`message-${messageId}`);
-    const header = messageDiv.querySelector('.message-header h3');
+    const headerDiv = messageDiv.querySelector('.message-header');
+    const headerText = headerDiv.querySelector('h3');
+
+    // Create new elements
     const headerInput = document.createElement('input');
-    headerInput.value = header.textContent;
-    header.parentNode.replaceChild(headerInput, header);
+    headerInput.value = headerText.textContent;
+    headerInput.classList.add('edit-input');
+    headerInput.type = 'text';
 
     const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
+    saveButton.textContent = 'שמור';
+    saveButton.classList.add('edit-button');
+
     const cancelButton = document.createElement('button');
-    cancelButton.textContent = 'Cancel';
+    cancelButton.textContent = 'ביטול';
+    cancelButton.classList.add('edit-button');
 
-    headerInput.parentNode.appendChild(saveButton);
-    headerInput.parentNode.appendChild(cancelButton);
+    // Create a wrapper div and append new elements
+    const editAreaDiv = document.createElement('div');
+    editAreaDiv.classList.add('edit-area');
+    editAreaDiv.appendChild(headerInput);
+    editAreaDiv.appendChild(saveButton);
+    editAreaDiv.appendChild(cancelButton);
 
+    // Clear the div and append new elements
+    headerDiv.innerHTML = '';
+    headerDiv.appendChild(editAreaDiv);
+
+    // Event listeners
     saveButton.addEventListener('click', async () => {
         const newHeader = headerInput.value;
-        const messageRef = db.collection('messages').doc(header.textContent);
-        const messageData = (await messageRef.get()).data();
+        const messageRef = db.collection('messages').doc(messageId);
+        await messageRef.update({ header: newHeader });
 
-        await messageRef.delete();
-        await db.collection('messages').doc(newHeader).set(messageData);
-
-        header.textContent = newHeader;
-        headerInput.parentNode.replaceChild(header, headerInput);
-        saveButton.remove();
-        cancelButton.remove();
+        headerText.textContent = headerInput.value;
+        headerDiv.innerHTML = '';
+        headerDiv.appendChild(headerText);
     });
 
     cancelButton.addEventListener('click', () => {
-        headerInput.parentNode.replaceChild(header, headerInput);
-        saveButton.remove();
-        cancelButton.remove();
+        headerDiv.innerHTML = '';
+        headerDiv.appendChild(headerText);
     });
 }
-
 
 function editMessage(messageId) {
     const messageDiv = document.getElementById(`message-${messageId}`);
-    const message = messageDiv.querySelector('.message-content p');
+    const contentDiv = messageDiv.querySelector('.message-content');
+    const messageText = contentDiv.querySelector('p');
+
+    // Create new elements
     const messageInput = document.createElement('textarea');
-    messageInput.value = message.textContent;
-    message.parentNode.replaceChild(messageInput, message);
+    messageInput.value = messageText.textContent;
+    messageInput.classList.add('edit-input');
+    messageInput.rows = '4';
+    messageInput.cols = '50';
 
     const saveButton = document.createElement('button');
-    saveButton.textContent = 'Save';
+    saveButton.textContent = 'שמור';
+    saveButton.classList.add('edit-button');
+
     const cancelButton = document.createElement('button');
-    cancelButton.textContent = 'Cancel';
+    cancelButton.textContent = 'ביטול';
+    cancelButton.classList.add('edit-button');
 
-    messageInput.parentNode.appendChild(saveButton);
-    messageInput.parentNode.appendChild(cancelButton);
+    // Create a wrapper div and append new elements
+    const editAreaDiv = document.createElement('div');
+    editAreaDiv.classList.add('edit-area');
+    editAreaDiv.appendChild(messageInput);
+    editAreaDiv.appendChild(saveButton);
+    editAreaDiv.appendChild(cancelButton);
 
+    // Insert new elements before the original message text
+    contentDiv.insertBefore(editAreaDiv, messageText.nextSibling);
+
+    // Hide the original message text while editing
+    messageText.style.display = 'none';
+
+    // Event listeners
     saveButton.addEventListener('click', async () => {
         const newMessage = messageInput.value;
-        const header = messageDiv.querySelector('.message-header h3');
-        const messageRef = db.collection('messages').doc(header.textContent);
+        const messageRef = db.collection('messages').doc(messageId);
         await messageRef.update({ message: newMessage });
-        message.textContent = newMessage;
-        messageInput.parentNode.replaceChild(message, messageInput);
-        saveButton.remove();
-        cancelButton.remove();
+
+        messageText.textContent = messageInput.value;
+        messageText.style.display = 'block';
+        contentDiv.removeChild(editAreaDiv);
     });
 
     cancelButton.addEventListener('click', () => {
-        messageInput.parentNode.replaceChild(message, messageInput);
-        saveButton.remove();
-        cancelButton.remove();
+        messageText.style.display = 'block';
+        contentDiv.removeChild(editAreaDiv);
     });
 }
+
+
+
+
 
 async function deleteMessage(messageId) {
     if (confirm('האם אתה בטוח שברצונך למחוק את ההודעה?')) {
@@ -272,8 +328,9 @@ async function deleteMessage(messageId) {
 }
 
 
-let isVolunteersMagagmentDivVisible=false;
 
+let isVolunteersMagagmentDivVisible=false;
+let volunteersTableValid=false;
 loadVolunteersBtn.addEventListener('click', function() {
   
     isVolunteersMagagmentDivVisible = !isVolunteersMagagmentDivVisible;
@@ -282,9 +339,14 @@ loadVolunteersBtn.addEventListener('click', function() {
     messageManagementDiv.style.display = 'none';
     messageListDiv.style.display = 'none';
     VolunteersMagagmentDiv.style.display="block";
-
+  
     const VolunteerTable = document.getElementById('VolunteerTable');
-
+  
+    let existingTable = document.getElementById('volunteersTable');
+    if (existingTable) {
+      // If the table already exists, remove it
+      VolunteerTable.removeChild(existingTable);
+    }
     let table = document.createElement('table');
     table.id = "volunteersTable";
     let thead = table.createTHead();
@@ -376,6 +438,10 @@ loadVolunteersBtn.addEventListener('click', function() {
                             { name: ' צפייה במלאי', value: '23' },
                             { name: 'מוצרים מושאלים', value: '24' },
                             { name: 'פאנל טלפניות', value: '30' },
+                            { name: 'הודעות כללי', value: '40' },
+                            { name: 'הודעות טלפניות', value: '41' },
+                            { name: 'הודעות שינוע', value: '42' },
+                            { name: 'הודעות מנהלים', value: '42' },
                         ];
                     
             

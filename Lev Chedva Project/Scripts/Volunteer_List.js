@@ -161,10 +161,11 @@ function displayVolunteers(volunteerData) {
             { name: ' צפייה במלאי', value: '23' },
             { name: 'מוצרים מושאלים', value: '24' },
             { name: 'פאנל טלפניות', value: '30' },
-            
-
-
-          ];
+            { name: 'הודעות כללי', value: '40' },
+            { name: 'הודעות טלפניות', value: '41' },
+            { name: 'הודעות שינוע', value: '42' },
+            { name: 'הודעות מנהלים', value: '43' },
+        ];
           authCheckboxes.forEach(cb => {
             const cbLabel = document.createElement('label');
             const cbInput = document.createElement('input');
@@ -184,7 +185,8 @@ function displayVolunteers(volunteerData) {
           submitButton.addEventListener('click', (e) => {
             e.preventDefault();
     
-            const selectedAuths = Array.from(authForm.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value).join(', ');
+            const selectedAuths = Array.from(authForm.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+
             const docRef = db.collection("Volunteers").doc(volunteerData.email);
             docRef.update({
               Authorizations: selectedAuths
