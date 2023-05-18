@@ -13,12 +13,22 @@
   <div class="header">
     <h1>ברוך הבא <span id="username"></span></h1>
     <p id="date"></p>
+    <div class="dropdown">
+        <button id="settingsButton">הגדרות משתמש</button>
+        <div class="dropdown-content" id="dropdownContent">
+            <a href="#" id="updateSettings">עדכן פרטי משתמש</a>
+            <a href="#" id="logout">יציאה</a>
+        </div>
+    </div>
   </div>
   <div class="navbar" id="navbar"></div>
-  <div class="messages" id="messages"></div>
-  
+  <div class="header">
+    <h3>הודעות מערכת</h3>
+  </div>
+  <div id="messageContainer">
+    <!-- Messages will be dynamically added here -->
+  </div>
+
   <script src="../Scripts/Volunteer_DashBoard.js"></script>
 </body>
 </html>
-
- 

@@ -5,6 +5,8 @@ auth.onAuthStateChanged(user => {
   if (user) {
     // User is signed in.
     let email = user.email;
+  
+
     db.collection('Volunteers').doc(email).get()
       .then(doc => {
         if (doc.exists) {
@@ -25,9 +27,24 @@ function createButtons(autorizations) {
   let navbar = document.getElementById('navbar');
 
   const authMap = {
-    "10": { text: "פתיחת אירוע חדש", href: "New_Event.html" },
-    "11": { text: "Text for 11", href: "href_for_11.html" },
-    "12": { text: "Text for 12", href: "href_for_12.html" },
+    "10": { text: "פתיחת שינוע חדש", href: "New_Event.html" },
+    "11": { text: "סטאטוס אירועים פתוחים", href: "Events_In_Action.html" },
+    "12": { text: "אירועים פתוחים", href: "Volunteer_Transport_Panel.html" },
+    "13": { text: "האירועים שלי", href: "Volunteer_Events.html" },
+    "14": { text: "אירועים סגורים", href: "Closed_Events.html" },
+    // "15": { text: "סטיסטיקה שלי", href: "href_for_12.html" },
+    "20": { text: "הוסף מוצר למלאי", href: "New_Product_ Insert.HTML" },
+    "21": { text: "החזרת מוצר", href: "Return_Item.html" },
+    "22": { text: "השאלת מוצר", href: "Borrow_Event.html" },
+    "23": { text: "צפה במלאי", href: "Inventory.html" },
+    "24": { text: "מוצרים מושאלים", href: "Borrowed_Items.html" },
+    //"25": { text: "ארכיב השאלות", href: "Closed_Events.html" },
+    "26": { text: "צור הזמנה עתידית", href: "reservation.html" },
+    //"27": { text: "הזמנות עתידיות",href: "Closed_Events.html" },
+    //"28": { text: "צפה בבקשות השאלה",href: "Closed_Events.html" },
+    //"29": { text: "צפה בבקשות תרומה":, href: "Closed_Events.html" },
+    "30": { text: "פאנל טלפניות", href: "Telephone_Panel.html" },
+
     // Add more mappings here...
   };
 
@@ -43,10 +60,64 @@ function createButtons(autorizations) {
   });
 }
 
-function loadMessages(autorizations) {
-  // Implement your own message loading logic
+
+
+
+
+
+
+
+
+function loadMessages(authorizations) {
+  const messageContainer = document.getElementById('messageContainer');
+
+  // Clear out any existing messages
+  messageContainer.innerHTML = "";
+  messageContainer.scrollTop = 0; // Reset the scroll position to the top
+
+  db.collection('messages')
+    .orderBy('timestamp', 'desc')
+    .get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        let data = doc.data();
+        if (authorizations.some(r => data.messageAuthorizations.includes(r))) {
+          let message = document.createElement('div');
+          message.className = 'message';
+          message.innerHTML = `
+            <h2>${data.header}</h2>
+            <p class="message-date">${new Date(data.timestamp.toDate()).toLocaleDateString()}</p>
+            <div class="message-preview">${data.message.substr(0, 100)}</div>
+            <div class="message-full">${data.message}</div>
+          `;
+          message.addEventListener('click', function() {
+            if (this.classList.contains('expanded')) {
+              this.classList.remove('expanded');
+            } else {
+              this.classList.add('expanded');
+            }
+          });
+          messageContainer.appendChild(message);
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Error loading messages:', error);
+    });
 }
 
-// Show today's date
-// Show today's date in Hebrew
-document.getElementById('date').textContent = new Date().toLocaleDateString('he-IL');
+
+document.getElementById("updateSettings").addEventListener("click", function() {
+  // Redirect to the settings page
+  window.location.href = "Update_User_Settings.html";
+});
+
+document.getElementById("logout").addEventListener("click", function() {
+  firebase.auth().signOut().then(function() {
+      // Sign-out successful, redirect to login page.
+      window.location.href = "MainPage_HE.html";
+  }).catch(function(error) {
+      // An error happened during sign out.
+      console.error("Sign out error: ", error);
+  });
+});

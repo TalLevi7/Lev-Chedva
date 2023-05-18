@@ -19,25 +19,16 @@ async function fetchAndDisplayBorrowedItems() {
     for (let doc of snapshot.docs) {
         const data = doc.data();
         const borrowedItems = data.borrowTickets;
-<<<<<<< HEAD
         let shouldShowDoc = false; // This variable will be true if at least one ticket matches the date requirement
 
         // Use a for...of loop here so we can use 'await' inside it
-=======
-        let shouldShowDoc = false; 
-
->>>>>>> refs/remotes/origin/main
         for (let item of borrowedItems) {
             const itemRef = db.collection('Borrow Tickets').doc(item.toString());
             const itemData = (await itemRef.get()).data();
 
-<<<<<<< HEAD
             // Check if the 'borrowingUntil' date falls within the range
             const borrowingUntilDate = new Date(itemData.borrowingUntil);
           
-=======
-            const borrowingUntilDate = new Date(itemData.borrowingUntil);
->>>>>>> refs/remotes/origin/main
 
             if (borrowingUntilDate <= inputDate && borrowingUntilDate >= currentDate) {
                 shouldShowDoc = true;
@@ -46,7 +37,6 @@ async function fetchAndDisplayBorrowedItems() {
         }
 
         if (shouldShowDoc) {
-<<<<<<< HEAD
             // Create row for each doc
             const row = document.createElement('tr');
         
@@ -80,68 +70,29 @@ async function fetchAndDisplayBorrowedItems() {
                 contactCell.textContent = currentDate;
         
                 // Update the 'lastTalk' field in Firestore
-=======
-            const row = document.createElement('tr');
-
-            const idCell = document.createElement('td');
-            idCell.textContent = doc.data().Name;
-            row.appendChild(idCell);
-
-            const buttonCell = document.createElement('td');
-            const contactButton = document.createElement('button');
-            contactButton.textContent = 'יצרתי קשר';
-
-            buttonCell.appendChild(contactButton);
-            row.appendChild(buttonCell);
-
-            const contactCell = document.createElement('td');
-            if (data.lastTalk) {
-                contactCell.textContent =  "נוצר קשר בתאריך:"+data.lastTalk;
-            }
-            row.appendChild(contactCell);
-
-            contactButton.addEventListener('click', async () => {
-                const currentDate = new Date().toLocaleDateString();
-                contactCell.textContent = currentDate;
->>>>>>> refs/remotes/origin/main
                 await borrowedItemsRef.doc(doc.id).update({
                     lastTalk: currentDate
                 });
             });
-<<<<<<< HEAD
         
             // Add row to the table body
             tableBody.appendChild(row);
         
             // Create a details row and cell for each doc
-=======
-
-            tableBody.appendChild(row);
-
->>>>>>> refs/remotes/origin/main
             const detailsRow = document.createElement('tr');
             const detailsCell = document.createElement('td');
             detailsCell.colSpan = 3;
         
-<<<<<<< HEAD
             // Create a nested table for the details
-=======
->>>>>>> refs/remotes/origin/main
             const detailsTable = document.createElement('table');
             detailsCell.appendChild(detailsTable);
             detailsRow.appendChild(detailsCell);
             tableBody.appendChild(detailsRow);
-<<<<<<< HEAD
         
             // Hide details by default
             detailsRow.style.display = 'none';
         
             // Show/hide details on click
-=======
-
-            detailsRow.style.display = 'none';
-
->>>>>>> refs/remotes/origin/main
             row.addEventListener('click', () => {
                 if (detailsRow.style.display === 'none') {
                     detailsRow.style.display = '';
@@ -149,54 +100,20 @@ async function fetchAndDisplayBorrowedItems() {
                     detailsRow.style.display = 'none';
                 }
             });
-<<<<<<< HEAD
         
             // Fetch and display all tickets of the doc
-=======
-
->>>>>>> refs/remotes/origin/main
             for (let item of borrowedItems) {
                 const itemRef = db.collection('Borrow Tickets').doc(item.toString());
                 const itemData = (await itemRef.get()).data();
                 displayTicketRow(detailsTable, itemData, item.toString());
             }
-<<<<<<< HEAD
         }
         
-=======
-
-            // Remarks cell
-            const remarksCell = document.createElement('td');
-            const remarksInput = document.createElement('textarea');
-            remarksInput.type = 'text';
-            remarksInput.value = doc.data().remarks || '';
-            remarksInput.style.width = '200px';
-            remarksInput.style.height = '50px';
-            remarksInput.style.textAlign = 'right'; // Align text to the right
-            remarksInput.style.overflow = 'auto';
-            const saveButton = document.createElement('button');
-            saveButton.textContent = 'שמור';
-
-            remarksCell.appendChild(remarksInput);
-            remarksCell.appendChild(saveButton);
-            row.appendChild(remarksCell);
-
-            saveButton.addEventListener('click', async () => {
-                await borrowedItemsRef.doc(doc.id).update({
-                    remarks: remarksInput.value
-                });
-            });
-        }
->>>>>>> refs/remotes/origin/main
     }
 }
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/main
 async function displayTicketRow(detailsTable, ticketData, itemId) {
     const row = document.createElement('tr');
   
