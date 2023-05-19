@@ -160,11 +160,17 @@ function displayVolunteers(volunteerData) {
             { name: ' השאלת מוצר', value: '22' },
             { name: ' צפייה במלאי', value: '23' },
             { name: 'מוצרים מושאלים', value: '24' },
+            { name: 'ארכיב השאלות', value: '25' },
+            { name: 'צור הזמנה עתידית', value: '26' },
+            { name: 'הזמנות עתידיות', value: '27' },
+            { name: 'צפה בבקשות השאלה', value: '28' },
+            { name: 'צפה בבקשות תרומה', value: '29' },
             { name: 'פאנל טלפניות', value: '30' },
-            
-
-
-          ];
+            { name: 'הודעות כללי', value: '40' },
+            { name: 'הודעות טלפניות', value: '41' },
+            { name: 'הודעות שינוע', value: '42' },
+            { name: 'הודעות מנהלים', value: '43' },
+        ];
           authCheckboxes.forEach(cb => {
             const cbLabel = document.createElement('label');
             const cbInput = document.createElement('input');
@@ -184,7 +190,8 @@ function displayVolunteers(volunteerData) {
           submitButton.addEventListener('click', (e) => {
             e.preventDefault();
     
-            const selectedAuths = Array.from(authForm.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value).join(', ');
+            const selectedAuths = Array.from(authForm.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+
             const docRef = db.collection("Volunteers").doc(volunteerData.email);
             docRef.update({
               Authorizations: selectedAuths

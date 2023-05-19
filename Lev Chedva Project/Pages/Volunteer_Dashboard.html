@@ -1,75 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="dashboard.css">
-</head>
-<body>
-    <h1>Welcome to the Dashboard</h1>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="../firebase.js"></script>
-    <script>
-        // Initialize Firebase
-        firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    // User is signed in.
-    const userEmail = user.email;
-    console.log(userEmail);
+  <title>Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="../styles/Volunteer_Dashboard.css">
+</head>
+<body>
+  <div class="header">
+    <h1>ברוך הבא <span id="username"></span></h1>
+    <p id="date"></p>
+    <div class="dropdown">
+        <button id="settingsButton">הגדרות משתמש</button>
+        <div class="dropdown-content" id="dropdownContent">
+            <a href="#" id="updateSettings">עדכן פרטי משתמש</a>
+            <a href="#" id="logout">יציאה</a>
+        </div>
+    </div>
+  </div>
+  <div class="navbar" id="navbar"></div>
+  <div class="header">
+    <h3>הודעות מערכת</h3>
+  </div>
+  <div id="messageContainer">
+    <!-- Messages will be dynamically added here -->
+  </div>
 
-    // Get the "authorizations" field for the current user's email from the "Volunteers" collection
-    firebase.firestore().collection("Volunteers").doc(userEmail).get().then((doc) => {
-        if (doc.exists) {
-            const authorizations = doc.data().Authorizations;
-            // Show the buttons based on the authorizations field
-            if (authorizations.includes("Transport")) {
-              const transportBtn = document.createElement('button');
-                transportBtn.textContent = 'Transport Panel';
-                document.body.append(transportBtn);
-            }
-
-            if (authorizations.includes("Telephone")) {
-              const TelephoneBtn = document.createElement('button');
-                TelephoneBtn.textContent = 'Telephone Panel';
-                document.body.append(TelephoneBtn);
-            }
-
-            transportBtn.addEventListener('click', () => {
-            window.location.href = "../Pages/Volunteer_Events.html"; 
-
-
-            });
-            TelephoneBtn.addEventListener('click',()=>{
-                window.location.href = "../Pages/Telephone_Panel.html";
-
-            });
-
-
-
-
-           
-        } else {
-            console.log("No such document!");
-        }
-    }).catch((error) => {
-        console.log("Error getting document:", error);
-    });
-  } else {
-    // No user is signed in.
-    console.log("User not signed in");
-  }
-});
-
-
-
-
-
-
-
-
-    </script>
+  <script src="../Scripts/Volunteer_DashBoard.js"></script>
 </body>
 </html>

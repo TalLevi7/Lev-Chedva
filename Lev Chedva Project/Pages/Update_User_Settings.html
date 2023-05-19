@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>User Settings</title>
+        <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-firestore.js"></script>
+        <script src="../firebase.js"></script>
+        <link rel="stylesheet" type="text/css" href="../styles/Update_User_Settings.css">
+    </head>
+    <body>
+        <div class="container">
+            <!-- Your code here -->
+        
+        
+        <div id="userDetails">
+            <button id="updatePersonalDetails">עדכן פרטים אישיים</button>
+            <div id="personalDetailsDiv" style="display: none;"></div>
+        </div>
+
+        <div id="userCredentials">
+            <button id="updateCredentials">עדכן שם אימייל וסיסמא</button>
+            <div id="credentialsDiv" style="display: none;"></div>
+        </div>
+    </div>
+        <script src="../Scripts/user-settings.js"></script>
+    </body>
+</html>
