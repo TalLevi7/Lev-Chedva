@@ -1,28 +1,64 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>פאנל מנהל</title>
-	<link rel="stylesheet" type="text/css" href="../styles/manager_panel_style.css">
+    <meta charset="utf-8">
+    <title>פאנל מנהל</title>
+    <link rel="stylesheet" type="text/css" href="../styles/manager_panel_style.css">
+    </script>
 </head>
 <body>
-	<h1>פאנל מנהל</h1>
-	<div class="button-container">
-		<button class="square-button"><a href="../Pages/Volunteer_List.html">רשימת מתנדבים</a></button>
+    <h1>פאנל מנהל</h1>
+    
+    <h2 class="header" onclick="toggleDisplay('group1')">שינוע</h2>
+    <div id="group1" class="button-container">
 		<button class="square-button"><a href="../Pages/New_Event.html">יצירת אירוע חדש</a></button>
 		<button class="square-button"><a href="../Pages/Events_In_Action.html">אירועים פתוחים</a></button>
-		<button class="square-button"><a href="../Pages/Borrow_Event.html">השאל מוצר </a></button>
-		<button class="square-button"><a href="../Pages/Return_Item.html">קבל מוצר</a></button>
 		<button class="square-button"><a href="../Pages/Closed_Events.html">אירועים סגורים</a></button>
-		<button class="square-button"><a href="#">סטטיסטיקה למתנדב</a></button>
-		<button class="square-button"><a href="#">סטטיסטיקה כללית</a></button>
-		<button class="square-button"><a href="../Pages/Control_Panel.html">פאנל שליטה</a></button>
-		<button class="square-button"><a href="../Pages/Inventory.html">מלאי</a></button>
-		<button class="square-button"><a href="../Pages/New_Product_ Insert.HTML">הוסף מוצר</a></button>
-		<button class="square-button"><a href="../Pages/Borrowed_Items.html">מוצרים מושאלים</a></button>
-		<button class="square-button"><a href="../Pages/Telephone_Panel.html">פאנל טלפניות</a></button>
 		<button class="square-button"><a href="../Pages/Volunteer_Events.html">אירועים שלי</a></button>
 		<button class="square-button"><a href="../Pages/Volunteer_Transport_Panel.html">אירועים פתוחים מתנדב</a></button>
-	</div>
+		<button class="square-button"><a href="#">סטטיסטיקה למתנדב</a></button>
+    </div>
+
+    <h2 class="header" onclick="toggleDisplay('group2')">מלאי וניהול מוצרים</h2>
+    <div id="group2" class="button-container">
+		<button class="square-button"><a href="../Pages/Inventory.html">מלאי</a></button>
+		<button class="square-button"><a href="../Pages/New_Product_ Insert.HTML">הוסף מוצר</a></button>
+		<button class="square-button"><a href="../Pages/Borrow_Event.html">השאל מוצר </a></button>
+		<button class="square-button"><a href="../Pages/Return_Item.html">קבל מוצר</a></button>
+		<button class="square-button"><a href="../Pages/reservation.html">הזמנה עתידית</a></button>
+		<button class="square-button"><a href="../Pages/reservation_list.html"> מוצרים מוזמנים</a></button>
+		<button class="square-button"><a href="../Pages/reservation_archive.html"> ארכיב הזמנות</a></button>
+		<button class="square-button"><a href="../Pages/Borrowed_Items.html">מוצרים מושאלים</a></button>
+		<button class="square-button"><a href="../Pages/Borrowed_Archive.html">ארכיב השאלות</a></button>
+		
+
+
+    </div>
+
+    <h2 class="header" onclick="toggleDisplay('group3')">ניהול</h2>
+    <div id="group3" class="button-container">
+		<button class="square-button"><a href="../Pages/Volunteer_List.html">רשימת מתנדבים</a></button>
+		<button class="square-button"><a href="#">סטטיסטיקה כללית</a></button>
+		<button class="square-button"><a href="../Pages/Control_Panel.html">פאנל שליטה</a></button>
+		<button class="square-button"><a href="../Pages/Telephone_Panel.html">פאנל טלפניות</a></button>
+		<button class="square-button"><a href="../Pages/Borrow_List.html">פניות להשאלה</a></button>
+		<button class="square-button"><a href="../Pages/Borrow_App_Archive.html"> ארכיב פניות להשאלה</a></button>
+		<button class="square-button"><a href="../Pages/Donation_List.html">פניות לתרומה</a></button>
+		<button class="square-button"><a href="../Pages/Donation_App_Archive.html"> ארכיב פניות לתרומה</a></button>
+		
+    </div>
+
+
+	<script>
+        function toggleDisplay(id) {
+            const element = document.getElementById(id);
+            if (element.style.display === "none") {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>

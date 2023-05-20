@@ -56,11 +56,12 @@ function submitData() {
 
 // Save the form data to Firestore
 db.collection("Borrow_List").add({
-contact_name: contactName,
-contact_number: contactNumber,
-patient_name: patientName,
-patient_number: patientNumber,
-address: address,
+    contact_name: contactName,
+    contact_number: contactNumber,
+    patient_name: patientName,
+    patient_number: patientNumber,
+    address: address,
+    date: firebase.firestore.Timestamp.fromDate(new Date()) // Current date and time
 })
 .then(() => {
 console.log("Form data saved successfully!");
@@ -75,8 +76,6 @@ addressInput.value = "";
 console.error("Error saving form data: ", error);
 });
 }
-
-    </script>
-
+ </script>
 </body>
 </html>
