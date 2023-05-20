@@ -9,9 +9,12 @@ const phoneNumber2 = document.getElementById('phone-number-2');
 const reservationDate = document.getElementById('reservation-date');
 const patientName = document.getElementById('patient-name');
 const volunteerName = document.getElementById('volunteer-name');
+const reservationQuantity = document.getElementById('reservation-quantity');
+const reservedOn=document.getElementById('reservedOn');
 
 let foundItemCategorialNumber = null;
-
+let ProductName=null;
+let CatNum=null;
 async function searchItemByCategorialNumber(categorialNumber) {
     const inventoryItemRef = firebase.firestore().collection('inventory').doc(categorialNumber);
     const inventoryItemSnapshot = await inventoryItemRef.get();
@@ -20,19 +23,19 @@ async function searchItemByCategorialNumber(categorialNumber) {
         alert('מוצר לא נמצא');
         return;
     }
-
+    ProductName=inventoryItemSnapshot.data().product_name;
+    CatNum=categorialNumber;
+    const inventoryItemData = inventoryItemSnapshot.data();
+    if (inventoryItemData.product_quantity <= 0) {
+        alert('Not enough in inventory');
+        return;
+    }
     foundItemCategorialNumber = categorialNumber;
     displayItemData(inventoryItemSnapshot);
 }
 
 function displayItemData(itemSnapshot) {
     const ProductData = itemSnapshot.data();
-    if(ProductData.status=="borrowed" || ProductData.status=="reserved")
-    {
-        alert("המוצר אינו זמין");
-        return;
-    }
-
     displayItemDetails(ProductData);
     itemData.style.display = 'block';
     reservationDetails.style.display = 'block';
@@ -47,28 +50,73 @@ reserveBtn.addEventListener('click', async () => {
         alert('No item found to reserve.');
         return;
     }
-
+    console.log(reservedOn.value);
     const reservationData = {
+        product_name:ProductName,
+        categorial_number:CatNum,
         contactName:contactName.value,
         patientName: patientName.value,
         phoneNumber1: phoneNumber1.value,
         phoneNumber2: phoneNumber2.value,
         reservationDate: reservationDate.value,
-        volunteerName: volunteerName.value
-   
+        volunteerName: volunteerName.value,
+        quantity: parseInt(reservationQuantity.value) || 0,
+        reservedOn: reservedOn.value
         
     };
+    const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
+    const inventoryItemSnapshot = await inventoryItemRef.get();
+    const inventoryItemData = inventoryItemSnapshot.data();
+    
+    if (inventoryItemData.product_quantity < reservationData.quantity) {
+        alert('Not enough in inventory');
+        return;
+    }
+    
+
+    let reservationCounter = null;
+    let borrowCounterRef = firebase.firestore().collection('Tools').doc('Events Counter');
+    async function getBorrowCounter() {
+            const doc = await borrowCounterRef.get();
+            if (!doc.exists) {
+              console.log('No such document!');
+            } else {
+              reservationCounter = doc.data()['reservation counter'];
+             
+            }
+          }
+
+          if (!inventoryItemData.hasOwnProperty('reserved_quantity')) {
+            inventoryItemData.reserved_quantity = 0;
+            // Update it to Firestore
+            await inventoryItemRef.update({ 'reserved_quantity': inventoryItemData.reserved_quantity });
+        } else {
+            // Ensure reserved_quantity is a number
+            inventoryItemData.reserved_quantity = parseInt(inventoryItemData.reserved_quantity);
+        }
+        
+        
     try {
-        const reservationListRef = firebase.firestore().collection('reservation list').doc(foundItemCategorialNumber);
+        await  getBorrowCounter();
+        
+        // Get borrow counter
+     
+         
+        const reservationListRef = firebase.firestore().collection('reservation list').doc(reservationCounter.toString());
         const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
     
         await reservationListRef.set(reservationData);
-        await inventoryItemRef.update({ status: 'reserved' });
+        await borrowCounterRef.update({ 'reservation counter': reservationCounter + 1 });
+
+        await inventoryItemRef.update({ 
+            reserved_quantity: inventoryItemData.reserved_quantity + reservationData.quantity,
+            product_quantity: inventoryItemData.product_quantity - reservationData.quantity
+        });
     
         alert('Item has been successfully reserved.');
         location.reload();
     } catch (error) {
-        console.error('Error reserving the item:', error);
+        console.error('Error reserving the itereservedOnm:', error);
         alert('Failed to reserve the item.');
     }
 });

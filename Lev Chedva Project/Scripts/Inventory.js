@@ -148,6 +148,9 @@ function displayProducts(ProductData) {
       const QuantityItem = document.createElement('li');
       QuantityItem.textContent = "כמות: " + ProductData.product_quantity;
       const RemarksItem = document.createElement('li');
+      const ReservedQuantityItem = document.createElement('li');
+      ReservedQuantityItem.textContent = "כמות שמורה: "  + ProductData.reserved_quantity;
+
       RemarksItem.textContent = "הערות: " + ProductData.remarks;
       const StatusItem = document.createElement('li');
       StatusItem.textContent = "סטאטוס: " + translateStatus(ProductData.status);
@@ -161,6 +164,7 @@ function displayProducts(ProductData) {
       detailsList.appendChild(CatNumItem);
       detailsList.appendChild(DescriptionItem);
       detailsList.appendChild(QuantityItem);
+      detailsList.appendChild(ReservedQuantityItem);
       detailsList.appendChild(KeywordItem);
       detailsList.appendChild(RemarksItem);
       detailsList.appendChild(AccessoriesItem);
