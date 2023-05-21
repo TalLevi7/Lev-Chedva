@@ -156,14 +156,6 @@ async function searchItemByCategorialNumber(categorialNumber) {
   }
 
   const buttonContainer = document.getElementById('buttonContainer');
-<<<<<<< HEAD
-=======
-  const header = document.createElement('h3');
-  const inventoryItemsRef = firebase.firestore().collection('inventory');
-    const docSnapshot = await inventoryItemsRef.doc(categorialNumber).get();
-    header.textContent = `${docSnapshot.data().product_name} - ${categorialNumber}`;
-    buttonContainer.appendChild(header);
->>>>>>> refs/remotes/origin/main
 
   // Create the table
   const table = document.createElement('table');
@@ -173,11 +165,7 @@ async function searchItemByCategorialNumber(categorialNumber) {
   for (let doc of querySnapshot.docs) {
       const ticket = doc.id;
       const ticketButton = document.createElement('button');
-<<<<<<< HEAD
       ticketButton.textContent = ticket;
-=======
-      ticketButton.textContent = doc.data().contactName +" "+doc.data().contactId;
->>>>>>> refs/remotes/origin/main
 
       // Create a row and a cell for the button
       const row = document.createElement('tr');

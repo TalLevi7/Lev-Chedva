@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #F0F0F0;
+}
+
+.search-bar {
+    margin: 20px 0;
+    text-align: right; /* Align search bar to the right */
+    direction: rtl; /* Set right-to-left direction */
+}
+
+#searchInput {
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+}
+
+#searchButton {
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    background-color: #007BFF;
+    color: #fff;
+    margin-right: 0; /* Move search button to the left of the input */
+    position: relative;
+    right:0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+
+th {
+    text-align: center;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr.main-row:hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+
+.expandable-row td {
+    background-color: #e6e6e6;
+}
+
+button:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    margin: 5px;
+    padding: 10px 20px;
+    position: relative;
+    left: 30%;
+    border-radius: 15px; /* you can adjust this value to change how rounded the corners are */
+}
+
+.save-button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    margin: 5px;
+    padding: 10px 20px;
+   
+}
+
+td {
+    border: none;
+}
+
+table, th, td {
+    text-align: right;
+}
+
+tr:not(:last-child) {
+    border-bottom: 1px solid #ccc; /* Add borders between rows */
+}
+
+tr {
+    flex-direction: row-reverse; /* Reverse the order of cells */
+}
+
+.search-bar {
+    min-width: 300px; /* Adjust the value as needed */
+}
