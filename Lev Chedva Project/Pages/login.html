@@ -71,12 +71,26 @@ loginForm.addEventListener("submit", (event) => {
 });
 
 function displayErrorMessage(message) {
-  errorMessage.textContent = message;
+  let errorText = "";
+
+  switch (message) {
+    case "auth/user-not-found":
+      errorText = "Wrong email address";
+      break;
+    case "auth/wrong-password":
+      errorText = "Wrong password";
+      break;
+    default:
+      errorText = "An error occurred";
+  }
+
+  errorMessage.textContent = errorText;
 }
 
 function clearErrorMessage() {
   errorMessage.textContent = "";
 }
+
     </script>
   </body>
 </html>
