@@ -74,3 +74,14 @@ button[type="submit"]:hover {
 h1,label,input,button {
       font-family: 'Assistent', sans-serif;
     }
+
+.error-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    font-size: 30px;
+    color: red;
+    font-weight: bold;
+    font-family: 'Assistent', sans-serif;
+  }    

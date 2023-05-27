@@ -3,31 +3,28 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="../styles/SignUp_style_HE.css">
-    <title>הירשם</title>
+    <title>הרשמה</title>
   </head>
   <body>
-    <h1>הירשם</h1>
+    <div class="logo-container">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo">
+    </div>
+    <h1>הרשמה</h1>
     <form id="signup-form">
-      <label for="email">אימייל:</label>
+      <label for="email">:אימייל</label>
       <input type="email" id="email" name="email" required>
-      <label for="password">סיסמא:</label>
+      <label for="password">:סיסמא</label>
       <input type="password" id="password" name="password" required>
       <button type="submit">הירשם</button>
     </form>
 
-    <button id="google-signup-btn">
-      <img src="../Pics/icons8-google-48.png" alt="Google icon">
-    </button>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
-    <script src="google-signup.js"></script>
-    <script>
    
-
-      
+   <script>
       // Get references to the email and password input fields
       const emailInput = document.getElementById("email");
       const passwordInput = document.getElementById("password");
