@@ -14,6 +14,7 @@ body {
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
   
   label {
@@ -44,35 +45,27 @@ body {
     margin-top: 20px;
     font-size: 16px;
     color: #fff;
-    background-color: #333;
+    background-color: #d25757;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-family: 'Assistent', sans-serif;
   }
   
   button[type="submit"]:hover {
-    background-color: #444;
+    background-color: #c61f1f;
   }
   
-  
-  
-  #google-signup-btn {
-    background-color: #fff;
-    border: 2px solid #fff;
-    border-radius: 4px;
-    color: #737373;
+
+  .logo-container {
     display: flex;
-    align-items: center;
     justify-content: center;
-    padding: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
+    margin-bottom: 20px;
   }
-  
-  #google-signup-btn img {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
+  .logo-container img {
+    max-width: 150px; 
   }
+  h1,label,input,button {
+        font-family: 'Assistent', sans-serif;
+      }
   

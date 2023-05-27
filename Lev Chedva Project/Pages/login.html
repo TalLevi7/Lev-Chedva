@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="../styles/LogIn_style.css">
-    <title>כניסה</title>
+    <title>login</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -11,25 +11,26 @@
     <script src="../firebase.js"></script>
   </head>
   <body>
-    <h1>כניסה</h1>
+    <div class="logo-container">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo">
+    </div>
+    <h1>Login</h1>
     <form id="login-form">
-      <label for="email">:אימייל</label>
+      <label for="email">Email:</label>
       <input type="email" id="email" name="email" required>
-      <label for="password">:סיסמא</label>
+      <label for="password">Password:</label>
       <input type="password" id="password" name="password" required>
-      <button type="submit">היכנס</button>
+      <button type="submit">login</button>
+      <p>
+        <a id="forgot-password-link" href="#" onclick="forgotPassword()">Forgot Password</a>
+      </p>
     </form>
 
-    <button id="google-login-btn" onclick="signInWithGoogle()">
-      <img src="../Pics/icons8-google-48.png" alt="Google logo">
-    </button>
-    
-    <button id="forgot-password-btn" onclick="forgotPassword()">
-      שכחתי את הסיסמא שלי
-    </button>
-    
+    <div id="error-message" class="error-message"></div>
+
     <script>
       // Get references to the email and password input fields
+
       const emailInput = document.getElementById("email");
       const passwordInput = document.getElementById("password");
       
@@ -65,64 +66,9 @@
             
           });
       });
+  errorMessage.textContent = errorMessageText;
+}
 
-      function signInWithGoogle() {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider)
-          .then((result) => {
-            console.log("Log In");
-          })
-          .catch((error) => {
-            // Handle errors here
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log(errorCode + ': ' + errorMessage);
-          });
-      }
-
-      function checkAuthorizationAndRedirect(email) {
-        // Get the document from the "Volunteers" collection based on the provided email
-        firebase.firestore().collection("Volunteers").doc(email).get().then((doc) => {
-          if (doc.exists) {
-            // If the document exists, get the "Authorizations" field
-            const authorizations = doc.data().Authorizations;
-            
-            if (authorizations.includes("000")) {
-              // If the "Authorizations" array contains "000", redirect to page A
-              window.location.href = "../Pages/Manager_Panel.html";
-            } else {
-              // If the "Authorizations" array does not contain "000", redirect to page B
-              window.location.href = "../Pages/Volunteer_Dashboard.html";
-            }
-          } else {
-            // If the document doesn't exist, log an error and redirect to an error page
-            console.error("No such document!");
-            window.location.href = "error.html";
-          }
-        }).catch((error) => {
-          // Handle errors
-          console.error("Error getting document:", error);
-          window.location.href = "error.html";
-        });
-      }
-      
-      function forgotPassword() {
-        const email = emailInput.value;
-        
-        // Send a password reset email to the user's email address
-        firebase.auth().sendPasswordResetEmail(email)
-          .then(() => {
-            // Password reset email sent successfully
-            console.log("Password reset email sent to " + email);
-            alert("An email has been sent to reset your password. Please check your inbox.");
-          })
-          .catch((error) => {
-            // Handle errors
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error(errorCode, errorMessage);
-          });
-      }
     </script>
   </body>
 </html>
