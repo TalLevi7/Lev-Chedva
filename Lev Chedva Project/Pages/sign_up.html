@@ -17,6 +17,7 @@
       <input type="password" id="password" name="password" required>
       <button type="submit">Sign Up</button>
     </form>
+    <div id="error-message" class="error-message"></div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -30,6 +31,9 @@
       
       // Get a reference to the sign-up form
       const signUpForm = document.getElementById("signup-form");
+
+      // Get a reference to the error message element
+      const errorMessage = document.getElementById("error-message");
       
       // Add an event listener to the sign-up form
       signUpForm.addEventListener("submit", (event) => {
@@ -39,11 +43,15 @@
         const email = emailInput.value;
         const password = passwordInput.value;
         
-        // Sign up the user using Firebase Authentication
-        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-          .then(() => {
-            // New sign-in will be persisted with session persistence.
-            return firebase.auth().createUserWithEmailAndPassword(email, password)
+         // Check if the user is already registered
+      firebase.auth().fetchSignInMethodsForEmail(email)
+        .then((signInMethods) => {
+          if (signInMethods.length > 0) {
+            // User is already registered, display an error message
+            errorMessage.textContent = "This user is already registered";
+          } else {
+            // User is not registered, sign them up
+            firebase.auth().createUserWithEmailAndPassword(email, password)
               .then((userCredential) => {
                 // Signed up successfully
                 const user = userCredential.user;
@@ -52,7 +60,7 @@
                 console.log("");
                 localStorage.setItem('email', email);
                 // Redirect to dashboard page
-                window.location.href = "../Pages/Volenteer_SignUp.html";
+                window.location.href = "../Pages/Volenteer_SignUp_HE.html";
               })
               .catch((error) => {
                 // Handle sign-up errors
@@ -60,12 +68,13 @@
                 const errorMessage = error.message;
                 console.error(errorCode, errorMessage);
               });
-          })
-          .catch((error) => {
-            // Handle setting persistence errors
-            console.error("Error setting persistence: ", error);
-          });
-      });
+          }
+        })
+        .catch((error) => {
+          // Handle error checking if user is already registered
+          console.error("Error checking if user is already registered:", error);
+        });
+    });
     </script>
   </body>
 </html>

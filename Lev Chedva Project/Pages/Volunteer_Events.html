@@ -1,24 +1,27 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="he" dir="rtl">
   <head>
     <meta charset="UTF-8">
-    <title>Event List</title>
+    <title>רשימת אירועים</title>
     <link rel="stylesheet" type="text/css" href="../styles/Volunteer_Transport_Panel.css">
  
   </head>
-  <body>
+  <body onload="readData()">
     <header>
-      <h1>Event List</h1>
+      <div class="logo-container">
+        <img src="../Pictures/logoLevChedva.png" alt="Logo">
+      </div>
+      <h1>רשימת אירועים</h1>
     </header>
     <main>
         <!-- ADD SEARCH BAR!!!! -->
-        <label for="authorization-filter">Filter by Status:</label>
+        <label for="authorization-filter">סנן:</label>
         <select id="authorization-filter">
-          <option value="all">All</option>
-          <option value="Open">Open</option>
-          <option value="Taken">Taken</option>
-          <option value="Transport">Transport</option>
+          <option value="all">הכל</option>
+          <option value="Open">פתוח</option>
+          <option value="Taken">נלקח</option>
+          <option value="Transport">בשינוע</option>
         </select>
       <table>
         <thead>

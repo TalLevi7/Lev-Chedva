@@ -35,41 +35,41 @@ firebase.auth().onAuthStateChanged(function(user) {
                   detailsCell.colSpan = 8;
                   const detailsList = document.createElement('ul');
                   const ProductNameItem = document.createElement('li');
-                  ProductNameItem.textContent = "Product Name: " + eventData.ProductName;
+                  ProductNameItem.textContent = "שם המוצר: " + eventData.ProductName;
                   const AdressItem = document.createElement('li');
-                  AdressItem.textContent = "Address: " + eventData.address;
+                  AdressItem.textContent = "כתובת: " + eventData.address;
                   const ContactNameItem = document.createElement('li');
-                  ContactNameItem.textContent = "ContactName: " + eventData.contactName;
+                  ContactNameItem.textContent = "שם איש קשר: " + eventData.contactName;
                   const ContactPhoneItem = document.createElement('li');
-                  ContactPhoneItem.textContent = "ContactPhone " + eventData.contactPhone;
+                  ContactPhoneItem.textContent = "טלפון איש קשר: " + eventData.contactPhone;
                   const RemarksItem = document.createElement('li');
-                  RemarksItem.textContent = "Remarks: " + eventData.remarks;
+                  RemarksItem.textContent = "הערות: " + eventData.remarks;
                   const timestamp = eventData.timestamp.seconds * 1000; // convert seconds to milliseconds
                   const date = new Date(eventData.timestamp.seconds * 1000);
                   const now = new Date();
                   const PostTimeItem = document.createElement('li');
-                  PostTimeItem.textContent = "Posted On: " + date;
+                  PostTimeItem.textContent = "תאריך פרסום: " + date;
                  const ElapsedTimeItem = document.createElement('li');
                   let timeElapsed = Math.round((now - timestamp) / (1000 * 60)); // in minutes
                   if(timeElapsed>60)
                   {
                   timeElapsed=timeElapsed/60;
                   timeElapsed=Math.floor(timeElapsed);
-                  ElapsedTimeItem.textContent = "Time Elapsed: " + timeElapsed +" Hours";
+                  ElapsedTimeItem.textContent = "זמן שחלף: " + timeElapsed + " שעות";
                   }else  
-                  ElapsedTimeItem.textContent = "Time Elapsed: " + timeElapsed +" Minutes";
+                  ElapsedTimeItem.textContent = "זמן שחלף: " + timeElapsed + " דקות";
                   const StatusItem = document.createElement('li');
-                  StatusItem.textContent = "Status: " + eventData.status;
+                  StatusItem.textContent = "סטטוס: " + eventData.status;
                   const TypeItem = document.createElement('li');
-                  TypeItem.textContent = "Type: " + eventData.type;
+                  TypeItem.textContent = "סוג: " + eventData.type;
                   const SizeItem = document.createElement('li');
-                  SizeItem.textContent = "Size: " + eventData.size;
+                  SizeItem.textContent = "גודל: " + eventData.size;
                   const UrgencyItem = document.createElement('li');
-                  UrgencyItem.textContent = "Urgency: " + eventData.urgency;
+                  UrgencyItem.textContent = "דחיפות: " + eventData.urgency;
                   const WeightItem = document.createElement('li');
-                  WeightItem.textContent = "Weight: " + eventData.weight;
+                  WeightItem.textContent = "משקל: " + eventData.weight;
                   const JeepItem = document.createElement('li');
-                  JeepItem.textContent = "Jeep Unit: " + eventData.jeepUnit;
+                  JeepItem.textContent = "יחידת ג'יפ: " + eventData.jeepUnit;
             
                   detailsList.appendChild(ProductNameItem);
                   detailsList.appendChild(AdressItem);
@@ -90,11 +90,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                   
                   
                 const PickupBtn = document.createElement('button');
-                PickupBtn.textContent = 'Picked Up';
+                PickupBtn.textContent = 'נאסף';
+                PickupBtn.style.marginLeft = '10px';
                 const Delivered = document.createElement('button');
-                Delivered.textContent = 'Delivered';
+                Delivered.textContent = 'נשלח';
+                Delivered.style.marginLeft = '10px';
                 const CancelEvent = document.createElement('button');
-                CancelEvent.textContent = 'Cancel Event';
+                CancelEvent.textContent = 'ביטול אירוע';
                
                 detailsList.appendChild(PickupBtn);
                 detailsList.appendChild(Delivered);
@@ -104,11 +106,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                   if (eventData && eventData.eventCounter) {
                     {
                     const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-                    StatusString="Transport";
+                    StatusString="בשינוע";
                     docRef.update({
                       status: StatusString
                     }).catch((error) => {
-                      console.error("Error updating document: ", error);
+                      console.error("שגיאה בעדכון המסמך: ", error);
                     });
                   
                   }
@@ -120,7 +122,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                     if (eventData && eventData.eventCounter) {
                        
                         const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-                        StatusString="closed";
+                        StatusString="סגור";
                         docRef.update({
                           status: StatusString
                         }).then(() => {
@@ -129,7 +131,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                           firebase.firestore().collection("Closed Events").doc(eventData.eventCounter.toString()).set({eventData});
                           firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString()).delete({eventData});
                         }).catch((error) => {
-                          console.error("Error updating document: ", error);
+                          console.error("שגיאה בעדכון המסמך: ", error);
                         });
                       } else {
                         console.error("Error: eventData or eventData.eventCounter is undefined");
@@ -153,11 +155,11 @@ firebase.auth().onAuthStateChanged(function(user) {
                     if (eventData && eventData.eventCounter) {
                         {
                         const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-                        StatusString="Open";
+                        StatusString="פתוח";
                         docRef.update({
                           status: StatusString
                         }).catch((error) => {
-                          console.error("Error updating document: ", error);
+                          console.error("שגיאה בעדכון המסמך: ", error);
                         });
                         const updatedTakenEvents = TakenEvents.filter((e) => e !== event);
                         firebase.firestore().collection("Volunteers").doc(userEmail).update({ 
@@ -185,50 +187,20 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               // Do something with the event data, e.g. display it on the page
             }).catch((error) => {
-              console.log("Error getting event data:", error);
+              console.log("שגיאה בקבלת נתוני האירוע", error);
             });
           });
         } else {
-          console.log("No such document!");
+          console.log("לא קיים מסמך כזה");
         }
       }).catch((error) => {
-        console.log("Error getting document:", error);
+        console.log("שגיאה בקבלת המסמך:", error);
       });
     } else {
       // No user is signed in.
-      console.log("User not signed in");
+      console.log("משתמש לא מחובר");
     }
   });
   
