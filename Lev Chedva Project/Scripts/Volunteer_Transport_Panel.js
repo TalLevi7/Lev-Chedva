@@ -7,13 +7,10 @@ const filterBar = document.getElementById("authorization-filter");
 async function readData() {
   try {
     const snapshot = await eventRef.get();
+    eventArray = []; // Clear the eventArray before populating it again
     snapshot.forEach((doc) => {
-      if (doc.exists) {
-        if (doc.data().status == "Open") {
-          eventArray.push(doc.data());
-        }
-      } else {
-        console.log("No such document!");
+      if (doc.exists && doc.data().status === "Open") {
+        eventArray.push(doc.data());
       }
     });
   } catch (error) {
