@@ -48,7 +48,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                   const date = new Date(eventData.timestamp.seconds * 1000);
                   const now = new Date();
                   const PostTimeItem = document.createElement('li');
-                  PostTimeItem.textContent = "תאריך פרסום: " + date;
+                  PostTimeItem.textContent = "תאריך פרסום: " + date.toLocaleString('he-IL');
                  const ElapsedTimeItem = document.createElement('li');
                   let timeElapsed = Math.round((now - timestamp) / (1000 * 60)); // in minutes
                   if(timeElapsed>60)
