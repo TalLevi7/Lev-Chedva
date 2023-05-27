@@ -30,58 +30,42 @@
 
     <script>
       // Get references to the email and password input fields
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
 
-// Get a reference to the login form
-const loginForm = document.getElementById("login-form");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      
+      // Get a reference to the login form
+      const loginForm = document.getElementById("login-form");
+      
+      // Add an event listener to the login form
+      loginForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        
+        // Get the email and password values from the form
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        
+        // Log in the user using Firebase Authentication
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .then(() => {
+            return firebase.auth().signInWithEmailAndPassword(email, password);
+          })
+          .then((userCredential) => {
+            // Logged in successfully
+            const user = userCredential.user;
+            console.log(user);
+            console.log("Logged in");
+            checkAuthorizationAndRedirect(email);
+          })
+          .catch((error) => {
+            // Handle login errors
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error(errorCode, errorMessage);
 
-// Get a reference to the error message element
-const errorMessage = document.getElementById("error-message");
-
-// Add an event listener to the login form
-loginForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-
-  // Get the email and password values from the form
-  const email = emailInput.value;
-  const password = passwordInput.value;
-
-  // Log in the user using Firebase Authentication
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      // Logged in successfully
-      console.log("Logged in");
-      window.location.href = "https://www.google.com"; //change it to the website page
-    })
-    .catch((error) => {
-      // Handle login errors
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error(errorCode, errorMessage);
-
-      // Display the error message to the user
-      displayErrorMessage(errorCode);
-    });
-});
-
-function displayErrorMessage(errorCode) {
-  let errorMessageText = "";
-
-  switch (errorCode) {
-  case "auth/user-not-found":
-    errorMessageText = "Invalid email address";
-    break;
-  case "auth/wrong-password":
-    errorMessageText = "Incorrect password";
-    break;
-  default:
-    errorMessageText = "Error!";
-}
-
-
+            
+          });
+      });
   errorMessage.textContent = errorMessageText;
 }
 
