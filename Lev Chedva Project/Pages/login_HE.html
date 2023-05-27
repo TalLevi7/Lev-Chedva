@@ -2,8 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../styles/LogIn_style.css">
-    <title>login</title>
+    <link rel="stylesheet" href="../styles/LogIn_style_HE.css">
+    <title>התחברות</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -14,15 +14,15 @@
     <div class="logo-container">
       <img src="../Pictures/logoLevChedva.png" alt="Logo">
     </div>
-    <h1>Login</h1>
+    <h1>התחברות</h1>
     <form id="login-form">
-      <label for="email">Email:</label>
+      <label for="email">:אימייל</label>
       <input type="email" id="email" name="email" required>
-      <label for="password">Password:</label>
+      <label for="password">:סיסמא</label>
       <input type="password" id="password" name="password" required>
-      <button type="submit">login</button>
+      <button type="submit">היכנס</button>
       <p>
-        <a id="forgot-password-link" href="#" onclick="forgotPassword()">Forgot Password</a>
+        <a id="forgot-password-link" href="#" onclick="forgotPassword()">שכחתי סיסמא</a>
       </p>
     </form>
 
@@ -71,16 +71,15 @@ function displayErrorMessage(errorCode) {
   let errorMessageText = "";
 
   switch (errorCode) {
-  case "auth/user-not-found":
-    errorMessageText = "Invalid email address";
-    break;
-  case "auth/wrong-password":
-    errorMessageText = "Incorrect password";
-    break;
-  default:
-    errorMessageText = "Error!";
-}
-
+    case "auth/user-not-found":
+      errorMessageText = "כתובת האימייל שגויה";
+      break;
+    case "auth/wrong-password":
+      errorMessageText = "הסיסמא שגויה";
+      break;
+    default:
+      errorMessageText = "אירעה שגיאה";
+  }
 
   errorMessage.textContent = errorMessageText;
 }
