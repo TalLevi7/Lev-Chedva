@@ -8,7 +8,7 @@ async function readData() {
     const snapshot = await eventRef.get();
     eventArray = []; // Clear the eventArray before populating it again
     snapshot.forEach((doc) => {
-      if (doc.exists && doc.data().status === "Open") {
+      if (doc.exists && doc.data().status === "פתוח") {
         eventArray.push(doc.data());
       }
     });
@@ -32,7 +32,7 @@ function DisplayData(eventData) {
   row.appendChild(nameCell);
   eventTable.appendChild(row);
   switch (eventData.status) {
-    case "Open":
+    case "פתוח":
       if (eventData.urgency == "Very Urgent") {
         row.style.backgroundColor = "red";
       } else if (eventData.urgency == "Urgent") {
@@ -43,10 +43,10 @@ function DisplayData(eventData) {
         row.style.backgroundColor = "orange";
       }
       break;
-    case "Taken":
+    case "נלקח":
       row.style.backgroundColor = "yellow";
       break;
-    case "Transport":
+    case "בשינוע":
       row.style.backgroundColor = "green";
       break;
     default:

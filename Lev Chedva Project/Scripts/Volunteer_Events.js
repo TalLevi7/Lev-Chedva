@@ -112,15 +112,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                     }).catch((error) => {
                       console.error("שגיאה בעדכון המסמך: ", error);
                     });
-                  
                   }
-                }
-                });
-                
-
+                }});
                 Delivered.addEventListener('click', () => {
                     if (eventData && eventData.eventCounter) {
-                       
                         const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
                         StatusString="סגור";
                         docRef.update({
@@ -144,14 +139,8 @@ firebase.auth().onAuthStateChanged(function(user) {
                           }).catch((error) => {
                             console.log("Error updating TakenEvents array:", error);
                           });
-                    
                   });    
-
-
-
-
                 CancelEvent.addEventListener('click', () => {
-            
                     if (eventData && eventData.eventCounter) {
                         {
                         const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
@@ -171,21 +160,10 @@ firebase.auth().onAuthStateChanged(function(user) {
                           }).catch((error) => {
                             console.log("Error updating TakenEvents array:", error);
                           });
-
-
-
-                      
                       }
                     }
                 })
-            
-            
-            
-            }  
-            
-            })
-
-
+            }})
 
               // Do something with the event data, e.g. display it on the page
             }).catch((error) => {
