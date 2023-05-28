@@ -2,7 +2,6 @@ let eventArray = [];
 const eventTable = document.getElementById('eventTable');
 const db = firebase.firestore();
 const eventRef = db.collection("Open Events");
-const filterBar = document.getElementById("authorization-filter");
 
 async function readData() {
   try {
@@ -18,24 +17,9 @@ async function readData() {
   }
 
   eventArray.reverse();
-  preDisplayData("all");
-}
-
-filterBar.addEventListener("change", function() {
-  const selectedValue = filterBar.value;
-  preDisplayData(selectedValue);
-});
-
-function preDisplayData(filter) {
   eventTable.innerHTML = "";
   eventArray.forEach((eventData) => {
-    if (filter == "all") {
-      DisplayData(eventData);
-    } else {
-      var StatusString = eventData.status;
-      if (StatusString.toLowerCase().includes(filter.toLowerCase()))
-        DisplayData(eventData);
-    }
+    DisplayData(eventData);
   })
 }
 
