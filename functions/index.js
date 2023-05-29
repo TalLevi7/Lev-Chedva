@@ -1,47 +1,216 @@
-const functions = require('firebase-functions');
+
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-exports.sendPushNotification = functions.https.onCall(async (data, context) => {
-    console.log(data.source,data.destination);
-  const message = {
-    notification: {
-      title: 'New Transport',
-      body: `Source: ${data.source} Destination: ${data.destination}`
-    },
-    tokens: [] // to be filled from Firestore
-  };
+const functions = require('firebase-functions');
+const nodemailer = require('nodemailer');
 
-  // Fetch FCM tokens from Firestore and collect the corresponding user emails
-  const volunteers = await admin.firestore().collection('Volunteers').get();
-  const emails = [];
-  volunteers.forEach(volunteer => {
-    const fcmToken = volunteer.data().fcmToken;
-    if (fcmToken) {
-        console.log(fcmToken);
-      message.tokens.push(fcmToken);
-      emails.push(volunteer.id);
+let transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'levchedvaalerts@gmail.com',  // your gmail account
+    pass: 'ahfjpbwoheeyypyk'          // your gmail password or app password
+  }
+});
+
+exports.sendEmailOnFormSubmit = functions.firestore
+  .document('Open Events/{documentId}')
+  .onCreate((snap, context) => {
+    const data = snap.data();
+    const link = "https://levchedva.org/Pages/login_HE.html";
+    const messageText = `שינוע חדש!מי זוכה בחסד? מכתובת ${data.Source_Address} לכתובת: ${data.Destination_Address}. היכנסו ללינק: ${link}`;
+    const encodedMessage = encodeURIComponent(messageText);
+    const phoneNumber = '+972545420068'; // Replace with the actual phone number
+    const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'נפתח שינוע חדש',
+      text: `${messageText}\n\n שלח לווצאפ ${whatsappLink}`,
+      
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
+
+
+  exports.sendEmailOnDelivered = functions.firestore
+  .document('Open Events/{documentId}')
+  .onUpdate((change, context) => {
+    // Get the after state of the document
+    const dataAfter = change.after.data();
+
+    // Check if status has changed to "נמסר"
+    if (dataAfter.status === "נמסר") {
+      // Prepare the mail message
+      const messageText = `השינוע מספר ${dataAfter.eventCounter} נמסר!`;
+      
+      let mailOptions = {
+        from: 'levchedvaalerts@gmail.com',  // sender
+        to: 'levchedvaalerts@gmail.com',  // receiver
+        subject: 'שינוע נמסר',
+        text: messageText
+      };
+      
+      // Send the mail
+      return transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          return error;
+        } else {
+          console.log('Email sent: ' + info.response);
+          return info.response;
+        }
+      });
+    } else {
+      console.log('Status not changed to "נמסר". No email sent.');
+      return null;
     }
   });
 
-  console.log('Users to receive notification:', emails);
 
-  // Send a message to devices subscribed to the provided topic.
-  return admin.messaging().sendMulticast(message)
-    .then((response) => {
-      // Response is a message ID string.
-      console.log('Successfully sent message:', response);
-      // Wrap the response in a 'data' field
-      return { data: { success: true }};
-    })
-    .catch((error) => {
-      console.log('Error sending message:', error);
-      // Wrap the error message in a 'data' field
-      return { data: { success: false }};
+  exports.sendEmailOnCancelled = functions.firestore
+  .document('Open Events/{documentId}')
+  .onUpdate((change, context) => {
+    // Get the after state of the document
+    const dataAfter = change.after.data();
+
+    // Check if status has changed to "פתוח"
+    if (dataAfter.status === "פתוח") {
+      // Prepare the mail message
+      const messageText = `השינוע מספר ${dataAfter.eventCounter} בוטל!`;
+      
+      let mailOptions = {
+        from: 'levchedvaalerts@gmail.com',  // sender
+        to: 'levchedvaalerts@gmail.com',  // receiver
+        subject: 'שינוע בוטל',
+        text: messageText
+      };
+      
+      // Send the mail
+      return transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          return error;
+        } else {
+          console.log('Email sent: ' + info.response);
+          return info.response;
+        }
+      });
+    } else {
+      console.log('Status not changed to "פתוח". No email sent.');
+      return null;
+    }
+  });
+
+
+
+  exports.sendEmailOnPickedUp = functions.firestore
+  .document('Open Events/{documentId}')
+  .onUpdate((change, context) => {
+    // Get the after state of the document
+    const dataAfter = change.after.data();
+
+    // Check if status has changed to "בשינוע"
+    if (dataAfter.status === "בשינוע") {
+      // Prepare the mail message
+      const messageText = `השינוע מספר ${dataAfter.eventCounter} נאסף!`;
+
+      let mailOptions = {
+        from: 'levchedvaalerts@gmail.com',  // sender
+        to: 'levchedvaalerts@gmail.com',  // receiver
+        subject: 'שינוע נאסף',
+        text: messageText
+      };
+
+      // Send the mail
+      return transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          return error;
+        } else {
+          console.log('Email sent: ' + info.response);
+          return info.response;
+        }
+      });
+    } else {
+      console.log('Status not changed to "בשינוע". No email sent.');
+      return null;
+    }
+  });
+
+
+
+
+  exports.sendEmailOnEventTaken = functions.firestore
+  .document('Open Events/{documentId}')
+  .onUpdate((change, context) => {
+    // Get the after document
+    const newData = change.after.data();
+
+    // Check if the event was taken
+    if (newData.status === "נלקח") {
+      const takenBy = newData.takenBy; // Get the email of the volunteer
+      
+      // Find the volunteer in the 'Volunteers' collection
+      admin.firestore().collection('Volunteers').doc(takenBy).get()
+        .then(doc => {
+          if (doc.exists) {
+            const volunteer = doc.data();
+            const messageText = `האירוע ${newData.eventCounter} נלקח על ידי המתנדב ${volunteer.firstName} ${volunteer.lastName}.`;
+
+            let mailOptions = {
+              from: 'levchedvaalerts@gmail.com',  // sender
+              to: 'levchedvaalerts@gmail.com',  // receiver
+              subject: 'האירוע נלקח',
+              text: messageText
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + info.response);
+              }
+            });
+          } else {
+            console.log("No volunteer found with this email.");
+          }
+        }).catch(error => {
+          console.log("Error getting volunteer document:", error);
+        });
+    }
+  });
+
+
+
+
+  exports.sendEmailOnNewVolunteer = functions.firestore
+  .document('Volunteers Waiting/{documentId}')
+  .onCreate((snap, context) => {
+    const newVolunteer = snap.data();
+
+    const messageText = `מתנדב חדש נרשם!\n\nשם פרטי: ${newVolunteer.firstName}\nשם משפחה: ${newVolunteer.lastName}\nאימייל: ${newVolunteer.email}`;
+
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'רישום מתנדב חדש',
+      text: messageText,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
     });
-});
-
-
-
-const cors = require('cors')({ origin: true });
-
+  });

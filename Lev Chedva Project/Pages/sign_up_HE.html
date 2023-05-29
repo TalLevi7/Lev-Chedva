@@ -29,24 +29,8 @@
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
 
-
-      })
-      .catch((error) => {
-        // Handle sign-up errors
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(errorCode, errorMessage);
-      });
-  })
-  .catch((error) => {
-    // Handle setting persistence errors
-    console.error("Error setting persistence: ", error);
-  });
-      });
-
     // Get a reference to the sign-up form
     const signUpForm = document.getElementById("signup-form");
-
 
     // Get a reference to the error message element
     const errorMessage = document.getElementById("error-message");
@@ -58,7 +42,6 @@
       // Get the email and password values from the form
       const email = emailInput.value;
       const password = passwordInput.value;
-
 
       // Check if the user is already registered
       firebase.auth().fetchSignInMethodsForEmail(email)
@@ -94,5 +77,4 @@
     });
   </script>
 </body>
-
 </html>

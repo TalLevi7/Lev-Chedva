@@ -98,7 +98,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 PickupBtn.style.marginLeft = '10px';
 
                 const Delivered = document.createElement('button');
-                Delivered.textContent = 'נשלח';
+                Delivered.textContent = 'נמסר';
                 Delivered.style.marginLeft = '10px';
 
                 const CancelEvent = document.createElement('button');
@@ -112,27 +112,40 @@ firebase.auth().onAuthStateChanged(function(user) {
             
                 PickupBtn.addEventListener('click', () => {
                   if (eventData && eventData.eventCounter) {
-                    {
                     const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
                     StatusString="בשינוע";
                     docRef.update({
                       status: StatusString
+                    }).then(() => {
+                      // After successful update, get the updated document
+                      docRef.get().then((updatedDoc) => {
+                        if (updatedDoc.exists) {
+                          const updatedData = updatedDoc.data();
+                          // Update the status item in the table row
+                          StatusItem.textContent = "סטטוס: " + updatedData.status;
+                        } else {
+                          console.error("No document exists with the given ID");
+                        }
+                      }).catch((error) => {
+                        console.error("שגיאה בקבלת המסמך המעודכן: ", error);
+                      });
                     }).catch((error) => {
                       console.error("שגיאה בעדכון המסמך: ", error);
                     });
+                  } else {
+                    console.error("Error: eventData or eventData.eventCounter is undefined");
                   }
-                }});
+                });
+                
                 Delivered.addEventListener('click', () => {
                     if (eventData && eventData.eventCounter) {
                         const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-                        StatusString="סגור";
+                        StatusString="נמסר";
                         docRef.update({
                           status: StatusString
                         }).then(() => {
                           row.remove();
                           detailsRow.remove();
-                          firebase.firestore().collection("Closed Events").doc(eventData.eventCounter.toString()).set({eventData});
-                          firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString()).delete({eventData});
                         }).catch((error) => {
                           console.error("שגיאה בעדכון המסמך: ", error);
                         });

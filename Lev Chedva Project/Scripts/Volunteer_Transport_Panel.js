@@ -2,6 +2,10 @@ let eventArray = [];
 const eventTable = document.getElementById('eventTable');
 const db = firebase.firestore();
 const eventRef = db.collection("Open Events");
+const winnersTable = document.getElementById('winnersTable');
+const winnersDiv = document.getElementById('winnersDiv');
+const volunteersRef = db.collection("Volunteers");
+
 
 async function readData() {
   try {
@@ -26,7 +30,7 @@ async function readData() {
 function DisplayData(eventData) {
   const row = document.createElement('tr');
   const nameCell = document.createElement('td');
-  nameCell.textContent = eventData.eventCounter + " " + eventData.ProductName + " " + eventData.address;
+  nameCell.textContent = eventData.eventCounter + " " + eventData.ProductName + " לכתובת:" + eventData.Destination_Address;
   const emailCell = document.createElement('td');
   emailCell.textContent = eventData.email;
   row.appendChild(nameCell);
@@ -65,8 +69,12 @@ function DisplayData(eventData) {
       const detailsList = document.createElement('ul');
       const ProductNameItem = document.createElement('li');
       ProductNameItem.textContent = "שם המוצר: " + eventData.ProductName;
-      const AdressItem = document.createElement('li');
-      AdressItem.textContent = "כתובת: " + eventData.address;
+      const SourceAdressItem = document.createElement('li');
+      SourceAdressItem.textContent = "כתובת מקור:"+ eventData.Source_Address;
+      const DestAdressItem = document.createElement('li');
+      DestAdressItem.textContent = "כתובת יעד: "+ eventData.Destination_Address;
+
+
       const ContactNameItem = document.createElement('li');
       ContactNameItem.textContent = "שם איש קשר: " + eventData.contactName;
       const ContactPhoneItem = document.createElement('li');
@@ -100,7 +108,8 @@ function DisplayData(eventData) {
       JeepItem.textContent = "יחידת ג'יפ: " + eventData.jeepUnit;
 
       detailsList.appendChild(ProductNameItem);
-      detailsList.appendChild(AdressItem);
+      detailsList.appendChild(SourceAdressItem);
+      detailsList.appendChild(DestAdressItem);
       detailsList.appendChild(ContactNameItem);
       detailsList.appendChild(ContactPhoneItem);
       detailsList.appendChild(RemarksItem);
@@ -121,7 +130,8 @@ function DisplayData(eventData) {
       buttonContainer.style.justifyContent = 'center';
       buttonContainer.style.alignItems = 'center';
       const TakeEvent = document.createElement('button');
-      TakeEvent.textContent = 'קח';
+
+      TakeEvent.textContent = 'לקחתי!';
       buttonContainer.appendChild(TakeEvent);
       detailsList.appendChild(buttonContainer);
 
@@ -129,30 +139,77 @@ function DisplayData(eventData) {
         var user = firebase.auth().currentUser;
         if (user) {
           var email = user.email;
-        } else {
-          console.log('לא נמצא משתמש מחובר.');
-        }
-        firebase.firestore().collection("Volunteers").doc(email).update({
+          firebase.firestore().collection("Volunteers").doc(email).update({
             TakenEvents: firebase.firestore.FieldValue.arrayUnion(eventData.eventCounter)
-          })
-          .then(() => {
+          }).then(() => {
             const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
             StatusString = "נלקח";
             docRef.update({
-              status: StatusString
+              status: StatusString,
+              takenBy: email // add takenBy field to the event document
             }).then(() => {
               row.remove();
               detailsRow.remove();
+              updateWinnersTable(); // Update the winners table
             }).catch((error) => {
               console.error("שגיאה בעדכון המסמך: ", error);
             });
-          })
-          .catch((error) => {
+          }).catch((error) => {
             console.error("שגיאה בעדכון המסמך: ", error);
           });
+        } else {
+          console.log('לא נמצא משתמש מחובר.');
+        }
       });
-    }
+}
   });
+
 }
 
-readData();
+let count=0;
+async function updateWinnersTable() {
+  try {
+    const snapshot = await eventRef.get();
+    winnersTable.innerHTML = ""; // Clear the winnersTable before populating it again
+    snapshot.forEach((doc) => {
+      if (doc.exists && (doc.data().status === "נלקח" || doc.data().status === "בשינוע")) {
+        const eventData = doc.data();
+        count++;
+        if(count>0)
+        winnersDiv.style.display = 'block';
+        displayWinner(eventData);
+      }
+    });
+  } catch (error) {
+    console.log("Error getting documents:", error);
+  }
+}
+
+async function displayWinner(eventData) {
+  const volunteerSnapshot = await volunteersRef.doc(eventData.takenBy).get();
+  if (volunteerSnapshot.exists) {
+    const volunteerData = volunteerSnapshot.data();
+    const row = document.createElement('tr');
+    const nameCell = document.createElement('td');
+    nameCell.textContent = "תודה ל "+volunteerData.firstName + " " + volunteerData.lastName+ " על שינוע של" +eventData.ProductName+" מ: "+eventData.Source_Address+" ל: "+eventData.Destination_Address;
+    // const sourceCell = document.createElement('td');
+    // sourceCell.textContent = eventData.Source_Address;
+    // const destCell = document.createElement('td');
+    // destCell.textContent = eventData.Destination_Address;
+    row.appendChild(nameCell);
+    // row.appendChild(sourceCell);
+    // row.appendChild(destCell);
+    winnersTable.appendChild(row);
+  } else {
+    console.log("No volunteer found for email:", eventData.takenBy);
+  }
+}
+
+// And also call updateWinnersTable when the page loads, to display the current winners:
+
+
+  readData();
+  updateWinnersTable();
+
+
+

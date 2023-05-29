@@ -93,97 +93,87 @@
 
     <script src="../firebase.js"></script>
     <script>
-// Get form elements
-const form = document.querySelector('#open-events-form');
-const nameInput = form.querySelector('#name');
-const typeSelect = form.querySelector('#type');
-const urgencySelect = form.querySelector('#urgency');
-const sizeSelect = form.querySelector('#size');
-const weightSelect = form.querySelector('#weight');
-const jeepCheckbox = form.querySelector('#jeep');
-const contactNameInput = form.querySelector('#contact-name');
-const contactPhoneInput = form.querySelector('#contact-phone');
-const Source_addressInput = form.querySelector('#Source_Address');
-const Destination_addressInput = form.querySelector('#Destination_Address');
-const remarksInput = form.querySelector('#remarks');
+      // Get form elements
+      const form = document.querySelector('#open-events-form');
+      const nameInput = form.querySelector('#name');
+      const typeSelect = form.querySelector('#type');
+      const urgencySelect = form.querySelector('#urgency');
+      const sizeSelect = form.querySelector('#size');
+      const weightSelect = form.querySelector('#weight');
+      const jeepCheckbox = form.querySelector('#jeep');
+      const contactNameInput = form.querySelector('#contact-name');
+      const contactPhoneInput = form.querySelector('#contact-phone');
+      const Source_addressInput = form.querySelector('#Source_Address');
+      const Destination_addressInput = form.querySelector('#Destination_Address');
+      const remarksInput = form.querySelector('#remarks');
+    
+      // Firestore collection reference
+      const openEventsRef = firebase.firestore().collection('Open Events');
+    
+      const messaging = firebase.messaging();
+      const functions = firebase.functions();
+    
+      
+    
+      // Add submit event listener
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+    
+        firebase.firestore().collection("Tools").doc("Events Counter")
+          .get()
+          .then((doc) => {
+            var eventCounter;
+    
+            eventCounter = doc.data().Counter;
+            console.log("Event Counter value:", eventCounter);
+            const incrementedCounter = eventCounter + 1;
+            firebase.firestore().collection("Tools").doc("Events Counter").update({ Counter: incrementedCounter });
+            return eventCounter;
+          })
+          .then((eventCounter) => {
+            // Get form values
+            const ProductName = nameInput.value.trim();
+            const type = typeSelect.value;
+            const urgency = urgencySelect.value;
+            const size = sizeSelect.value;
+            const weight = weightSelect.value;
+            const jeepUnit = jeepCheckbox.checked;
+            const contactName = contactNameInput.value.trim();
+            const contactPhone = contactPhoneInput.value.trim();
+            const Source_Address = Source_addressInput.value.trim();
+            const Destination_Address = Destination_addressInput.value.trim();
+            const remarks = remarksInput.value.trim();
+            const status = "פתוח";
+            eventCounter = eventCounter + 1;
+            // Create new document in Firestore
+            firebase.firestore().collection('Open Events').doc(eventCounter.toString()).set({
+              eventCounter,
+              eventCounter,
+              ProductName,
+              type,
+              urgency,
+              size,
+              weight,
+              jeepUnit,
+              contactName,
+              contactPhone,
+              Source_Address,
+              Destination_Address,
+              remarks,
+              status,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+            console.log('Event added to Firestore');
+            form.reset();
 
-// Firestore collection reference
-const openEventsRef = firebase.firestore().collection('Open Events');
-
-const messaging = firebase.messaging();
-const functions = firebase.functions();
-
-var sendNotification = firebase.functions().httpsCallable('sendPushNotification');
+    
 
 
-
-// Add submit event listener
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  
-
-firebase.firestore().collection("Tools").doc("Events Counter")
-  .get()
-  .then((doc) => {
-    var eventCounter;
-
-    eventCounter = doc.data().Counter;
-    console.log("Event Counter value:", eventCounter);
-    const incrementedCounter = eventCounter + 1;
-    firebase.firestore().collection("Tools").doc("Events Counter").update({ Counter: incrementedCounter });
-    return eventCounter;
-  })
-  .then((eventCounter) => {
-   // Get form values
-  const ProductName = nameInput.value.trim();
-  const type = typeSelect.value;
-  const urgency = urgencySelect.value;
-  const size = sizeSelect.value;
-  const weight = weightSelect.value;
-  const jeepUnit = jeepCheckbox.checked;
-  const contactName = contactNameInput.value.trim();
-  const contactPhone = contactPhoneInput.value.trim();
-  const Source_Address = Source_addressInput.value.trim();
-  const Destination_Address = Destination_addressInput.value.trim();
-  const remarks = remarksInput.value.trim();
-  const status ="פתוח";
-  eventCounter=eventCounter+1;
-  // Create new document in Firestore
-  firebase.firestore().collection('Open Events').doc(eventCounter.toString()).set({
-    eventCounter,
-    eventCounter,
-    ProductName,
-    type,
-    urgency,
-    size,
-    weight,
-    jeepUnit,
-    contactName,
-    contactPhone,
-    Source_Address,
-    Destination_Address,
-    remarks,
-    status,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  })
-  .then(() => {
-    console.log('Event added to Firestore');
-    form.reset();
-    if (window.confirm('Would you like to push to all users?')) {
-      sendNotification({ source: Source_Address, destination: Destination_Address })
-    .then((result) => {
-      console.log('Notification sent successfully', result);
-    })
-    .catch((error) => {
-      console.error('Error sending notification', error);
-    });
-          }
-
- 
-});
-});
-});
-
+            
+          });
+      });
+  });
 </script>
 </body>
 </html>
