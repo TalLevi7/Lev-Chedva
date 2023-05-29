@@ -1,5 +1,4 @@
 const db = firebase.firestore();
-
 const editLocationsBtn = document.getElementById('edit-locations');
 const writeMessagesBtn = document.getElementById('write-messages');
 const showMessagesBtn=document.getElementById('show-messages');
@@ -332,7 +331,7 @@ async function deleteMessage(messageId) {
 let isVolunteersMagagmentDivVisible=false;
 let volunteersTableValid=false;
 loadVolunteersBtn.addEventListener('click', function() {
-  
+
     isVolunteersMagagmentDivVisible = !isVolunteersMagagmentDivVisible;
     messageListDiv.style.display = isVolunteersMagagmentDivVisible ? 'block' : 'none';
     locationManagementDiv.style.display = 'none';
@@ -380,28 +379,26 @@ loadVolunteersBtn.addEventListener('click', function() {
             let row = tbody.insertRow();
             let nameCell = row.insertCell(0);
             let actionsCell = row.insertCell(1);
-            
+    
             nameCell.textContent = doc.data().firstName + " " + doc.data().lastName;
-
             actionsCell.style.display = 'none'; // Hide the Actions cell by default
-
+    
             let detailsList = document.createElement('ul');
             Object.entries(hebrewLabels).forEach(([key, value]) => {
                 let listItem = document.createElement('li');
                 listItem.textContent = `${value}: ${doc.data()[key]}`;
                 detailsList.appendChild(listItem);
             });
-
+    
             let authBtn = document.createElement('button');
             authBtn.textContent = 'הוסף הרשאות';
-            
+    
             let authorizeBtn = document.createElement('button');
             authorizeBtn.textContent = 'אשר מתנדב';
-
+    
             let doNotAuthorizeBtn = document.createElement('button');
             doNotAuthorizeBtn.textContent = 'מחק מתנדב';
-
-
+    
             row.addEventListener('click', function() {
                 let detailsRow = row.nextElementSibling;
                 if (detailsRow && detailsRow.classList.contains('details-row')) {
@@ -415,100 +412,109 @@ loadVolunteersBtn.addEventListener('click', function() {
                     cell.appendChild(authBtn);
                     cell.appendChild(authorizeBtn);
                     cell.appendChild(doNotAuthorizeBtn);
-            
-                    authBtn.addEventListener('click', function() {
-                        let authRow = document.createElement('tr');
-                        let authCell = authRow.insertCell(0);
-                        authCell.colSpan = 2;
-                        const authForm = document.createElement('form');
-                        authForm.style.display = 'grid';
-                        authForm.style.gridTemplateColumns = '1fr 1fr 1fr';
-                        const authCheckboxes = [
-                            { name: 'מנהל', value: '000' },
-                            { name: 'כללי', value: '01' },
-                            { name: 'אירוע חדש', value: '10' },
-                            { name: 'אירועים פתוחים כללי', value: '11' },
-                            { name: 'אירועים פתוחים מתנדב', value: '12' },
-                            { name: 'אירועים של המתנדב', value: '13' },
-                            { name: 'אירועים סגורים', value: '14' },
-                            { name: 'סטטיסטיקה למתנדב', value: '15' },
-                            { name: 'הוספת מוצר', value: '20' },
-                            { name: 'החזרת מוצר', value: '21' },
-                            { name: ' השאלת מוצר', value: '22' },
-                            { name: ' צפייה במלאי', value: '23' },
-                            { name: 'מוצרים מושאלים', value: '24' },
-                            { name: 'ארכיב השאלות', value: '25' },
-                            { name: 'צור הזמנה עתידית', value: '26' },
-                            { name: 'הזמנות עתידיות', value: '27' },
-                            { name: 'צפה בבקשות השאלה', value: '28' },
-                            { name: 'צפה בבקשות תרומה', value: '29' },
-                            { name: 'פאנל טלפניות', value: '30' },
-                            { name: 'הודעות כללי', value: '40' },
-                            { name: 'הודעות טלפניות', value: '41' },
-                            { name: 'הודעות שינוע', value: '42' },
-                            { name: 'הודעות מנהלים', value: '43' },
-                        ];
-                    
-            
-            
-                        authCheckboxes.forEach(authOption => {
-                            const checkboxContainer = document.createElement('div');
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.id = authOption.value;
-                            checkbox.name = authOption.name;
-                            checkbox.value = authOption.value;
-            
-                            const label = document.createElement('label');
-                            label.htmlFor = authOption.value;
-                            label.appendChild(document.createTextNode(authOption.name));
-            
-                            checkboxContainer.appendChild(checkbox);
-                            checkboxContainer.appendChild(label);
-            
-                            authForm.appendChild(checkboxContainer);
-                        });
-            
-                        const submitButton = document.createElement('input');
-                        submitButton.type = 'submit';
-                        submitButton.value = 'Submit';
-                        authForm.appendChild(submitButton);
-            
-                        authForm.addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            const selectedAuths = [];
-            
-                            authCheckboxes.forEach(authOption => {
-                                if (document.getElementById(authOption.value).checked) {
-                                    selectedAuths.push(authOption.value);
-                                }
-                            });
-            
-                            db.collection('Volunteers Waiting').doc(doc.id).update({
-                                Authorizations: selectedAuths
-                            });
-                        });
-            
-                        authCell.appendChild(authForm);
-                        detailsRow.insertAdjacentElement('afterend', authRow);
+                }
+    
+                authBtn.addEventListener('click', function() {
+                    let authRow = document.createElement('tr');
+                    let authCell = authRow.insertCell(0);
+                    authCell.colSpan = 2;
+                    const authForm = document.createElement('form');
+                    authForm.style.display = 'grid';
+                    authForm.style.gridTemplateColumns = '1fr 1fr 1fr';
+    
+                    const authCheckboxes = [
+                        { name: 'מנהל', value: '000' },
+                        { name: 'כללי', value: '01' },
+                        { name: 'אירוע חדש', value: '10' },
+                        { name: 'אירועים פתוחים כללי', value: '11' },
+                        { name: 'אירועים פתוחים מתנדב', value: '12' },
+                        { name: 'אירועים של המתנדב', value: '13' },
+                        { name: 'אירועים סגורים', value: '14' },
+                        { name: 'סטטיסטיקה למתנדב', value: '15' },
+                        { name: 'הוספת מוצר', value: '20' },
+                        { name: 'החזרת מוצר', value: '21' },
+                        { name: ' השאלת מוצר', value: '22' },
+                        { name: ' צפייה במלאי', value: '23' },
+                        { name: 'מוצרים מושאלים', value: '24' },
+                        { name: 'ארכיב השאלות', value: '25' },
+                        { name: 'צור הזמנה עתידית', value: '26' },
+                        { name: 'הזמנות עתידיות', value: '27' },
+                        { name: 'צפה בבקשות השאלה', value: '28' },
+                        { name: 'צפה בבקשות תרומה', value: '29' },
+                        { name: 'פאנל טלפניות', value: '30' },
+                        { name: 'הודעות כללי', value: '40' },
+                        { name: 'הודעות טלפניות', value: '41' },
+                        { name: 'הודעות שינוע', value: '42' },
+                        { name: 'הודעות מנהלים', value: '43' },
+                    ];
+    
+                    authCheckboxes.forEach(authOption => {
+                        const checkboxContainer = document.createElement('div');
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.id = authOption.value;
+                        checkbox.name = authOption.name;
+                        checkbox.value = authOption.value;
+    
+                        const label = document.createElement('label');
+                        label.htmlFor = authOption.value;
+                        label.appendChild(document.createTextNode(authOption.name));
+    
+                        checkboxContainer.appendChild(checkbox);
+                        checkboxContainer.appendChild(label);
+    
+                        authForm.appendChild(checkboxContainer);
                     });
-                }
-            });
-            
-
-            authorizeBtn.addEventListener('click', function() {
-                // Transfer the doc to the "Volunteers" collection and delete from the current one
-                db.collection("Volunteers").doc(doc.id).set(doc.data())
-                .then(() => {
-                    db.collection("Volunteers Waiting").doc(doc.id).delete();
-                });
-            });
-
-            doNotAuthorizeBtn.addEventListener('click', function() {
-                // Delete the doc from the current collection
-                if (confirm('Are you sure you want to delete this volunteer?')) {
-                    db.collection("Volunteers Waiting").doc(doc.id).delete();
-                }
+    
+                    const submitButton = document.createElement('input');
+                    submitButton.type = 'submit';
+                    submitButton.value = 'Submit';
+                    authForm.appendChild(submitButton);
+    
+                    authForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        const selectedAuths = Array.from(authForm.querySelectorAll('input[type=checkbox]:checked')).map(cb => cb.value);
+    
+                        db.collection('Volunteers Waiting').doc(doc.id).update({
+                            Authorizations: selectedAuths
+                        }).then(() => {
+                            authForm.style.display = 'none'; // To hide the form after submit
+                        });
+                    });
+    
+                    authorizeBtn.addEventListener('click', function() {
+                        // First get the updated document
+                        db.collection("Volunteers Waiting").doc(doc.id).get()
+                        .then(doc => {
+                            if (doc.exists) {
+                                // Then move the updated document to the "Volunteers" collection
+                                db.collection("Volunteers").doc(doc.id).set(doc.data())
+                                .then(() => {
+                                    // Then delete from the "Volunteers Waiting" collection
+                                    db.collection("Volunteers Waiting").doc(doc.id).delete()
+                                    .then(() => {
+                                        row.remove(); // To remove the entire row after form submission
+                                        location.reload();
+                                    });
+                                });
+                            } else {
+                                console.log("No such document!");
+                            }
+                        }).catch(error => {
+                            console.log("Error getting document:", error);
+                        });
+                    });
+    
+                    doNotAuthorizeBtn.addEventListener('click', function() {
+                        // Delete the doc from the current collection
+                        if (confirm('Are you sure you want to delete this volunteer?')) {
+                            db.collection("Volunteers Waiting").doc(doc.id).delete();
+                        }
+                    });
+    
+                    authCell.appendChild(authForm);
+                    detailsRow.insertAdjacentElement('afterend', authRow);
+                }); 
             });
         });
     });
