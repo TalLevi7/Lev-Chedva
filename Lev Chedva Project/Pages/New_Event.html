@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
     <link rel="stylesheet" href="../styles/Open_Event_Form_style.css">
 	<title>טופס יצירת אירוע חדש</title>
 </head>
@@ -65,9 +66,28 @@
 		
 		<input type="submit" value="Submit">
 	</form>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+          .then((registration) => {
+            // Registration was successful
+            console.log('Service Worker registered:', registration);
+          })
+          .catch((error) => {
+            // Registration failed
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
+  
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
+
     <script src="../firebase.js"></script>
     <script>
 // Get form elements
@@ -84,14 +104,20 @@ const Source_addressInput = form.querySelector('#Source_Address');
 const Destination_addressInput = form.querySelector('#Destination_Address');
 const remarksInput = form.querySelector('#remarks');
 
-
-
 // Firestore collection reference
 const openEventsRef = firebase.firestore().collection('Open Events');
+
+const messaging = firebase.messaging();
+const functions = firebase.functions();
+
+var sendNotification = firebase.functions().httpsCallable('sendPushNotification');
+
+
 
 // Add submit event listener
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  
 
 firebase.firestore().collection("Tools").doc("Events Counter")
   .get()
@@ -140,18 +166,19 @@ firebase.firestore().collection("Tools").doc("Events Counter")
   .then(() => {
     console.log('Event added to Firestore');
     form.reset();
-  })
-  .catch((error) => {
-    console.error('Error adding event to Firestore', error);
-  });
-    
-  })
-  .catch((error) => {
-    console.error("Error getting Events counter document: ", error);
-  });
+    if (window.confirm('Would you like to push to all users?')) {
+      sendNotification({ source: Source_Address, destination: Destination_Address })
+    .then((result) => {
+      console.log('Notification sent successfully', result);
+    })
+    .catch((error) => {
+      console.error('Error sending notification', error);
+    });
+          }
 
-
-  
+ 
+});
+});
 });
 
 </script>
