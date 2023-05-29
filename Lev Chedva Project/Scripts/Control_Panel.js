@@ -352,7 +352,7 @@ loadVolunteersBtn.addEventListener('click', function() {
     let thead = table.createTHead();
     let tbody = table.createTBody();
 
-    let headers = ['Name', 'Actions'];
+    let headers = ['שם'];
     let headRow = thead.insertRow();
     for (let head of headers) {
         let th = document.createElement("th");
@@ -386,6 +386,7 @@ loadVolunteersBtn.addEventListener('click', function() {
             actionsCell.style.display = 'none'; // Hide the Actions cell by default
 
             let detailsList = document.createElement('ul');
+            detailsList.classList.add('no-bullets');
             Object.entries(hebrewLabels).forEach(([key, value]) => {
                 let listItem = document.createElement('li');
                 listItem.textContent = `${value}: ${doc.data()[key]}`;
@@ -422,57 +423,79 @@ loadVolunteersBtn.addEventListener('click', function() {
                         authCell.colSpan = 2;
                         const authForm = document.createElement('form');
                         authForm.style.display = 'grid';
-                        authForm.style.gridTemplateColumns = '1fr 1fr 1fr';
-                        const authCheckboxes = [
-                            { name: 'מנהל', value: '000' },
-                            { name: 'כללי', value: '01' },
-                            { name: 'אירוע חדש', value: '10' },
-                            { name: 'אירועים פתוחים כללי', value: '11' },
-                            { name: 'אירועים פתוחים מתנדב', value: '12' },
-                            { name: 'אירועים של המתנדב', value: '13' },
-                            { name: 'אירועים סגורים', value: '14' },
-                            { name: 'סטטיסטיקה למתנדב', value: '15' },
-                            { name: 'הוספת מוצר', value: '20' },
-                            { name: 'החזרת מוצר', value: '21' },
-                            { name: ' השאלת מוצר', value: '22' },
-                            { name: ' צפייה במלאי', value: '23' },
-                            { name: 'מוצרים מושאלים', value: '24' },
-                            { name: 'ארכיב השאלות', value: '25' },
-                            { name: 'צור הזמנה עתידית', value: '26' },
-                            { name: 'הזמנות עתידיות', value: '27' },
-                            { name: 'צפה בבקשות השאלה', value: '28' },
-                            { name: 'צפה בבקשות תרומה', value: '29' },
-                            { name: 'פאנל טלפניות', value: '30' },
-                            { name: 'הודעות כללי', value: '40' },
-                            { name: 'הודעות טלפניות', value: '41' },
-                            { name: 'הודעות שינוע', value: '42' },
-                            { name: 'הודעות מנהלים', value: '43' },
+                        authForm.style.gridTemplateColumns = '1fr 1fr 1fr 1fr 1fr 1fr';
+                        const categories = [
+                            {name: 'ניהול וכללי', options: [
+                                { name: 'מנהל', value: '000' },
+                                { name: 'כללי', value: '01' },
+                                { name: 'פאנל טלפניות', value: '30' },
+                            ]},
+                            {name: 'אירועים', options: [
+                                { name: 'אירוע חדש', value: '10' },
+                                { name: 'אירועים פתוחים כללי', value: '11' },
+                                { name: 'אירועים פתוחים מתנדב', value: '12' },
+                                { name: 'אירועים של המתנדב', value: '13' },
+                                { name: 'אירועים סגורים', value: '14' },
+                            ]},
+                            {name: 'מלאי', options: [
+                                { name: 'הוספת מוצר', value: '20' },
+                                { name: 'החזרת מוצר', value: '21' },
+                                { name: ' השאלת מוצר', value: '22' },
+                                { name: ' צפייה במלאי', value: '23' },
+                            ]},
+                            {name: 'מידע ורשימות', options: [
+                                { name: 'סטטיסטיקה למתנדב', value: '15' },
+                                { name: 'מוצרים מושאלים', value: '24' },
+                                { name: 'ארכיב השאלות', value: '25' },
+                                { name: 'הזמנות עתידיות', value: '27' },
+                            ]},
+                            {name: 'בקשות', options: [
+                                { name: 'צפה בבקשות השאלה', value: '28' },
+                                { name: 'צפה בבקשות תרומה', value: '29' },
+                                { name: 'צור הזמנה עתידית', value: '26' },
+                            ]},
+                            {name: 'הודעות', options: [
+                                { name: 'הודעות כללי', value: '40' },
+                                { name: 'הודעות טלפניות', value: '41' },
+                                { name: 'הודעות שינוע', value: '42' },
+                                { name: 'הודעות מנהלים', value: '43' },
+                            ]}
                         ];
                     
             
             
-                        authCheckboxes.forEach(authOption => {
-                            const checkboxContainer = document.createElement('div');
-                            const checkbox = document.createElement('input');
-                            checkbox.type = 'checkbox';
-                            checkbox.id = authOption.value;
-                            checkbox.name = authOption.name;
-                            checkbox.value = authOption.value;
-            
-                            const label = document.createElement('label');
-                            label.htmlFor = authOption.value;
-                            label.appendChild(document.createTextNode(authOption.name));
-            
-                            checkboxContainer.appendChild(checkbox);
-                            checkboxContainer.appendChild(label);
-            
-                            authForm.appendChild(checkboxContainer);
+                        categories.forEach(category => {
+                            const categoryDiv = document.createElement('div');
+                            const categoryLabel = document.createElement('label');
+                            categoryLabel.textContent = category.name;
+                            categoryDiv.appendChild(categoryLabel);
+                          
+                            category.options.forEach(option => {
+                              const checkboxContainer = document.createElement('div');
+                              const checkbox = document.createElement('input');
+                              checkbox.type = 'checkbox';
+                              checkbox.id = option.value;
+                              checkbox.name = option.name;
+                              checkbox.value = option.value;
+                          
+                              const label = document.createElement('label');
+                              label.htmlFor = option.value;
+                              label.appendChild(document.createTextNode(option.name));
+                          
+                              checkboxContainer.appendChild(checkbox);
+                              checkboxContainer.appendChild(label);
+                          
+                              categoryDiv.appendChild(checkboxContainer);
+                            });
+                            authForm.appendChild(categoryDiv);
                         });
             
-                        const submitButton = document.createElement('input');
-                        submitButton.type = 'submit';
-                        submitButton.value = 'Submit';
-                        authForm.appendChild(submitButton);
+                        let finishBtn = document.createElement('button');
+                        finishBtn.textContent = 'סיום';
+                        finishBtn.classList.add('finish-button'); // Add this line to assign a class to the button
+                        authForm.appendChild(finishBtn);
+
+                        
             
                         authForm.addEventListener('submit', function(e) {
                             e.preventDefault();

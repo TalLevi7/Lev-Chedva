@@ -6,18 +6,21 @@
 	<title>טופס תרומת ציוד רפואי</title>
 </head>
 <body>
-	<h1>טופס תרומת ציוד רפואי</h1>
+  <div class="logo-container">
+    <img src="../Pictures/logoLevChedva.png" alt="Logo">
+  </div>
 	<form>
-		<label for="name">שם:</label>
+    <h1>טופס תרומת ציוד רפואי</h1>
+		<label for="name">:שם</label>
 		<input type="text" id="name" name="name"><br><br>
 		
-		<label for="Phone Number">טלפון:</label>
+		<label for="Phone Number">:טלפון</label>
 		<input type="tel" id="Phone Number" name="Phone Number"><br><br>
 		
-		<label for="Product">ציוד לתרומה:</label>
+		<label for="Product">:ציוד לתרומה</label>
 		<input type="text" id="Product" name="Product"><br><br>
 		
-		<input type="button" value="Submit" onclick="submitData()">
+		<input type="button" value="שלח" onclick="submitData()">
 	</form>
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
