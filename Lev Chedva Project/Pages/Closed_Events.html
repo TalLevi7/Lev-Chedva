@@ -47,7 +47,7 @@ async function fetchAndDisplayEvents() {
     if (timestamp) {
         // Convert timestamp to a date string in day/month/year format
         const date = timestamp.toDate();
-        dateString = date.toLocaleDateString();
+        dateString = date.toLocaleDateString('he-IL');
     }
 
     // Create cells for each data
