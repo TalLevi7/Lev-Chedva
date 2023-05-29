@@ -1,9 +1,9 @@
 body {
     font-family: Arial, sans-serif;
-    text-align: right;
+    text-align: center;
     padding: 20px;
     background-color: #f4f4f4;
-    direction: rtl; /* added this */
+    direction: rtl;
 }
 
 h1 {
@@ -11,18 +11,23 @@ h1 {
 }
 
 table {
-    width: 100%;
+    width: 90%;
     border-collapse: collapse;
+    margin: 0 auto; /* Center the table horizontally */
     margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-table, th, td {
+table,
+th,
+td {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
 th {
-    background-color: #4CAF50;
+    background-color: #d25757;
     color: white;
 }
 
@@ -35,12 +40,13 @@ tr:hover {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #d25757;
     color: white;
     padding: 10px 20px;
-    margin: 10px 0;
+    margin: 10px 10px;
     border: none;
     cursor: pointer;
+    
 }
 
 button:hover {
@@ -56,7 +62,6 @@ form {
 input[type=checkbox] {
     margin-left: 10px;
 }
-
 
 .message {
     background-color: white;
@@ -98,12 +103,17 @@ input[type=checkbox] {
     flex-direction: column;
 }
 
+.no-bullets {
+    list-style-type: none;
+}
+
 input[type="text"],
 textarea {
     text-align: right;
     width: 60%;
     margin-bottom: 10px;
 }
+
 #locations-dropdown {
     position: relative;
     background-color: #fff;
@@ -113,11 +123,11 @@ textarea {
     width: calc(100% - 12px);
     margin-top: 5px;
     right: 0;
-    width:10%;
+    width: 10%;
     text-align: right;
-  }
-  
-  .buttons-container {
+}
+
+.buttons-container {
     display: flex;
     flex-direction: row;
     margin-top: 10px;
@@ -134,8 +144,35 @@ textarea {
 
 .edit-button {
     position: relative;
-    margin:10px;
-    right:20px;
-    
+    margin: 10px;
+    right: 20px;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo-container img {
+    max-width: 150px;
+}
+
+.finish-button {
+    background-color: #d25757;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    margin-right: 10px;
+    cursor: pointer;
+    margin-top: 30px;
+    border-radius: 5px;
+    transition-duration: 0.4s;
+    justify-content: center;
 
 }
+  

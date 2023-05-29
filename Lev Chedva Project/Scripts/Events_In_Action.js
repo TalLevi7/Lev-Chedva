@@ -133,14 +133,23 @@ function DisplayData(eventData) {
       detailsRow.appendChild(detailsCell);
       row.after(detailsRow);
 
+      const buttonContainer = document.createElement('div');
+      buttonContainer.style.display = 'flex';
+      buttonContainer.style.justifyContent = 'center';
+      buttonContainer.style.alignItems = 'center';
+      
       const CloseEvent = document.createElement('button');
       CloseEvent.textContent = 'סגירת אירוע';
-      CloseEvent.style.marginLeft = '10px'; // Add margin to the right side of the button
+      CloseEvent.style.margin = '0 10px'; // Add margin around the button
+      
       const CancelEvent = document.createElement('button');
       CancelEvent.textContent = 'ביטול אירוע';
-
-      detailsList.appendChild(CloseEvent);
-      detailsList.appendChild(CancelEvent);
+      CancelEvent.style.margin = '0 10px'; // Add margin around the button
+      
+      buttonContainer.appendChild(CloseEvent);
+      buttonContainer.appendChild(CancelEvent);
+      
+      detailsList.appendChild(buttonContainer);
 
       CloseEvent.addEventListener('click', () => {
         if (eventData && eventData.eventCounter) {

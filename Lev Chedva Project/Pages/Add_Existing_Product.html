@@ -6,12 +6,16 @@
   <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
 </head>
 <body>
+  <div class="logo-container">
+    <img src="../Pictures/logoLevChedva.png" alt="Logo">
+  </div>
   <h1>עדכון כמות מוצר קיים</h1>
-
+  <div class="center-label">
+    <label for="category-number">מק"ט: </label>
+  </div>
   <form id="search-form">
-    <label for="category-number">מק"ט:</label>
     <input type="text" id="category-number" name="category-number" required><br><br>
-    <button type="button" onclick="searchProduct()">חפש מוצר</button>
+    <button class="search-button" type="button" onclick="searchProduct()">חפש מוצר</button>
   </form>
   <hr>
   <form id="update-form" style="display:none;">

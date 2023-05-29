@@ -88,19 +88,27 @@ firebase.auth().onAuthStateChanged(function(user) {
                   detailsRow.appendChild(detailsCell);
                   row.after(detailsRow);
                   
-                  
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.display = 'flex';
+                buttonContainer.style.justifyContent = 'center';
+                buttonContainer.style.alignItems = 'center';
+
                 const PickupBtn = document.createElement('button');
                 PickupBtn.textContent = 'נאסף';
                 PickupBtn.style.marginLeft = '10px';
+
                 const Delivered = document.createElement('button');
                 Delivered.textContent = 'נמסר';
                 Delivered.style.marginLeft = '10px';
+
                 const CancelEvent = document.createElement('button');
                 CancelEvent.textContent = 'ביטול אירוע';
+                Delivered.style.marginLeft = '10px';
                
-                detailsList.appendChild(PickupBtn);
-                detailsList.appendChild(Delivered);
-                detailsList.appendChild(CancelEvent);  
+                buttonContainer.appendChild(PickupBtn);
+                buttonContainer.appendChild(Delivered);
+                buttonContainer.appendChild(CancelEvent);  
+                detailsList.appendChild(buttonContainer);
             
                 PickupBtn.addEventListener('click', () => {
                   if (eventData && eventData.eventCounter) {

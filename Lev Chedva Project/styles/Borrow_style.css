@@ -43,7 +43,7 @@ input[type="radio"] {
 }
 
 input[type="button"] {
-	background-color: #4CAF50;
+	background-color: #d25757;
 	color: white;
 	padding: 10px 20px;
 	border: none;
@@ -54,5 +54,15 @@ input[type="button"] {
 }
 
 input[type="button"]:hover {
-	background-color: #3e8e41;
+	background-color: #c61f1f;
 }
+
+.logo-container {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 20px;
+  }
+  
+  .logo-container img {
+	max-width: 150px; 
+  }
