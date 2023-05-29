@@ -4,17 +4,21 @@ body {
     direction: rtl;
     font-family: 'Assistent', sans-serif;
 }
-
+h1{
+    text-align: center;
+}
 table {
-    width: 100%;
+    width: 90%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
+    border: 1.5px solid rgb(99, 98, 98);
     padding: 10px;
-    border: 1px solid red;
-    text-align: right;
+    text-align: center; /* Align text to the right */
 }
 
 th {
@@ -39,13 +43,12 @@ li {
     padding: 5px;
 }
 
-table {
-    border-collapse: collapse;
-}
-
-table td, table th {
-    border-left: none;
-    border-right: none;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-}
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo-container img {
+    max-width: 150px; 
+  }
