@@ -1,25 +1,20 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="he" dir="rtl">
   <head>
     <meta charset="UTF-8">
-    <title>Event List</title>
+    <title>רשימת אירועים</title>
     <link rel="stylesheet" type="text/css" href="../styles/Volunteer_Transport_Panel.css">
  
   </head>
-  <body>
+  <body onload="readData()">
     <header>
-      <h1>Event List</h1>
+      <div class="logo-container">
+        <img src="../Pictures/logoLevChedva.png" alt="Logo">
+      </div>
+      <h1>רשימת אירועים</h1>
     </header>
     <main>
-        <!-- ADD SEARCH BAR!!!! -->
-        <label for="authorization-filter">Filter by Status:</label>
-        <select id="authorization-filter">
-          <option value="all">All</option>
-          <option value="Open">Open</option>
-          <option value="Taken">Taken</option>
-          <option value="Transport">Transport</option>
-        </select>
       <table>
         <thead>
           <tr>
@@ -35,10 +30,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="../firebase.js"></script>
     <script src="../Scripts/Volunteer_Events.js"></script>
-
-
-
-
 
   </body>
 </html>

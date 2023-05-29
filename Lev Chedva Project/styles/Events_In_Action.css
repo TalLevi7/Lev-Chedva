@@ -1,80 +1,123 @@
 /* Global styles */
-
 body {
-    font-family: Arial, sans-serif;
-    }
-    
-    h1 {
-    text-align: center;
-    margin-top: 20px;
-    }
-    
-    table {
-    margin: 20px auto;
-    border-collapse: collapse;
-    width: 80%;
-    max-width: 800px;
-    }
-    
-    td, th {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
-    }
-    
-    tr:nth-child(even) {
-    background-color: #f2f2f2;
-    }
-    
-    /* Filter bar styles */
-    
-    label {
-    margin-right: 10px;
-    }
-    
-    select {
-    padding: 5px;
-    border-radius: 5px;
-    }
-    
-    /* Volunteer details row styles */
-    
-    .volunteer-details-row {
-    background-color: #ddd;
-    }
-    
-    ul {
-    margin: 10px 0;
-    padding: 0;
-    }
-    
-    li {
-    list-style-type: none;
-    margin-bottom: 5px;
-    }
-    
-    /* Status-specific row styles */
-    
-    tr.status-open {
-    background-color: orange;
-    }
-    
-    tr.status-open.urgent {
-    background-color: pink;
-    }
-    
-    tr.status-open.very-urgent {
-    background-color: red;
-    }
-    
-    tr.status-open.brown {
-    background-color: brown;
-    }
-    
-    tr.status-taken {
-    background-color: yellow;
-    }
-    
-    tr.status-transport {
-    background-color: green;
-    }
+  font-family: 'Assistent', sans-serif;
+}
+
+#event-header {
+  font-size: 30px;
+  text-align: center;
+  font-family: 'Assistent', sans-serif;
+  -webkit-text-stroke: 0.5px black;
+  -webkit-text-fill-color: #d25757;
+}
+
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+  width: 80%;
+  max-width: 800px;
+  background-color: #f2f2f2;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Adjust the value to increase or decrease the rounding */
+  overflow: hidden; /* Ensure the rounded corners are visible */
+}
+
+td, th {
+  padding: 10px;
+  border: 1.5px solid #9f9d9d;
+  text-align: right;
+}
+
+th {
+  background-color: #d25757;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Filter bar styles */
+label {
+  margin-right: 10px;
+}
+
+select {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+/* Volunteer details row styles */
+.volunteer-details-row {
+  background-color: #ddd;
+}
+
+ul {
+  margin: 10px 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+  margin-bottom: 5px;
+}
+
+/* Status-specific row styles */
+tr.status-open {
+  background-color: orange;
+}
+
+tr.status-open.urgent {
+  background-color: pink;
+}
+
+tr.status-open.very-urgent {
+  background-color: red;
+}
+
+tr.status-open.brown {
+  background-color: brown;
+}
+
+tr.status-taken {
+  background-color: yellow;
+}
+
+tr.status-transport {
+  background-color: green;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#authorization-filter {
+  margin-top: 10px; /* Adjust as needed */
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #d25757;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Assistent', sans-serif;
+}
+
+button:hover {
+  background-color: #c61f1f;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 150px; 
+}

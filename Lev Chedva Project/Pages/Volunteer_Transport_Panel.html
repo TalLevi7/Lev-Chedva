@@ -1,25 +1,22 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="he" dir="rtl">
+  
   <head>
     <meta charset="UTF-8">
-    <title>Volunteer_Transport_Panel</title>
+    <title>פאנל שינוע - מתנדבים</title>
     <link rel="stylesheet" type="text/css" href="../styles/Volunteer_Transport_Panel.css">
- 
   </head>
+
   <body onload="readData()">
     <header>
-      <h1>Volunteer_Transport_Panel</h1>
+      <div class="logo-container">
+        <img src="../Pictures/logoLevChedva.png" alt="Logo">
+      </div>
+      <h1>פאנל שינוע</h1>
     </header>
+
     <main>
-        <!-- ADD SEARCH BAR!!!! -->
-        <label for="authorization-filter">Filter by Status:</label>
-        <select id="authorization-filter">
-          <option value="all">All</option>
-          <option value="Open">Open</option>
-          <option value="Taken">Taken</option>
-          <option value="Transport">Transport</option>
-        </select>
       <table>
         <thead>
           <tr>
@@ -29,16 +26,13 @@
         </tbody>
       </table>
     </main>
+
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="../firebase.js"></script>
     <script src="../Scripts/Volunteer_Transport_Panel.js"></script>
-
-
-
-
 
   </body>
 </html>
