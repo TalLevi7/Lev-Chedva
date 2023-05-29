@@ -13,7 +13,7 @@
 		<label for="type">:סוג</label>
 		<select id="type" name="type">
       <option value="Empty"></option>
-			<option value="Transport">שינוע</option>
+			<option value="בשינוע">בשינוע</option>
 			<option value="Visit">ביקור</option>
 			<option value="Other">אחר</option>
 		</select><br><br>
@@ -117,7 +117,7 @@ firebase.firestore().collection("Tools").doc("Events Counter")
   const Source_Address = Source_addressInput.value.trim();
   const Destination_Address = Destination_addressInput.value.trim();
   const remarks = remarksInput.value.trim();
-  const status ="Open";
+  const status ="פתוח";
   eventCounter=eventCounter+1;
   // Create new document in Firestore
   firebase.firestore().collection('Open Events').doc(eventCounter.toString()).set({
