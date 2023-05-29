@@ -1,6 +1,6 @@
 
   body {
-    font-family: Arial, sans-serif;
+    font-family: 'Assistent', sans-serif;
     background-color: #f2f2f2;
     padding: 20px;
     direction: rtl;
@@ -18,16 +18,19 @@
   }
 
   button {
-    background-color: #4CAF50;
+    background-color: #d25757;
     color: white;
     padding: 8px 16px;
     margin: 4px 0;
     border: none;
     cursor: pointer;
+    border-radius: 8px;
+    font-family: 'Assistent', sans-serif;
+    margin-right: 10px;
   }
 
   button:hover {
-    background-color: #45a049;
+    background-color: #c61f1f;
   }
 
   label {
@@ -54,4 +57,19 @@
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-
+  #container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px; /* Optional: Adjust the margin-top value to position the container on the page */
+  }
+  
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo-container img {
+    max-width: 150px; 
+  }

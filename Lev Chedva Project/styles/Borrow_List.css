@@ -52,3 +52,14 @@ h1 {
 #searchInput {
     margin-top: 1em;
 }
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+  
+  .logo-container img {
+    max-width: 150px; 
+  }
