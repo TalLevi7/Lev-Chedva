@@ -6,7 +6,16 @@ auth.onAuthStateChanged(user => {
     // User is signed in.
     let email = user.email;
   
-
+    const messaging = firebase.messaging();
+    messaging.requestPermission().then(() => {
+      return messaging.getToken();
+    }).then((token) => {
+      console.log('FCM Token:', token);
+      // Here you should send this token to your server or Firestore to save it with the user's data
+      saveUserToken(email, token);
+    }).catch((err) => {
+      console.error('Unable to get permission to notify.', err);
+    });
     db.collection('Volunteers').doc(email).get()
       .then(doc => {
         if (doc.exists) {
@@ -62,6 +71,17 @@ function createButtons(autorizations) {
 
 
 
+
+function saveUserToken(email, token) {
+  const userRef = firebase.firestore().collection('Volunteers').doc(email);
+  userRef.update({ fcmToken: token })
+    .then(() => {
+      console.log('FCM token saved for the user.');
+    })
+    .catch((error) => {
+      console.error("Error saving FCM token: ", error);
+    });
+}
 
 
 
