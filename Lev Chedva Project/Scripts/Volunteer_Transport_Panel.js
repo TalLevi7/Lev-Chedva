@@ -116,9 +116,14 @@ function DisplayData(eventData) {
       detailsRow.appendChild(detailsCell);
       row.after(detailsRow);
 
+      const buttonContainer = document.createElement('div');
+      buttonContainer.style.display = 'flex';
+      buttonContainer.style.justifyContent = 'center';
+      buttonContainer.style.alignItems = 'center';
       const TakeEvent = document.createElement('button');
       TakeEvent.textContent = 'קח';
-      detailsList.appendChild(TakeEvent);
+      buttonContainer.appendChild(TakeEvent);
+      detailsList.appendChild(buttonContainer);
 
       TakeEvent.addEventListener('click', () => {
         var user = firebase.auth().currentUser;
