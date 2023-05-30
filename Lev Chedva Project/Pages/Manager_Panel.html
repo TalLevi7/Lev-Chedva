@@ -10,7 +10,7 @@
 <body>
     <h1>פאנל מנהל</h1>
     
-    <h2 class="header" onclick="toggleDisplay('group1')">שינוע</h2>
+    <h2 class="header">שינוע</h2>
     <div id="group1" class="button-container">
 		<button class="square-button"><a href="../Pages/New_Event.html">יצירת אירוע חדש</a></button>
 		<button class="square-button"><a href="../Pages/Events_In_Action.html">אירועים פתוחים</a></button>
@@ -20,7 +20,7 @@
 		<button class="square-button"><a href="#">סטטיסטיקה למתנדב</a></button>
     </div>
 
-    <h2 class="header" onclick="toggleDisplay('group2')">מלאי וניהול מוצרים</h2>
+    <h2 class="header" >מלאי וניהול מוצרים</h2>
     <div id="group2" class="button-container">
 		<button class="square-button"><a href="../Pages/Inventory.html">מלאי</a></button>
 		<button class="square-button"><a href="../Pages/New_Product_ Insert.HTML">הוסף מוצר</a></button>
@@ -36,7 +36,7 @@
 
     </div>
 
-    <h2 class="header" onclick="toggleDisplay('group3')">ניהול</h2>
+    <h2 class="header" >ניהול</h2>
     <div id="group3" class="button-container">
 		<button class="square-button"><a href="../Pages/Volunteer_List.html">רשימת מתנדבים</a></button>
 		<button class="square-button"><a href="#">סטטיסטיקה כללית</a></button>
@@ -58,16 +58,6 @@
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-function saveUserToken(email, token) {
-  const userRef = firebase.firestore().collection('Volunteers').doc(email);
-  userRef.update({ fcmToken: token })
-    .then(() => {
-      console.log('FCM token saved for the user.');
-    })
-    .catch((error) => {
-      console.error("Error saving FCM token: ", error);
-    });
-}
 
 
 
@@ -104,14 +94,14 @@ auth.onAuthStateChanged(user => {
 
 
 
-        function toggleDisplay(id) {
-            const element = document.getElementById(id);
-            if (element.style.display === "none") {
-                element.style.display = "block";
-            } else {
-                element.style.display = "none";
-            }
-        }
+        // function toggleDisplay(id) {
+        //     const element = document.getElementById(id);
+        //     if (element.style.display === "none") {
+        //         element.style.display = "block";
+        //     } else {
+        //         element.style.display = "none";
+        //     }
+        // }
     </script>
 </body>
 </html>
