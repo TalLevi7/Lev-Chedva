@@ -214,3 +214,151 @@ exports.sendEmailOnFormSubmit = functions.firestore
       }
     });
   });
+
+
+
+
+  exports.sendEmailOnNewBorrow = functions.firestore
+  .document('Borrow Tickets/{documentId}')
+  .onCreate((snap, context) => {
+    const BorrowTicket = snap.data();
+
+    const messageText = `השאלה חדשה!\n\nאיש קשר : ${BorrowTicket.contactName}\nשם המוצר: ${BorrowTicket.product_name}\nכמות: ${BorrowTicket.quantity}`;
+
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'השאלה חדשה',
+      text: messageText,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
+
+
+  exports.sendEmailOnNewBorrow = functions.firestore
+  .document('Borrow Tickets/{documentId}')
+  .onCreate((snap, context) => {
+    const BorrowTicket = snap.data();
+
+    const messageText = `השאלה חדשה!\n\nאיש קשר : ${BorrowTicket.contactName}\nשם המוצר: ${BorrowTicket.product_name}\nכמות: ${BorrowTicket.quantity}`;
+
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'השאלה חדשה',
+      text: messageText,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
+
+
+
+  exports.sendEmailOnBorrowDelete = functions.firestore
+  .document('Borrow Tickets/{documentId}')
+  .onDelete((snap, context) => {
+    const BorrowTicket = snap.data();
+
+    const messageText = `מוצר הוחזר\n\nאיש קשר : ${BorrowTicket.contactName}\nשם המוצר: ${BorrowTicket.product_name}\nכמות: ${BorrowTicket.quantity}`;
+
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'מוצר הוחזר',
+      text: messageText,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
+
+
+  exports.sendEmailOnNewReservation = functions.firestore
+  .document('reservation list/{documentId}')
+  .onCreate((snap, context) => {
+    const BorrowTicket = snap.data();
+
+    const messageText = `הזמנה חדשה!\n\nאיש קשר : ${BorrowTicket.contactName}\nשם המוצר: ${BorrowTicket.product_name}\nכמות: ${BorrowTicket.quantity}\nלתאריך: ${BorrowTicket.reservationDate}`;
+
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'הזמנה חדשה',
+      text: messageText,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
+
+
+  exports.sendEmailOnNewBorrowApp = functions.firestore
+  .document('Borrow_List/{documentId}')
+  .onCreate((snap, context) => {
+    const BorrowApp = snap.data();
+
+    const messageText = `בקשת השאלה חדשה!\n\nאיש קשר : ${BorrowApp.contact_name}`;
+
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'בקשת השאלה חדשה',
+      text: messageText,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
+
+
+
+  exports.sendEmailOnNewDonationApp = functions.firestore
+  .document('Donation_List/{documentId}')
+  .onCreate((snap, context) => {
+    const DonationApp = snap.data();
+
+    const messageText = `בקשת תרומה חדשה!\n\nאיש קשר : ${DonationApp.name}`;
+
+    let mailOptions = {
+      from: 'levchedvaalerts@gmail.com',  // sender
+      to: 'levchedvaalerts@gmail.com',  // receiver
+      subject: 'בקשת תרומה חדשה',
+      text: messageText,
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  });
