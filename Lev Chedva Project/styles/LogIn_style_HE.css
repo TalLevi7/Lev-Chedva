@@ -5,14 +5,12 @@ body {
 h1 {
   text-align: center;
   color: #333;
-  font-size: 40px;
 }
 
 form {
-  width: 600px;
-  height: 400px;
+  width: 300px;
   margin: 0 auto;
-  padding: 60px;
+  padding: 20px;
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
@@ -21,9 +19,9 @@ form {
 
 label {
   display: block;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   color: #555;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   text-align: right;
 }
@@ -32,9 +30,9 @@ input[type="email"],
 input[type="password"] {
   display: block;
   width: 100%;
-  padding: 20px;
-  margin-bottom: 30px;
-  font-size: 24px;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box;
@@ -43,10 +41,9 @@ input[type="password"] {
 button[type="submit"] {
   display: block;
   width: 100%;
-  padding: 20px;
-  margin-top: 40px;
-  margin-bottom: 25px;
-  font-size: 24px;
+  padding: 10px;
+  margin-top: 20px;
+  font-size: 16px;
   color: #fff;
   background-color: #d25757;
   border: none;
@@ -72,7 +69,7 @@ button[type="submit"]:hover {
   margin-bottom: 20px;
 }
 .logo-container img {
-  max-width: 200px; 
+  max-width: 150px; 
 }
 h1,label,input,button {
       font-family: 'Assistent', sans-serif;
@@ -82,12 +79,8 @@ h1,label,input,button {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 35px;
+    font-size: 30px;
     color: red;
     font-weight: bold;
     font-family: 'Assistent', sans-serif;
-  }    
-  
-  #forgot-password-link{
-    font-size: 20px;
-  }
+  }  
