@@ -325,8 +325,12 @@ async function deleteMessage(messageId) {
 
 let isVolunteersMagagmentDivVisible=false;
 let volunteersTableValid=false;
-loadVolunteersBtn.addEventListener('click', function() {
-  
+
+loadVolunteersBtn.addEventListener('click', loadWaitingVolunteers());
+async function loadWaitingVolunteers()
+{
+
+>
     isVolunteersMagagmentDivVisible = !isVolunteersMagagmentDivVisible;
     messageListDiv.style.display = isVolunteersMagagmentDivVisible ? 'block' : 'none';
     locationManagementDiv.style.display = 'none';
@@ -412,7 +416,9 @@ loadVolunteersBtn.addEventListener('click', function() {
                     cell.appendChild(authBtn);
                     cell.appendChild(authorizeBtn);
                     cell.appendChild(doNotAuthorizeBtn);
-            
+
+
+                }
                     authBtn.addEventListener('click', function() {
                         let authRow = document.createElement('tr');
                         let authCell = authRow.insertCell(0);
@@ -492,39 +498,56 @@ loadVolunteersBtn.addEventListener('click', function() {
             
                         authForm.addEventListener('submit', function(e) {
                             e.preventDefault();
+                            const authCheckboxes = Array.from(authForm.querySelectorAll('input[type=checkbox]'));  // Query all checkboxes inside the form
                             const selectedAuths = [];
-            
+                        
                             authCheckboxes.forEach(authOption => {
-                                if (document.getElementById(authOption.value).checked) {
+                                if (authOption.checked) {
                                     selectedAuths.push(authOption.value);
                                 }
                             });
+
                             db.collection('Volunteers Waiting').doc(doc.id).update({
                                 Authorizations: selectedAuths
                             });
+                            authForm.style.display = 'none';
                         });
-            
-                        authCell.appendChild(authForm);
-                        detailsRow.insertAdjacentElement('afterend', authRow);
+                        
+                        authorizeBtn.addEventListener('click', function() {
+                            // First get the updated document
+                            db.collection("Volunteers Waiting").doc(doc.id).get()
+                            .then(doc => {
+                                if (doc.exists) {
+                                    // Then move the updated document to the "Volunteers" collection
+                                    db.collection("Volunteers").doc(doc.id).set(doc.data())
+                                    .then(() => {
+                                        // Then delete from the "Volunteers Waiting" collection
+                                        db.collection("Volunteers Waiting").doc(doc.id).delete()
+                                        .then(() => {
+                                            row.remove(); // To remove the entire row after form submission
+                                            loadWaitingVolunteers();
+                                        });
+                                    });
+                                } else {
+                                    console.log("No such document!");
+                                }
+                            }).catch(error => {
+                                console.log("Error getting document:", error);
+                            });
+                        });
+
+    
+                    doNotAuthorizeBtn.addEventListener('click', function() {
+                        // Delete the doc from the current collection
+                        if (confirm('Are you sure you want to delete this volunteer?')) {
+                            db.collection("Volunteers Waiting").doc(doc.id).delete();
+                        }
                     });
-                }
-            });
-            
-
-            authorizeBtn.addEventListener('click', function() {
-                // Transfer the doc to the "Volunteers" collection and delete from the current one
-                db.collection("Volunteers").doc(doc.id).set(doc.data())
-                .then(() => {
-                    db.collection("Volunteers Waiting").doc(doc.id).delete();
-                });
-            });
-
-            doNotAuthorizeBtn.addEventListener('click', function() {
-                // Delete the doc from the current collection
-                if (confirm('Are you sure you want to delete this volunteer?')) {
-                    db.collection("Volunteers Waiting").doc(doc.id).delete();
-                }
+    
+                    authCell.appendChild(authForm);
+                    detailsRow.insertAdjacentElement('afterend', authRow);
+                }); 
             });
         });
     });
-});
+}

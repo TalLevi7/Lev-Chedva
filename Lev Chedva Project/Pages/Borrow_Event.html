@@ -37,7 +37,8 @@
     <script src="../firebase.js"></script>
     <script>
       const searchInput = document.getElementById('search-input');
-      const searchBtn = document.getElementById('search-btn');
+      const searchBtn = document.getElementById('search-button');
+
       const itemData = document.getElementById('item-data');
       const itemDetails = document.getElementById('item-details');
       const saveBtn = document.getElementById('save-btn');
@@ -101,9 +102,6 @@
     if (itemSnapshot.exists) {
         itemDetails.style.display = 'block';
         const item = itemSnapshot.data();
-   
-
-
 
         let detailsList = document.getElementById('item-data');
         detailsList.innerHTML = '';
