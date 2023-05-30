@@ -1,4 +1,5 @@
 const db = firebase.firestore();
+
 const editLocationsBtn = document.getElementById('edit-locations');
 const writeMessagesBtn = document.getElementById('write-messages');
 const showMessagesBtn=document.getElementById('show-messages');
@@ -314,10 +315,6 @@ function editMessage(messageId) {
     });
 }
 
-
-
-
-
 async function deleteMessage(messageId) {
     if (confirm('האם אתה בטוח שברצונך למחוק את ההודעה?')) {
         await db.collection('messages').doc(messageId).delete();
@@ -326,12 +323,10 @@ async function deleteMessage(messageId) {
     }
 }
 
-
-
 let isVolunteersMagagmentDivVisible=false;
 let volunteersTableValid=false;
 loadVolunteersBtn.addEventListener('click', function() {
-
+  
     isVolunteersMagagmentDivVisible = !isVolunteersMagagmentDivVisible;
     messageListDiv.style.display = isVolunteersMagagmentDivVisible ? 'block' : 'none';
     locationManagementDiv.style.display = 'none';
@@ -362,44 +357,48 @@ loadVolunteersBtn.addEventListener('click', function() {
     VolunteerTable.appendChild(table);
 
     const hebrewLabels = {
-        EmergencyContactName: 'איש קשר לשעת חירום ',
+        EmergencyContactName: 'איש קשר לשעת חירום',
         EmergencyContactPhone: 'טלפון איש קשר לשעת חירום',
         ID: 'ת.ז.',
-        address:'כתובת',
+        address: 'כתובת',
         email: 'אימייל',
         firstName: 'שם פרטי',
         lastName: 'שם משפחה',
         phone: 'מספר טלפון',
         vehicals: 'רכבים',
-        volunteerTypes: 'סוגי התנדבות' 
+        volunteerTypes: 'סוגי התנדבות'
     };
+    
 
     db.collection("Volunteers Waiting").get().then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
             let row = tbody.insertRow();
             let nameCell = row.insertCell(0);
             let actionsCell = row.insertCell(1);
-    
+            
             nameCell.textContent = doc.data().firstName + " " + doc.data().lastName;
+
             actionsCell.style.display = 'none'; // Hide the Actions cell by default
-    
+
             let detailsList = document.createElement('ul');
-            detailsList.classList.add('no-bullets');
+            detailsList.classList.add('no-bullets'); // Add CSS class to the ul element
             Object.entries(hebrewLabels).forEach(([key, value]) => {
                 let listItem = document.createElement('li');
                 listItem.textContent = `${value}: ${doc.data()[key]}`;
                 detailsList.appendChild(listItem);
             });
-    
+
+
             let authBtn = document.createElement('button');
             authBtn.textContent = 'הוסף הרשאות';
-    
+            
             let authorizeBtn = document.createElement('button');
             authorizeBtn.textContent = 'אשר מתנדב';
-    
+
             let doNotAuthorizeBtn = document.createElement('button');
             doNotAuthorizeBtn.textContent = 'מחק מתנדב';
-    
+
+
             row.addEventListener('click', function() {
                 let detailsRow = row.nextElementSibling;
                 if (detailsRow && detailsRow.classList.contains('details-row')) {
@@ -413,7 +412,6 @@ loadVolunteersBtn.addEventListener('click', function() {
                     cell.appendChild(authBtn);
                     cell.appendChild(authorizeBtn);
                     cell.appendChild(doNotAuthorizeBtn);
-
             
                     authBtn.addEventListener('click', function() {
                         let authRow = document.createElement('tr');
@@ -459,7 +457,6 @@ loadVolunteersBtn.addEventListener('click', function() {
                                 { name: 'הודעות מנהלים', value: '43' },
                             ]}
                         ];
-                    
             
             
                         categories.forEach(category => {
@@ -492,8 +489,6 @@ loadVolunteersBtn.addEventListener('click', function() {
                         finishBtn.textContent = 'סיום';
                         finishBtn.classList.add('finish-button'); // Add this line to assign a class to the button
                         authForm.appendChild(finishBtn);
-
-                        
             
                         authForm.addEventListener('submit', function(e) {
                             e.preventDefault();
@@ -504,23 +499,31 @@ loadVolunteersBtn.addEventListener('click', function() {
                                     selectedAuths.push(authOption.value);
                                 }
                             });
-            
                             db.collection('Volunteers Waiting').doc(doc.id).update({
                                 Authorizations: selectedAuths
                             });
                         });
+            
+                        authCell.appendChild(authForm);
+                        detailsRow.insertAdjacentElement('afterend', authRow);
                     });
-    
-                    doNotAuthorizeBtn.addEventListener('click', function() {
-                        // Delete the doc from the current collection
-                        if (confirm('Are you sure you want to delete this volunteer?')) {
-                            db.collection("Volunteers Waiting").doc(doc.id).delete();
-                        }
-                    });
-    
-                    authCell.appendChild(authForm);
-                    detailsRow.insertAdjacentElement('afterend', authRow);
-                }); 
+                }
+            });
+            
+
+            authorizeBtn.addEventListener('click', function() {
+                // Transfer the doc to the "Volunteers" collection and delete from the current one
+                db.collection("Volunteers").doc(doc.id).set(doc.data())
+                .then(() => {
+                    db.collection("Volunteers Waiting").doc(doc.id).delete();
+                });
+            });
+
+            doNotAuthorizeBtn.addEventListener('click', function() {
+                // Delete the doc from the current collection
+                if (confirm('Are you sure you want to delete this volunteer?')) {
+                    db.collection("Volunteers Waiting").doc(doc.id).delete();
+                }
             });
         });
     });
