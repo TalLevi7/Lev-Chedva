@@ -330,7 +330,6 @@ loadVolunteersBtn.addEventListener('click', loadWaitingVolunteers());
 async function loadWaitingVolunteers()
 {
 
->
     isVolunteersMagagmentDivVisible = !isVolunteersMagagmentDivVisible;
     messageListDiv.style.display = isVolunteersMagagmentDivVisible ? 'block' : 'none';
     locationManagementDiv.style.display = 'none';
