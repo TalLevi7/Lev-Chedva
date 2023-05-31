@@ -52,3 +52,15 @@ li {
   .logo-container img {
     max-width: 150px; 
   }
+
+  .details-row-expanded {
+    display: table-row !important;
+  }
+  
+  .details-cell-expanded {
+    display: table-cell !important;
+    width: 100%;
+    padding: 15px;
+    text-align: right;
+    background-color: #f9f9f9;
+  }

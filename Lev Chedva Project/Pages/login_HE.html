@@ -98,12 +98,6 @@ function displayErrorMessage(errorCode) {
   errorMessage.textContent = errorMessageText;
 }
 
-
-
-
-
-
-
 function checkAuthorizationAndRedirect(email) {
         // Get the document from the "Volunteers" collection based on the provided email
         firebase.firestore().collection("Volunteers").doc(email).get().then((doc) => {

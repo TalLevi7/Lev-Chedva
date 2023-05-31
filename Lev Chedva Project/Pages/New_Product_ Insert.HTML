@@ -2,11 +2,16 @@
 <html>
 <head>
   <meta charset="UTF-8">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>הרשמת מוצר חדש</title>
   <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
 </head>
 <body>
+  <div class="logo-container">
+    <a href="#" onclick="validateUserAndRedirect(); return false;">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+    </a>
+  </div>
   <h1>הרשמת מוצר חדש</h1>
   <button class="square-button"><a href="../Pages/Add_Existing_Product.html">הכנס מוצר קיים</a></button>
 
@@ -51,6 +56,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="../firebase.js"></script>
+  <script src="../Scripts/auth.js"></script>
   <script>
     // Get a reference to the Firestore database
     const db = firebase.firestore();

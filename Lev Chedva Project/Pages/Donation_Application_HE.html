@@ -2,17 +2,22 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/Donation_style_HE.css">
-	<title>טופס תרומת ציוד</title>
+	<title>טופס תרומת ציוד רפואי</title>
 </head>
 <body>
+  <div class="logo-container">
+    <a href="#" onclick="validateUserAndRedirect(); return false;">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+    </a>
+  </div>
 	<form>
     <h1>טופס תרומת ציוד רפואי</h1>
-    <br><br>
 		<label for="name">:שם</label>
 		<input type="text" id="name" name="name"><br><br>
 		
-		<label for="Phone Number">:מספר טלפון</label>
+		<label for="Phone Number">:טלפון</label>
 		<input type="tel" id="Phone Number" name="Phone Number"><br><br>
 		
 		<label for="Product">:ציוד לתרומה</label>
@@ -23,6 +28,7 @@
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
     <script>
 
 const db = firebase.firestore();
@@ -42,8 +48,7 @@ function submitData() {
   db.collection("Donation_List").add({
     name: name,
     Phone_Num: Phone_Num,
-    Product: Product,
-    date: firebase.firestore.Timestamp.fromDate(new Date()) // Current date and time
+    Product: Product
   })
   .then((docRef) => {
     console.log("Document written with ID: ", docRef.id);
@@ -58,6 +63,23 @@ function submitData() {
     alert("Failed to save data!");
   });
 }
+
+
+
+
+
+
+
+
+
+
+
     </script>
+
+
+
+
+
+
 </body>
 </html>

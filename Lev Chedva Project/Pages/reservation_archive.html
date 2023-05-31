@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="../styles/reservation_archive.css">
 </head>
 <body>
+    <div class="logo-container">
+        <a href="#" onclick="validateUserAndRedirect(); return false;">
+          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+        </a>
+      </div>
     <input type="text" id="search-input" placeholder="Search" />
     <button id="search-btn">Search</button>
     <table id="reservation-table">
@@ -27,10 +32,13 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
     <script>
 const db = firebase.firestore();
 const searchInput = document.getElementById('search-input');
+searchInput.value = 'חיפוש..';
 const searchBtn = document.getElementById('search-btn');
+searchBtn.textContent = 'חפש';
 const reservationTableBody = document.getElementById('reservation-table-body');
 
 // Function to get the reservation archive
