@@ -11,7 +11,9 @@
   <body onload="readData()">
     <header>
       <div class="logo-container">
-        <img src="../Pictures/logoLevChedva.png" alt="Logo">
+        <a href="#" onclick="validateUserAndRedirect(); return false;">
+          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+        </a>
       </div>
       <h1>רשימת אירועים</h1>
     </header>
@@ -30,6 +32,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
     <script src="../Scripts/Volunteer_Events.js"></script>
 
   </body>

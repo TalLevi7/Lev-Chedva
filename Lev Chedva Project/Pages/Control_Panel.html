@@ -9,8 +9,14 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
 </head>
 <body>
+    <div class="logo-container">
+        <a href="#" onclick="validateUserAndRedirect(); return false;">
+          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+        </a>
+      </div>
     <h1>כלי ניהול</h1>
     <button id="edit-locations">ערוך מחסנים</button>
     <button id="write-messages">כתוב הודעה</button>

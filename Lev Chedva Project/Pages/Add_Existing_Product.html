@@ -8,7 +8,9 @@
 </head>
 <body>
   <div class="logo-container">
-    <img src="../Pictures/logoLevChedva.png" alt="Logo">
+    <a href="#" onclick="validateUserAndRedirect(); return false;">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+    </a>
   </div>
   <h1>עדכון כמות מוצר קיים</h1>
   <div class="center-label">
@@ -40,6 +42,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="../firebase.js"></script>
+  <script src="../Scripts/auth.js"></script>
   <script>
     // Get a reference to the Firestore database
     const db = firebase.firestore();

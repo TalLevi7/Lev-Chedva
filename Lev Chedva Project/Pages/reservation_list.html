@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="rtl">
+<html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reservations List</title>
@@ -7,15 +7,19 @@
     
 </head>
 <body>
+    <div class="logo-container">
+        <a href="#" onclick="validateUserAndRedirect(); return false;">
+          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+        </a>
+      </div>
     <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="..חפש">
+        <input type="text" id="searchInput" placeholder="חיפוש..">
        <button id="searchButton">חיפוש</button>
     </div>
     <div id="reservationTableWrapper">
-        <table id="reservationTableHeader">
-                    
-           
+        <table id="reservationTableHeader">         
         </table>
+        <div id="reservationTableWrapper" class="table-center">
         <table id="reservationTable">
             <th >מס' כרטיס השאלה</th> 
             <th >שם המוצר</th> 
@@ -32,7 +36,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script src="../firebase.js"></script>
-
+<script src="../Scripts/auth.js"></script>
 <script>
     let db = firebase.firestore();
     let reservationTableHeader = document.getElementById('reservationTableHeader');
@@ -102,11 +106,20 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
             row.appendChild(categoricalNumber);
 
             let reservationDate = document.createElement('td');
-            reservationDate.textContent = doc.data().reservationDate;
-            row.appendChild(reservationDate);
+            let rawDate = doc.data().reservationDate;
+            let date = new Date(rawDate);
 
+            if (isNaN(date)) {
+                reservationDate.textContent = "";
+            } else {
+                let formattedDate = date.toLocaleDateString("he-IL");
+                reservationDate.textContent = formattedDate;
+            }
+
+            row.appendChild(reservationDate);
             // Create action buttons
             let actions = document.createElement('td');
+            actions.className = 'button-container'; // Add the button-container class to the container element
 
             let editButton = document.createElement('button');
             editButton.textContent = "ערוך";
@@ -139,7 +152,7 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
                 let listItem = document.createElement('li');
                 if (key === 'reservationDate'||key ==='reservedOn') {
                     let date = new Date(value);
-                    let formattedDate = date.toLocaleDateString("he-IL"); // Format the date to the desired format
+                    let formattedDate = date.toLocaleDateString("he-IL"); 
                     listItem.textContent = hebrewLabels[key] + ": " + formattedDate;
                 } else {
                     listItem.textContent = hebrewLabels[key] + ": " + value;

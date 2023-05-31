@@ -8,8 +8,10 @@
 </head>
 <body>
 	<div class="logo-container">
-        <img src="../Pictures/logoLevChedva.png" alt="Logo">
-      </div>
+    <a href="#" onclick="validateUserAndRedirect(); return false;">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+    </a>
+  </div>
 	<form>
         <h1>טופס השאלת ציוד</h1>
 		<label class = "form_labels" for="contact-name">:שם מלא</label>
@@ -33,6 +35,7 @@
 	<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
     <script>
 
 

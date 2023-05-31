@@ -7,6 +7,9 @@
     <title>Create Volunteer</title>
   </head>
   <body>
+    <div class="logo-container">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo">
+    </div>
     <h1>Create Volunteer</h1>
     <form id="volunteer-form">
         <label for="firstName">First Name:</label>
@@ -36,19 +39,33 @@
         </select>
         <div id="vehicleInputs"></div>
         
-        <label for="volunteer-types">How would you like to volunteer?:</label>
-        <div id="volunteer-types">
-          <input type="checkbox" id="Volunteer_Type1" name="Volunteer_Type" value="שינוע">
-          <label for="Volunteer_Type1">Transport</label>
-          <input type="checkbox" id="Volunteer_Type2" name="Volunteer_Type" value="טלפן">
-          <label for="Volunteer_Type2">Telephone Operator</label>
-          <input type="checkbox" id="Volunteer_Type3" name="Volunteer_Type" value="ג'יפים">
-          <label for="Volunteer_Type3">Jeep Unit</label>
-          <input type="checkbox" id="Volunteer_Type4" name="Volunteer_Type" value="עזרה כללית">
-          <label for="Volunteer_Type4">Helping in the distribution center</label>
-          <input type="checkbox" id="Volunteer_Type5" name="Volunteer_Type" value="איש קשר לשעת חירום">
-          <label for="Volunteer_Type5">Emergency Contact</label>
-        </div>
+        <label for="volunteer-types">How would you like to volunteer?</label>
+        <label class="custom-checkbox">
+          <input type="checkbox" id="checkbox1" name="checkbox1">
+          <span class="checkbox-icon"></span>
+          Transport
+        </label>
+        <label class="custom-checkbox">
+          <input type="checkbox" id="checkbox1" name="checkbox1">
+          <span class="checkbox-icon"></span>
+          Telephone Operator
+        </label>
+        <label class="custom-checkbox">
+          <input type="checkbox" id="checkbox1" name="checkbox1">
+          <span class="checkbox-icon"></span>
+          Jeep Unit
+        </label>
+        <label class="custom-checkbox">
+          <input type="checkbox" id="checkbox1" name="checkbox1">
+          <span class="checkbox-icon"></span>
+          Helping in the distribution center
+        </label>
+        <label class="custom-checkbox">
+          <input type="checkbox" id="checkbox1" name="checkbox1">
+          <span class="checkbox-icon"></span>
+          Emergency Contact
+        </label>
+        
         <button type="submit">Create Volunteer</button>
     </form>
         
