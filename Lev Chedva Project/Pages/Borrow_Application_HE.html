@@ -68,7 +68,7 @@ db.collection("Borrow_List").add({
     patient_name: patientName,
     patient_number: patientNumber,
     address: address,
-    date: firebase.firestore.Timestamp.fromDate(new Date()) // Current date and time
+    date: firebase.firestore.Timestamp.fromDate(new Date()), // Current date and time
 })
 .then(() => {
 console.log("Form data saved successfully!");
