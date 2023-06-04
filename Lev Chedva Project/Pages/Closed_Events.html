@@ -34,7 +34,7 @@
             eventContainer.appendChild(table);
 
             // Create table headers
-            const headers = ['מספר אירוע ', 'שם מוצר', 'תאריך'];
+            const headers = ['מספר אירוע ', 'שם מוצר', 'תאריך פתיחת אירוע', 'תאריך סגירת אירוע'];
             const headerRow = document.createElement('tr');
             headers.forEach(headerText => {
                 const header = document.createElement('th');
@@ -60,6 +60,7 @@
                     const date = timestamp.toDate();
                     dateString = date.toLocaleDateString('he-IL');
                 }
+
 
                 // Create cells for each data
                 const eventCounterCell = document.createElement('td');

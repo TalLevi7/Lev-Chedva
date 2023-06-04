@@ -384,7 +384,6 @@ async function loadWaitingVolunteers()
             actionsCell.style.display = 'none'; // Hide the Actions cell by default
 
             let detailsList = document.createElement('ul');
-            detailsList.classList.add('no-bullets'); // Add CSS class to the ul element
             Object.entries(hebrewLabels).forEach(([key, value]) => {
                 let listItem = document.createElement('li');
                 listItem.textContent = `${value}: ${doc.data()[key]}`;
@@ -411,20 +410,21 @@ async function loadWaitingVolunteers()
                     detailsRow.classList.add('details-row');
                     let cell = detailsRow.insertCell(0);
                     cell.colSpan = 2;
-                    cell.appendChild(detailsList);
-                    cell.appendChild(authBtn);
-                    cell.appendChild(authorizeBtn);
-                    cell.appendChild(doNotAuthorizeBtn);
-
-
+                    let contentContainer = document.createElement('div');
+                    contentContainer.style.textAlign = 'right';
+                    contentContainer.appendChild(detailsList);
+                    contentContainer.appendChild(authBtn);
+                    contentContainer.appendChild(authorizeBtn);
+                    contentContainer.appendChild(doNotAuthorizeBtn);
+                    cell.appendChild(contentContainer);
                 }
                     authBtn.addEventListener('click', function() {
                         let authRow = document.createElement('tr');
                         let authCell = authRow.insertCell(0);
                         authCell.colSpan = 2;
                         const authForm = document.createElement('form');
-                        authForm.style.display = 'grid';
-                        authForm.style.gridTemplateColumns = '1fr 1fr 1fr 1fr 1fr 1fr';
+                        authForm.classList.add('categories-form');
+
                         const categories = [
                             {name: 'ניהול וכללי', options: [
                                 { name: 'מנהל', value: '000' },
@@ -466,21 +466,31 @@ async function loadWaitingVolunteers()
             
                         categories.forEach(category => {
                             const categoryDiv = document.createElement('div');
+                            categoryDiv.classList.add('category');
+
                             const categoryLabel = document.createElement('label');
+                            categoryLabel.classList.add('category-title');
+
                             categoryLabel.textContent = category.name;
                             categoryDiv.appendChild(categoryLabel);
                           
                             category.options.forEach(option => {
                               const checkboxContainer = document.createElement('div');
+                              checkboxContainer.classList.add('checkbox-container');
+
                               const checkbox = document.createElement('input');
                               checkbox.type = 'checkbox';
                               checkbox.id = option.value;
                               checkbox.name = option.name;
                               checkbox.value = option.value;
+                              checkbox.classList.add('checkbox');
+
                           
                               const label = document.createElement('label');
                               label.htmlFor = option.value;
                               label.appendChild(document.createTextNode(option.name));
+                              label.classList.add('checkbox-label');
+
                           
                               checkboxContainer.appendChild(checkbox);
                               checkboxContainer.appendChild(label);
@@ -494,7 +504,7 @@ async function loadWaitingVolunteers()
                         finishBtn.textContent = 'סיום';
                         finishBtn.classList.add('finish-button'); // Add this line to assign a class to the button
                         authForm.appendChild(finishBtn);
-            
+          
                         authForm.addEventListener('submit', function(e) {
                             e.preventDefault();
                             const authCheckboxes = Array.from(authForm.querySelectorAll('input[type=checkbox]'));  // Query all checkboxes inside the form

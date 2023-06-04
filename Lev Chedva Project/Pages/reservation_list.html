@@ -11,7 +11,7 @@
         <a href="#" onclick="validateUserAndRedirect(); return false;">
           <img src="../Pictures/logoLevChedva.png" alt="Logo" />
         </a>
-      </div>
+    </div>
     <div class="search-bar">
         <input type="text" id="searchInput" placeholder="חיפוש..">
        <button id="searchButton">חיפוש</button>
@@ -20,17 +20,18 @@
         <table id="reservationTableHeader">         
         </table>
         <div id="reservationTableWrapper" class="table-center">
-        <table id="reservationTable">
-            <th >מס' כרטיס השאלה</th> 
-            <th >שם המוצר</th> 
-            <th>מספר סידורי</th>
-            <th>לתאריך</th>
-            <tbody id="reservationTableBodyContent">
-                <!-- Table body content will be generated dynamically -->
-            </tbody>
-        </table>
+            <table id="reservationTable">
+                <thead>
+                    <th>מס' כרטיס השאלה</th> 
+                    <th>שם המוצר</th>
+                    <th>לתאריך</th>
+                </thead>
+                <tbody id="reservationTableBodyContent">
+                    <!-- Table body content will be generated dynamically -->
+                </tbody>
+            </table>
+        </div>
     </div>
-
 
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -42,22 +43,17 @@
     let reservationTableHeader = document.getElementById('reservationTableHeader');
     let reservationTableBodyContent = document.getElementById('reservationTableBodyContent');
     const hebrewLabels = {
-    categorial_number: 'מספר סידורי',
-    contactName: 'שם איש קשר',
-    quantity: 'כמות',
-    phoneNumber1: 'טלפון איש קשר',
-    phoneNumber2: 'טלפון איש קשר נוסף',
-    product_name: 'שם המוצר',
-    reservationDate: 'הוזמן לתאריך',
-    patientName: 'שם המטופל',
-    volunteerName: 'שם המתנדב',
-    product_name: 'שם המוצר',
-    reservedOn:'הוזמן בתאריך'
-};
-let reverseHebrewLabels = {};
-Object.entries(hebrewLabels).forEach(([key, value]) => {
-    reverseHebrewLabels[value] = key;
-});
+        categorial_number: 'מספר סידורי',
+        contactName: 'שם איש קשר',
+        quantity: 'כמות',
+        phoneNumber1: 'טלפון איש קשר',
+        phoneNumber2: 'טלפון איש קשר נוסף',
+        product_name: 'שם המוצר',
+        reservationDate: 'הוזמן לתאריך',
+        patientName: 'שם המטופל',
+        volunteerName: 'שם המתנדב',
+        reservedOn:'הוזמן בתאריך'
+    };
 
     searchAcrossCollection("");
 
@@ -92,7 +88,7 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
             row.className = 'main-row';
             row.id = doc.id; // Setting doc.id as row id for easy access
 
-            // Create table data for product_name, categorial_number, reservationDate
+            // Create table data for product_name, reservationDate
             let ticketNum = document.createElement('td');
             ticketNum.textContent = doc.id;
             row.appendChild(ticketNum);
@@ -100,10 +96,6 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
             let productName = document.createElement('td');
             productName.textContent = doc.data().product_name;
             row.appendChild(productName);
-
-            let categoricalNumber = document.createElement('td');
-            categoricalNumber.textContent = doc.data().categorial_number;
-            row.appendChild(categoricalNumber);
 
             let reservationDate = document.createElement('td');
             let rawDate = doc.data().reservationDate;
@@ -117,12 +109,14 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
             }
 
             row.appendChild(reservationDate);
+
             // Create action buttons
             let actions = document.createElement('td');
             actions.className = 'button-container'; // Add the button-container class to the container element
 
             let editButton = document.createElement('button');
             editButton.textContent = "ערוך";
+            editButton.className = "edit-button"; // Add a CSS class to the button
             editButton.onclick = function () {
                 editReservation(doc.id);
             };
@@ -130,6 +124,7 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
 
             let cancelButton = document.createElement('button');
             cancelButton.textContent = "בטל";
+            cancelButton.className = "cancel-button"; // Add a CSS class to the button
             cancelButton.onclick = function () {
                 cancelReservation(doc.id);
             };
@@ -142,7 +137,7 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
             let expandableRow = document.createElement('tr');
             expandableRow.className = 'expandable-row';
             let expandableCell = document.createElement('td');
-            expandableCell.colSpan = 4; // Now colspan is 4
+            expandableCell.colSpan = 3; // Now colspan is 3
 
             let detailsList = document.createElement('ul');
 
@@ -150,9 +145,9 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
             Object.entries(doc.data()).forEach(([key, value]) => {
                 if (key === 'product_name' || key === 'categorialNumber') return; // Skip these keys
                 let listItem = document.createElement('li');
-                if (key === 'reservationDate'||key ==='reservedOn') {
+                if (key === 'reservationDate' || key === 'reservedOn') {
                     let date = new Date(value);
-                    let formattedDate = date.toLocaleDateString("he-IL"); 
+                    let formattedDate = date.toLocaleDateString("he-IL");
                     listItem.textContent = hebrewLabels[key] + ": " + formattedDate;
                 } else {
                     listItem.textContent = hebrewLabels[key] + ": " + value;
@@ -205,7 +200,7 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
                 let actions = row.nextSibling.firstChild.firstChild.lastChild;
 
                 // If a save button already exists, remove it
-                if(actions.querySelector('.save-button')) {
+                if (actions.querySelector('.save-button')) {
                     actions.querySelector('.save-button').remove();
                 }
 
@@ -242,7 +237,7 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
                         await inventoryRef.update({
                             product_quantity: Number(inventoryData.product_quantity),
                             reserved_quantity: Number(inventoryData.reserved_quantity)
-                                                });
+                        });
                     }
                     actions.removeChild(saveButton);
                     alert('Document successfully updated!');
@@ -255,34 +250,30 @@ Object.entries(hebrewLabels).forEach(([key, value]) => {
     }
 
     async function cancelReservation(docId) {
-    let userConfirmation = confirm("האם אתה בטוח שברצונך לבטל את ההזמנה?");
-    if (!userConfirmation) {
-        return; // If user clicks "Cancel" in the dialog, do nothing.
+        let userConfirmation = confirm("האם אתה בטוח שברצונך לבטל את ההזמנה?");
+        if (!userConfirmation) {
+            return; // If user clicks "Cancel" in the dialog, do nothing.
+        }
+        let docRef = db.collection("reservation list").doc(docId);
+        let docSnapshot = await docRef.get();
+        let reservationData = docSnapshot.data();
+        let categorialNumber = reservationData.categorial_number;
+        let reservedQuantity = reservationData.quantity;
+
+        let inventoryRef = db.collection("inventory").doc(categorialNumber.toString());
+        let inventorySnapshot = await inventoryRef.get();
+        let inventoryData = inventorySnapshot.data();
+
+        inventoryData.product_quantity = parseInt(inventoryData.product_quantity, 10) + parseInt(reservedQuantity, 10);
+        inventoryData.reserved_quantity = parseInt(inventoryData.reserved_quantity, 10) - parseInt(reservedQuantity, 10);
+
+        await docRef.delete();
+        await inventoryRef.update({
+            product_quantity: parseInt(inventoryData.product_quantity, 10),
+            reserved_quantity: parseInt(inventoryData.reserved_quantity, 10)
+        });
+        alert('ההזמנה בוטלה בהצלחה!');
     }
-    let docRef = db.collection("reservation list").doc(docId);
-    let docSnapshot = await docRef.get();
-    let reservationData = docSnapshot.data();
-    let categorialNumber = reservationData.categorial_number;
-    let reservedQuantity = reservationData.quantity;
-
-    let inventoryRef = db.collection("inventory").doc(categorialNumber.toString());
-    let inventorySnapshot = await inventoryRef.get();
-    let inventoryData = inventorySnapshot.data();
-
-    inventoryData.product_quantity = parseInt(inventoryData.product_quantity, 10) + parseInt(reservedQuantity, 10);
-    inventoryData.reserved_quantity = parseInt(inventoryData.reserved_quantity, 10) - parseInt(reservedQuantity, 10);
-
-    // Update inventory item
-    await inventoryRef.update({
-        product_quantity: inventoryData.product_quantity,
-        reserved_quantity: inventoryData.reserved_quantity
-    });
-
-    // Delete the reservation
-    await docRef.delete();
-
-    location.reload(); // Reload the page to reflect changes
-}
-
 </script>
+</body>
 </html>
