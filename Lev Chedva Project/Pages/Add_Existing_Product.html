@@ -2,19 +2,22 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>עדכון כמות מוצר קיים</title>
   <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
 </head>
 <body>
   <div class="logo-container">
-    <img src="../Pictures/logoLevChedva.png" alt="Logo">
+    <a href="#" onclick="validateUserAndRedirect(); return false;">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+    </a>
   </div>
   <h1>עדכון כמות מוצר קיים</h1>
   <div class="center-label">
-    <label for="category-number">מק"ט: </label>
+    <label for="product-name">שם המוצר: </label>
   </div>
   <form id="search-form">
-    <input type="text" id="category-number" name="category-number" required><br><br>
+    <input type="text" id="product-name" name="product-name" required><br><br>
     <button class="search-button" type="button" onclick="searchProduct()">חפש מוצר</button>
   </form>
   <hr>
@@ -39,22 +42,25 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="../firebase.js"></script>
+  <script src="../Scripts/auth.js"></script>
   <script>
     // Get a reference to the Firestore database
     const db = firebase.firestore();
 
     async function searchProduct() {
-      const categoryNumber = document.getElementById('category-number').value;
-      const docRef = db.collection('inventory').doc(categoryNumber);
-      const docSnapshot = await docRef.get();
+      const productName = document.getElementById('product-name').value;
+      const querySnapshot = await db.collection('inventory').where('product_name', '==', productName).get();
 
-      if (docSnapshot.exists) {
-        document.getElementById('product-name').value = docSnapshot.data().product_name;
-        document.getElementById('product-description').value = docSnapshot.data().product_description;
-        document.getElementById('product-quantity').value = docSnapshot.data().product_quantity;
+      if (!querySnapshot.empty) {
+        const docSnapshot = querySnapshot.docs[0];
+        const data = docSnapshot.data();
+
+        document.getElementById('product-name').value = data.product_name;
+        document.getElementById('product-description').value = data.product_description;
+        document.getElementById('product-quantity').value = data.product_quantity;
         document.getElementById('update-form').style.display = 'block';
       } else {
-        alert('No product found with this category number.');
+        alert('No product found with this name.');
       }
     }
 
@@ -64,24 +70,25 @@
       event.preventDefault();
 
       // Get the form data
-      const categoryNumber = document.getElementById('category-number').value;
+      const productName = document.getElementById('product-name').value;
       const quantityUpdate = form.elements['quantity-update'].value;
 
-      // Check if the document with the same category number exists
-      const docRef = db.collection('inventory').doc(categoryNumber);
-      const docSnapshot = await docRef.get();
+      // Check if the document with the same product name exists
+      const querySnapshot = await db.collection('inventory').where('product_name', '==', productName).get();
 
-      if (!docSnapshot.exists) {
-        alert('No product found with this category number.');
+      if (querySnapshot.empty) {
+        alert('No product found with this name.');
         return;
       }
 
       // Update the product quantity in Firestore
-      docRef.update({
-    'product_quantity': parseInt(docSnapshot.data().product_quantity) + parseInt(quantityUpdate)
-})
+      const docSnapshot = querySnapshot.docs[0];
+      const docRef = docSnapshot.ref;
 
-      .then(() => {
+      docRef.update({
+          'product_quantity': parseInt(docSnapshot.data().product_quantity) + parseInt(quantityUpdate)
+        })
+        .then(() => {
           alert('Product quantity updated successfully!');
           form.reset();
           // Refresh the page
@@ -95,4 +102,3 @@
   </script>
 </body>
 </html>
-

@@ -83,7 +83,7 @@ tr:nth-child(even) {
 
 /* Buttons */
 button {
-  background-color: #4CAF50;
+  background-color: #d25757;
   border: none;
   color: white;
   padding: 8px 16px;
@@ -93,10 +93,12 @@ button {
   font-size: 14px;
   margin: 4px 2px;
   cursor: pointer;
+  border-radius: 5px;
+
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #d25757;
 }
 
 /* Add/Delete/Edit Buttons */
@@ -106,7 +108,7 @@ button:hover {
 .deleteProductBtn,
 .editProductBtn,
 .saveChangesBtn {
-  background-color: #008CBA;
+  background-color: #d25757;
 }
 
 #add-product-btn:hover,
@@ -115,6 +117,28 @@ button:hover {
 .deleteProductBtn:hover,
 .editProductBtn:hover,
 .saveChangesBtn:hover {
-  background-color: #0073ad;
+  background-color: #c61f1f;
 
+}
+.add-product-btn a {
+  text-decoration: none;
+  color: white;
+}
+
+.add-product-btn a:active,
+.add-product-btn a:focus {
+  outline: none;
+}
+
+.add-product-btn a:hover {
+  color: white;
+}
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 150px; 
 }

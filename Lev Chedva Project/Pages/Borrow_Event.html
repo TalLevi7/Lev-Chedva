@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,37 +8,72 @@
     <link rel="stylesheet" type="text/css" href="../styles/Borrow_Event.css">
     <title>השאלת מוצר</title>
 </head>
+
 <body>
     <div class="logo-container">
-        <img src="../Pictures/logoLevChedva.png" alt="Logo">
-      </div>
+        <a href="#" onclick="validateUserAndRedirect(); return false;">
+            <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+        </a>
+    </div>
     <div id="container">
-        <input type="text" id="search-input" placeholder="הכנס מספר סידורי" />
-        <button id="search-button">חפש לפי מספר סידורי</button>
+        <input type="text" id="search-input" placeholder="הכנס שם מוצר" />
+        <button id="search-button">חפש לפי שם מוצר</button>
         <button id="ticket-search-btn">חפש לפי כרטיס הזמנה</button>
-      </div>
+    </div>
     <div id="item-data" style="display: none;"></div>
     <div id="item-details" style="display: none;">
-      <label>שם האיש קשר <input type="text" id="contact-name" /></label>
-      <label>טלפון איש קשר<input type="text" id="contact-phone" /></label>
-      <label>טלפון איש קשר נוסף<input type="text" id="contact-phone2" /></label>
-      <label>ת.ז איש קשר <input type="text" id="contact-id" required/></label>
-      <label>שם המטופל <input type="text" id="patient-name" /></label>
-      <label>כתובת<input type="text" id="address" /></label>
-      <label>משאיל מתאריך <input type="date" id="borrowing-from" /></label>
-      <label>משאיל עד לתאריך <input type="date" id="borrowing-until" /></label>
-      <label>שם המתנדב<input type="text" id="loaning_volunteer" /></label>
-      <label>כמות להשאלה<input type="number" id="borrowing-quantity" /></label>
-      <button id="save-btn">השאל</button>
+      <div class="field-container">
+        <label for="patient-name">שם מטופל:</label>
+        <input type="text" id="patient-name" name="patient-name" />
+      </div>
+      <div class="field-container">
+        <label for="address">כתובת מטופל:</label>
+        <input type="text" id="address" name="address" />
+      </div>
+      <div class="field-container">
+        <label for="contact-name">שם האיש קשר:</label>
+        <input type="text" id="contact-name" name="contact-name" />
+      </div>
+      <div class="field-container">
+        <label for="contact-id">ת.ז איש קשר:</label>
+        <input type="text" id="contact-id" name="contact-id" />
+      </div>
+      <div class="field-container">
+        <label for="contact-phone">טלפון איש קשר:</label>
+        <input type="text" id="contact-phone" name="contact-phone" />
+      </div>
+      <div class="field-container">
+        <label for="contact-phone2">טלפון איש קשר נוסף:</label>
+        <input type="text" id="contact-phone2" name="contact-phone2" />
+      </div>
+      <div class="field-container">
+        <label for="borrowing-quantity">כמות להשאלה:</label>
+        <input type="text" id="borrowing-quantity" name="borrowing-quantity" />
+      </div>
+      <div class="field-container">
+        <label for="borrowing-from">משאיל מתאריך:</label>
+        <input type="date" id="borrowing-from" name="borrowing-from" />
+      </div>
+      <div class="field-container">
+        <label for="borrowing-until">משאיל עד לתאריך:</label>
+        <input type="date" id="borrowing-until" name="borrowing-until" />
+      </div>
+      <div class="field-container">
+        <label for="loaning_volunteer">שם המתנדב:</label>
+        <input type="text" id="loaning_volunteer" name="loaning_volunteer" />
+      </div>
+        
+        <button id="save-btn">השאל</button>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
     <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
     <script>
-      const searchInput = document.getElementById('search-input');
-      const searchBtn = document.getElementById('search-btn');
+        const searchInput = document.getElementById('search-input');
+      const searchBtn = document.getElementById('search-button');
       const itemData = document.getElementById('item-data');
       const itemDetails = document.getElementById('item-details');
       const saveBtn = document.getElementById('save-btn');
@@ -56,20 +92,32 @@
       let borrowCounter = null;
       let borrowCounterRef = firebase.firestore().collection('Tools').doc('Events Counter');
       
-      let hebrewLabels = {
-            categorial_number:'מספר סידורי',
-            status: 'סטאטוס',
-            keywords: 'מילות מפתח',
-            product_description: 'תיאור מוצר',
-            product_name: 'שם המוצר',
-            remarks: 'הערות',
-            product_quantity : 'כמות במלאי',
-            companion_accessories: 'מוצרים נלווים',
-            location: 'מיקום',
-            free: 'במלאי',
-            reserved_quantity:'כמות שמורה'
-
-        };
+      function getHebrewLabel(key) {
+  switch (key) {
+    case 'categorial_number':
+      return 'שם מוצר';
+    case 'status':
+      return 'סטאטוס';
+    case 'keywords':
+      return 'מילות מפתח';
+    case 'product_description':
+      return 'תיאור מוצר';
+    case 'remarks':
+      return 'הערות';
+    case 'product_quantity':
+      return 'כמות במלאי';
+    case 'companion_accessories':
+      return 'מוצרים נלווים';
+    case 'location':
+      return 'מיקום';
+    case 'free':
+      return 'במלאי';
+    case 'reserved_quantity':
+      return 'כמות שמורה';
+    default:
+      return key;
+  }
+}
 
         let statusTranslations = {
         'free': 'במלאי',
@@ -93,37 +141,39 @@
       searchBtn.addEventListener('click', async () => {
     const itemName = searchInput.value;
 
-    const itemRef = firebase.firestore().collection('inventory').doc(itemName);
+    const itemRef = firebase.firestore().collection('inventory').where('product_name', '==', itemName);
 
     const itemSnapshot = await itemRef.get();
-  
 
-    if (itemSnapshot.exists) {
+    if (!itemSnapshot.empty) {
+        // Item found, display details
         itemDetails.style.display = 'block';
-        const item = itemSnapshot.data();
-   
+        const item = itemSnapshot.docs[0].data();
 
-
-
+        // Display item details in the item-data section
         let detailsList = document.getElementById('item-data');
         detailsList.innerHTML = '';
         detailsList.style.display = 'block'; // Make the item data list visible
 
+        // Iterate over item properties and display them
         for (let [key, value] of Object.entries(item)) {
-    let label = hebrewLabels[key] ? hebrewLabels[key] : key;
-
-    if (key === 'status') {
-        value = statusTranslations[value] ? statusTranslations[value] : value;
-    }
-
-    const listItem = document.createElement('li');
-    listItem.textContent = `${label}: ${value}`;
-    detailsList.appendChild(listItem);
-}
+          if (key === 'categorial_number') {
+            key = 'שם מוצר'; // Change the label from 'מספר סידורי' to 'שם מוצר'
+          } else if (key === 'status') {
+            value = statusTranslations[value] ? statusTranslations[value] : value;
+            } else if (key === 'product_name') {
+              continue; // Skip displaying the "product_name" field
+            }
+          const listItem = document.createElement('li');
+          listItem.textContent = `${getHebrewLabel(key)}: ${value}`;
+          detailsList.appendChild(listItem);
+        }
     } else {
+        // Item not found
         alert('המוצר לא נמצא או לא זמין');
     }
 });
+
 let TicketValid=false;
 let OldBorrow=null;     
 let CatNum=null;
@@ -131,7 +181,6 @@ let CatNum=null;
     ticketSearchBtn.addEventListener('click', async () => {
         const ticketNumber = searchInput.value;
      
-
         const reservationListRef = firebase.firestore().collection('reservation list');
         const reservationDoc = await reservationListRef.doc(ticketNumber).get();
       
@@ -141,8 +190,6 @@ let CatNum=null;
           CatNum=reservationData.categorial_number;
           const itemSnapshot = await itemRef.get();
           
- 
-        
           if (itemSnapshot.exists) {
             console.log("hello");
             itemDetails.style.display = 'block';
@@ -162,24 +209,16 @@ let CatNum=null;
     listItem.textContent = `${label}: ${value}`;
     detailsList.appendChild(listItem);
 }
-
             borrowingQuantity.value = reservationData.quantity;  
             TicketValid=true;
             OldBorrow=reservationData.quantity;
-           
-
-
-
-
           } else {
             alert('המוצר לא נמצא או לא זמין');
-
           }
         } else {
           alert('הזמנה לא נמצאה');
         }
       });
-
 
       saveBtn.addEventListener('click', async () => {
           let itemName = searchInput.value;
@@ -291,8 +330,7 @@ let CatNum=null;
           }
       });
 
-</script>
+    </script>
 </body>
-</html>
 
-      
+</html>

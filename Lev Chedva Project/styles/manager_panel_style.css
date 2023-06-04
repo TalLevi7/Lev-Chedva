@@ -1,8 +1,8 @@
 body {
-	font-family: Arial, sans-serif;
+    font-family: 'Assistent', sans-serif;
 	margin: 0;
 	padding: 0;
-	text-align: right;
+	text-align: center;
 	direction: rtl;
 	background-color: #f0f0f0;
 }
@@ -28,7 +28,7 @@ h1 {
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 .button-container {
-	display: none;
+
 	padding: 10px;
 	margin-bottom: 20px;
 	background-color: #fff;
@@ -40,7 +40,7 @@ h1 {
 	padding: 10px 20px;
 	margin: 10px 0;
 	text-decoration: none;
-	background-color: #007BFF;
+	background-color: #d25757;
 	color: white;
 	font-size: 1em;
 	line-height: 15px;
@@ -48,9 +48,19 @@ h1 {
 	transition: background-color 0.3s ease-in-out;
 }
 .square-button:hover {
-	background-color: #0056b3;
+	background-color: #c61f1f;
 }
 .square-button a {
 	color: white;
 	text-decoration: none;
 }
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo-container img {
+    max-width: 150px; 
+  }

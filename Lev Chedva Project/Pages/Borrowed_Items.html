@@ -2,12 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Borrowed Tickets Display</title>
     <link rel="stylesheet" href="../styles/Telephone_Panel.css">
 </head>
 <body>
     <div class="logo-container">
-        <img src="../Pictures/logoLevChedva.png" alt="Logo">
+        <a href="#" onclick="validateUserAndRedirect(); return false;">
+          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+        </a>
       </div>
     <h1>מוצרים מושאלים</h1>
     <div id="searchContainer">
@@ -19,7 +22,6 @@
         <table id="itemTable">
             <thead>
                 <tr>
-                    <th>מספר קטגורי</th>
                     <th>שם המוצר</th>
                     <th>כמות</th>
                 </tr>
@@ -33,7 +35,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
-  
+    <script src="../Scripts/auth.js"></script>
     <script>
         const db = firebase.firestore();
     
@@ -90,13 +92,9 @@
 
         // Create row for each doc
         const row = document.createElement('tr');
-        const cell1 = document.createElement('td');
-        cell1.textContent =data.categorialNumber;
-        row.appendChild(cell1);
 
         const inventoryRef = db.collection('inventory').doc(data.categorialNumber);
         const inventoryData = (await inventoryRef.get()).data();
-;
 
 
         const cell2 = document.createElement('td');
@@ -111,7 +109,8 @@
 
         const detailsRow = document.createElement('tr')
         const detailsCell = document.createElement('td');
-        detailsCell.colSpan = 4; // Span across all columns
+        detailsCell.style.textAlign = 'right';
+        detailsCell.colSpan = 3; // Span across all columns
 
         // Create a list for the details
         const detailsList = document.createElement('ul');
@@ -189,9 +188,26 @@
 }
 
 function translateToHebrew(data) {
-    // Replace with your own translation logic
-    return data;
+    const translatedData = {};
+
+    for (let [key, value] of Object.entries(data)) {
+        if (key === 'borrowingFrom') {
+            // Convert date to Israeli format
+            const date = new Date(value);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear().toString();
+
+            translatedData[key] = `${day}/${month}/${year}`;
+        } else {
+            // For other fields, keep the original value
+            translatedData[key] = value;
+        }
+    }
+
+    return translatedData;
 }
+
 
 async function searchAcrossCollection(searchTerm, borrowedTicketsRef) { 
     let matchedDocs = []; 

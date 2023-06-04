@@ -1,75 +1,80 @@
+body {
+  font-family: 'Assistent', sans-serif;
+  background-color: #f2f2f2;
+  padding: 20px;
+  direction: rtl;
+}
 
-  body {
-    font-family: 'Assistent', sans-serif;
-    background-color: #f2f2f2;
-    padding: 20px;
-    direction: rtl;
-  }
+input,
+button {
+  font-size: 16px;
+}
 
-  input,
-  button {
-    font-size: 16px;
-  }
+input {
+  padding: 6px 12px;
+  margin: 4px 0;
+  box-sizing: border-box;
+}
 
-  input {
-    padding: 6px 12px;
-    margin: 4px 0;
-    box-sizing: border-box;
-  }
+button {
+  background-color: #d25757;
+  color: white;
+  padding: 8px 16px;
+  margin: 4px 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: 'Assistent', sans-serif;
+  margin-right: 10px;
+}
 
-  button {
-    background-color: #d25757;
-    color: white;
-    padding: 8px 16px;
-    margin: 4px 0;
-    border: none;
-    cursor: pointer;
-    border-radius: 8px;
-    font-family: 'Assistent', sans-serif;
-    margin-right: 10px;
-  }
+button:hover {
+  background-color: #c61f1f;
+}
 
-  button:hover {
-    background-color: #c61f1f;
-  }
+label {
+  display: flex; /* Change to flex to align label and input horizontally */
+  align-items: center; 
+  margin: 8px 0;
+}
 
-  label {
-    display: block;
-    margin: 8px 0;
-  }
+#item-data {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 4px;
+  margin: 8px 0;
+  margin-top: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
+}
 
-  #item-data {
-    background-color: #ffffff;
-    padding: 16px;
-    border-radius: 4px;
-    margin: 8px 0;
-  }
+#item-details {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 4px;
+  margin: 8px 0;
+}
 
-  #item-details {
-    background-color: #ffffff;
-    padding: 16px;
-    border-radius: 4px;
-    margin: 8px 0;
-  }
+pre {
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
 
-  pre {
-    font-family: monospace;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-  }
-  #container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 100px; /* Optional: Adjust the margin-top value to position the container on the page */
-  }
-  
-  .logo-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .logo-container img {
-    max-width: 150px; 
-  }
+#container {
+  display: flex;
+  flex-direction: column; /* Change to column to stack elements vertically */
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 150px;
+}

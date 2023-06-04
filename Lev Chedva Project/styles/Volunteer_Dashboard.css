@@ -28,7 +28,7 @@ body {
   max-width: 200px;
   padding: 0.5em 1em 0.5em 1em;
   border-radius: 20px;
-  background-color: #0e77de;
+  background-color: #d25757;
   color: white;
   border: none;
   font-size: 14px;
@@ -38,15 +38,11 @@ body {
 }
 
 #navbar button:hover {
-  background-color: #0073e6;
+  background-color: #c61f1f;
   cursor: pointer;
 }
 
-#navbar button:active {
-  background-color: #005cbf;
-  color: white;
-  outline: none;
-}
+
 
 #messageContainer {
   display: flex;
@@ -157,7 +153,7 @@ body {
 #settingsButton {
   padding: 5px 10px;
   border-radius: 5px;
-  background-color: #0e77de;
+  background-color: #d25757;
   color: white;
   border: none;
   font-size: 14px;
@@ -165,7 +161,7 @@ body {
 }
 
 #settingsButton:hover {
-  background-color: #0073e6;
+  background-color: #c61f1f;
 }
 
 .dropdown {
@@ -195,4 +191,14 @@ body {
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 150px; 
 }

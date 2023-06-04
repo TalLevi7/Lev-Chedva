@@ -2,12 +2,15 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/Open_Event_Form_style.css">
 	<title>טופס יצירת אירוע חדש</title>
 </head>
 <body>
   <div class="logo-container">
-    <img src="../Pictures/logoLevChedva.png" alt="Logo">
+    <a href="#" onclick="validateUserAndRedirect(); return false;">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+    </a>
   </div>
 	<h1>טופס יצירת אירוע חדש</h1>
 	<form id="open-events-form">
@@ -90,8 +93,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-functions.js"></script>
-
     <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
     <script>
       // Get form elements
       const form = document.querySelector('#open-events-form');

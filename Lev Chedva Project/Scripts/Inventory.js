@@ -117,12 +117,11 @@ filter="all";
 function displayProducts(ProductData) {
 
   const row = document.createElement('tr');
-  const CatNum = document.createElement('td');
-  CatNum.textContent = ProductData.categorial_number;
+  
   const nameCell = document.createElement('td');
   nameCell.textContent = ProductData.product_name;
   nameCell.style.textAlign = "right";
-  row.appendChild(CatNum);
+  
   row.appendChild(nameCell);
   ProductsTable.appendChild(row);
 
@@ -269,7 +268,7 @@ function displayProducts(ProductData) {
         };
       
         makeEditable(ProductNameItem, "product_name");
-        makeEditable(CatNumItem, "categorial_number");
+        
 
         makeEditable(DescriptionItem, "product_description");
         makeEditable(KeywordItem, "keywords");
@@ -293,7 +292,7 @@ function displayProducts(ProductData) {
       
         saveChangesBtn.addEventListener('click', () => {
           ProductNameItem.textContent = "שם: " + ProductData.product_name;
-          CatNumItem.textContent = "מספר קטגורי: " + ProductData.categorial_number;
+          
           DescriptionItem.textContent = " תיאור: " + ProductData.product_description;
           QuantityItem.textContent="כמות: " +ProductData.product_quantity;
           KeywordItem.textContent="מילות מפתח "+ProductData.keywords;
@@ -326,12 +325,6 @@ deleteProductBtn.addEventListener('click', async () => {
     const enteredCatNum = prompt("Enter the categorial number of the product to confirm:");
     if (enteredCatNum === ProductData.categorial_number) {
       // Step 5: Delete the product from the Firestore database
-      try {
-        await deleteProductFromFirestore(ProductData.categorial_number);
-        location.reload(); // Reload the page to display the updated list
-      } catch (error) {
-        console.error("Error deleting document:", error);
-      }
     } else {
       alert("Incorrect categorial number. Deletion cancelled.");
     }
@@ -340,20 +333,6 @@ deleteProductBtn.addEventListener('click', async () => {
 
 // ... (previous code)
 
-async function deleteProductFromFirestore(CatNum) {
-  try {
-    await ProductsRef.doc(CatNum).delete();
-  } catch (error) {
-    console.error("Error deleting document:", error);
-    throw error;
-  }
-}
-       
-
-
-
-      
-    
     }
   });
 

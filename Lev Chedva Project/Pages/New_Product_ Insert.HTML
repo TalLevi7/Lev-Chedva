@@ -2,21 +2,22 @@
 <html>
 <head>
   <meta charset="UTF-8">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>הרשמת מוצר חדש</title>
   <link rel="stylesheet" href="../styles/New_Product_Insert_style.css">
 </head>
 <body>
+  <div class="logo-container">
+    <a href="#" onclick="validateUserAndRedirect(); return false;">
+      <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+    </a>
+  </div>
   <h1>הרשמת מוצר חדש</h1>
   <button class="square-button"><a href="../Pages/Add_Existing_Product.html">הכנס מוצר קיים</a></button>
 
   <form id="product-form">
-    <label for="category-number">מק"ט:</label>
+    <label for="category-number">שם המוצר:</label>
     <input type="text" id="category-number" name="category-number" required><br><br>
-
-
-    <label for="product-name">שם המוצר:</label>
-    <input type="text" id="product-name" name="product-name" required><br><br>
 
     <label for="product-description">תיאור המוצר:</label>
     <input type="text" id="product-description" name="product-description" required><br><br>
@@ -51,6 +52,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
   <script src="../firebase.js"></script>
+  <script src="../Scripts/auth.js"></script>
   <script>
     // Get a reference to the Firestore database
     const db = firebase.firestore();
@@ -59,7 +61,7 @@
       // Load and set category number
       const counterSnapshot = await db.collection('Tools').doc('Categorical Number').get();
       counterValue = counterSnapshot.data().counter;
-      document.getElementById('category-number').value = counterValue + 1;
+      document.getElementById('category-number') = counterValue + 1;
 
       // Load locations
       const locationSelect = document.getElementById('location');
@@ -153,7 +155,6 @@
 
       // Get the form data
       const categoryNumber = form.elements['category-number'].value;
-      const productName = form.elements['product-name'].value;
       const productDescription = form.elements['product-description'].value;
 
       const keywords = form.elements['keywords'].value;
@@ -182,7 +183,6 @@
       // Save the product details to Firestore
       docRef.set({
         'categorial_number': categoryNumber,
-        'product_name': productName,
         'product_description': productDescription,
         'keywords': keywords,
         'companion_accessories': companionAccessories,

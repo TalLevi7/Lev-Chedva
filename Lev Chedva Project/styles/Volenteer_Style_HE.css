@@ -1,6 +1,6 @@
 /* Set default font and background colors */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Assistent', sans-serif;
   background-color: #f0f0f0;
 }
 
@@ -50,7 +50,7 @@ button[type="submit"] {
   padding: 10px 20px;
   border-radius: 5px;
   border: none;
-  background-color: #ff0000;
+  background-color: #d25757;
   color: #fff;
   font-weight: bold;
   cursor: pointer;
@@ -58,17 +58,17 @@ button[type="submit"] {
 
 /* Style the form error messages */
 input:invalid {
-  border-color: #f00;
+  border-color: #c61f1f;
 }
 
 input:invalid + span::before {
   content: "✖ ";
-  color: #f00;
+  color: #c61f1f;
 }
 
 input:valid + span::before {
   content: "✓ ";
-  color: #0f0;
+  color: #57d267;
 }
 
 /* Style the vehicle inputs */
@@ -122,4 +122,14 @@ input:valid + span::before {
   text-align: right !important;
   width: 100% !important;
   display: block !important;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 150px; 
 }
