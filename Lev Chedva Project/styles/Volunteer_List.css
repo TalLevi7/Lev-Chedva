@@ -1,6 +1,5 @@
 body {
   background-color: #f0f0f0;
-  color: #333;
   font-family: 'Assistent', sans-serif;
   direction: rtl;
 }
@@ -119,14 +118,4 @@ button {
 .checkbox-wrapper input[type="checkbox"]:checked {
   background-color: #63d496;
   border-color: #d25757;
-}
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.logo-container img {
-  max-width: 150px; 
 }

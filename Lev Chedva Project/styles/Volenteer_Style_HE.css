@@ -123,13 +123,3 @@ input:valid + span::before {
   width: 100% !important;
   display: block !important;
 }
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.logo-container img {
-  max-width: 150px; 
-}

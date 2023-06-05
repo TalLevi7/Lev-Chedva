@@ -1,7 +1,7 @@
 
 /* General styling */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Assistent', sans-serif;
   direction: rtl;
 }
 
@@ -21,7 +21,7 @@ h1 {
 #filter-bar {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -41,13 +41,16 @@ h1 {
 #search-input {
   flex-grow: 1;
   margin-right: 10px;
+  max-width: 70%;
 }
 
 /* Product table */
 table {
-  width: 100%;
+  width: 90%;
   border-collapse: collapse;
-
+  margin: auto;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 th,
@@ -132,13 +135,4 @@ button:hover {
 
 .add-product-btn a:hover {
   color: white;
-}
-.logo-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.logo-container img {
-  max-width: 150px; 
 }

@@ -4,184 +4,185 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/Volenteer_Style_HE.css">
+    <link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
     <title>יצירת מתנדב חדש</title>
   </head>
   <body>
-    <div class="logo-container">
-      <img src="../Pictures/logoLevChedva.png" alt="Logo">
-    </div>
-    <h1>יצירת מתנדב חדש</h1>
-    <form id="volunteer-form">
-        <label for="firstName">שם פרטי:</label>
-        <input type="text" id="firstName" name="firstName" required>
-        <label for="lastName">שם משפחה:</label>
-        <input type="text" id="lastName" name="lastName" required>
-        <label for="ID">.מספר ת.ז:</label>
-        <input type="text" id="ID" name="ID" required>
-        <label for="BirthDate">תאריך לידה:</label>
-        <input type="text" id="BirthDate" name="BirthDate" required>
-        <label for="address">כתובת:</label>
-        <input type="text" id="address" name="address" required>
-        <label for="phone">טלפון:</label>
-        <input type="tel" id="phone" name="phone" required>
-        <label for="EmergencyContactName">שם איש קשר לשעת חירו:</label>
-        <input type="text" id="EmergencyContactName" name="EmergencyContactName" required>
-        <label for="EmergencyContactPhone">טלפון ליצירת קשר לשעת חירום:</label>
-        <input type="text" id="EmergencyContactPhone" name="EmergencyContactPhone" required>
-        <label for="numVehicles">מספר רכבים:</label>
-        <select id="numVehicles" name="numVehicles">
-          <option value="0">0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
-        <div id="vehicleInputs"></div>
-        
-        <label for="volunteer-types">איך היית רוצה להתנדב?</label>
-        <div id="volunteer-types" style="text-align: right; width: 100%; display: block;">
-          <div class="checkbox-wrapper">
-              <label for="Volunteer_Type1">שינוע</label>
-              <input type="checkbox" id="Volunteer_Type1" name="Volunteer_Type" value="שינוע">
-          </div>
-          <div class="checkbox-wrapper">
-              <label for="Volunteer_Type2">טלפנ/ית</label>
-              <input type="checkbox" id="Volunteer_Type2" name="Volunteer_Type" value="טלפן">
-          </div>
-          <div class="checkbox-wrapper">
-              <label for="Volunteer_Type3">יחידת הג'יפים</label>
-              <input type="checkbox" id="Volunteer_Type3" name="Volunteer_Type" value="ג'יפים">
-          </div>
-          <div class="checkbox-wrapper">
-              <label for="Volunteer_Type4">עזרה במרכז הפצה</label>
-              <input type="checkbox" id="Volunteer_Type4" name="Volunteer_Type" value="עזרה כללית">
-          </div>
-          <div class="checkbox-wrapper">
-              <label for="Volunteer_Type5">איש קשר לשעת חירום</label>
-              <input type="checkbox" id="Volunteer_Type5" name="Volunteer_Type" value="איש קשר לשעת חירום">
-          </div>
+    <div class="content-wrapper">
+      <div class="logo-container">
+        <img src="../Pictures/logoLevChedva.png" alt="Logo">
       </div>
-      <button type="submit">צור מתנדב</button>
-      
-      
-    </form>
+      <h1>יצירת מתנדב חדש</h1>
+      <form id="volunteer-form">
+          <label for="firstName">שם פרטי:</label>
+          <input type="text" id="firstName" name="firstName" required>
+          <label for="lastName">שם משפחה:</label>
+          <input type="text" id="lastName" name="lastName" required>
+          <label for="ID">.מספר ת.ז:</label>
+          <input type="text" id="ID" name="ID" required>
+          <label for="BirthDate">תאריך לידה:</label>
+          <input type="text" id="BirthDate" name="BirthDate" required>
+          <label for="address">כתובת:</label>
+          <input type="text" id="address" name="address" required>
+          <label for="phone">טלפון:</label>
+          <input type="tel" id="phone" name="phone" required>
+          <label for="EmergencyContactName">שם איש קשר לשעת חירו:</label>
+          <input type="text" id="EmergencyContactName" name="EmergencyContactName" required>
+          <label for="EmergencyContactPhone">טלפון ליצירת קשר לשעת חירום:</label>
+          <input type="text" id="EmergencyContactPhone" name="EmergencyContactPhone" required>
+          <label for="numVehicles">מספר רכבים:</label>
+          <select id="numVehicles" name="numVehicles">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          <div id="vehicleInputs"></div>
+          
+          <label for="volunteer-types">איך היית רוצה להתנדב?</label>
+          <div id="volunteer-types" style="text-align: right; width: 100%; display: block;">
+            <div class="checkbox-wrapper">
+                <label for="Volunteer_Type1">שינוע</label>
+                <input type="checkbox" id="Volunteer_Type1" name="Volunteer_Type" value="שינוע">
+            </div>
+            <div class="checkbox-wrapper">
+                <label for="Volunteer_Type2">טלפנ/ית</label>
+                <input type="checkbox" id="Volunteer_Type2" name="Volunteer_Type" value="טלפן">
+            </div>
+            <div class="checkbox-wrapper">
+                <label for="Volunteer_Type3">יחידת הג'יפים</label>
+                <input type="checkbox" id="Volunteer_Type3" name="Volunteer_Type" value="ג'יפים">
+            </div>
+            <div class="checkbox-wrapper">
+                <label for="Volunteer_Type4">עזרה במרכז הפצה</label>
+                <input type="checkbox" id="Volunteer_Type4" name="Volunteer_Type" value="עזרה כללית">
+            </div>
+            <div class="checkbox-wrapper">
+                <label for="Volunteer_Type5">איש קשר לשעת חירום</label>
+                <input type="checkbox" id="Volunteer_Type5" name="Volunteer_Type" value="איש קשר לשעת חירום">
+            </div>
+        </div>
+        <button type="submit">צור מתנדב</button>
         
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="../firebase.js"></script>
-    <script>
-       const email = localStorage.getItem('email');
-        console.log(email); // "user@example.com"
-
+        
+      </form>
+          
+      
+      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+      <script src="../firebase.js"></script>
+      <script>
+         const email = localStorage.getItem('email');
+          console.log(email); // "user@example.com"
   
-      
-      // Get a reference to the volunteer form
-      const volunteerForm = document.getElementById("volunteer-form");
-      
-    const vehicleInputs = document.getElementById("vehicleInputs");
-    const numVehiclesSelect = document.getElementById("numVehicles");
-    numVehiclesSelect.addEventListener("change", (event) => {
-    const numVehicles = event.target.value;
-    vehicleInputs.innerHTML = "";
-
-    for (let i = 1; i <= numVehicles; i++) {
-      const label = document.createElement("label");
-      label.setAttribute("for", `vehicle${i}`);
-      label.textContent = `: הכנס מספר רכב ${i} `;
-      const input = document.createElement("input");
-      input.style.width = '100px';
-      input.setAttribute("type", "text");
-      input.setAttribute("id", `vehicle${i}`);
-      input.setAttribute("name", `vehicle${i}`);
-      input.setAttribute("required", true);
-      vehicleInputs.appendChild(label);
-      vehicleInputs.appendChild(input);
-    }
+    
+        
+        // Get a reference to the volunteer form
+        const volunteerForm = document.getElementById("volunteer-form");
+        
+      const vehicleInputs = document.getElementById("vehicleInputs");
+      const numVehiclesSelect = document.getElementById("numVehicles");
+      numVehiclesSelect.addEventListener("change", (event) => {
+      const numVehicles = event.target.value;
+      vehicleInputs.innerHTML = "";
+  
+      for (let i = 1; i <= numVehicles; i++) {
+        const label = document.createElement("label");
+        label.setAttribute("for", `vehicle${i}`);
+        label.textContent = `: הכנס מספר רכב ${i} `;
+        const input = document.createElement("input");
+        input.style.width = '100px';
+        input.setAttribute("type", "text");
+        input.setAttribute("id", `vehicle${i}`);
+        input.setAttribute("name", `vehicle${i}`);
+        input.setAttribute("required", true);
+        vehicleInputs.appendChild(label);
+        vehicleInputs.appendChild(input);
+      }
+    });
+  
+  
+        // Add an event listener to the volunteer form
+        volunteerForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          
+          // Get the values from the form
+          const firstName = document.getElementById("firstName").value;
+          const lastName = document.getElementById("lastName").value;
+          const ID = document.getElementById("ID").value;
+          const address = document.getElementById("address").value;
+          const phone = document.getElementById("phone").value;
+          const EmergencyContactName = document.getElementById("EmergencyContactName").value;
+          const EmergencyContactPhone = document.getElementById("EmergencyContactPhone").value;
+          const BirthDate=document.getElementById("BirthDate").value;
+          
+          
+  
+  
+  
+          const Authorizations="1";
+          
+          
+  
+          // Store the Volunteer object in Firestore
+          firebase.firestore().collection("Volunteers Waiting").doc(email).set({
+          firstName,
+          lastName,
+          ID,
+          BirthDate,
+          email,
+          address,
+          phone,
+          Authorizations,
+          volunteerTypes: getCheckedVolunteerTypes(),
+          vehicles: getVehicles(),
+          EmergencyContactName,
+          EmergencyContactPhone
+      })
+  .then(() => {
+      alert("Volunteer created successfully!");
+      window.location.href = `Volunteer_Dashboard.html`;
+      volunteerForm.reset();
+      vehicleInputs.innerHTML = "";
+  
+  })
+  .catch((error) => {
+      console.error("Error creating volunteer: ", error);
+      alert("Error creating volunteer!");
   });
-
-
-      // Add an event listener to the volunteer form
-      volunteerForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        
-        // Get the values from the form
-        const firstName = document.getElementById("firstName").value;
-        const lastName = document.getElementById("lastName").value;
-        const ID = document.getElementById("ID").value;
-        const address = document.getElementById("address").value;
-        const phone = document.getElementById("phone").value;
-        const EmergencyContactName = document.getElementById("EmergencyContactName").value;
-        const EmergencyContactPhone = document.getElementById("EmergencyContactPhone").value;
-        const BirthDate=document.getElementById("BirthDate").value;
-        
-        
-
-
-
-        const Authorizations="1";
-        
-        
-
-        // Store the Volunteer object in Firestore
-        firebase.firestore().collection("Volunteers Waiting").doc(email).set({
-        firstName,
-        lastName,
-        ID,
-        BirthDate,
-        email,
-        address,
-        phone,
-        Authorizations,
-        volunteerTypes: getCheckedVolunteerTypes(),
-        vehicles: getVehicles(),
-        EmergencyContactName,
-        EmergencyContactPhone
-    })
-.then(() => {
-    alert("Volunteer created successfully!");
-    window.location.href = `Volunteer_Dashboard.html`;
-    volunteerForm.reset();
-    vehicleInputs.innerHTML = "";
-
-})
-.catch((error) => {
-    console.error("Error creating volunteer: ", error);
-    alert("Error creating volunteer!");
-});
-
-});
-
-function getVehicles() {
-    const numVehicles = parseInt(numVehiclesSelect.value);
-    const vehicles = [];
-
-    for (let i = 1; i <= numVehicles; i++) {
-      const vehicleNumber = document.getElementById(`vehicle${i}`).value;
-      vehicles.push(vehicleNumber);
+  
+  });
+  
+  function getVehicles() {
+      const numVehicles = parseInt(numVehiclesSelect.value);
+      const vehicles = [];
+  
+      for (let i = 1; i <= numVehicles; i++) {
+        const vehicleNumber = document.getElementById(`vehicle${i}`).value;
+        vehicles.push(vehicleNumber);
+      }
+  
+      return vehicles;
     }
-
-    return vehicles;
+  
+  
+    function getCheckedVolunteerTypes() {
+    const volunteerTypes = [];
+    const checkboxes = document.querySelectorAll('#volunteer-types input[type="checkbox"]:checked');
+    for (let i = 0; i < checkboxes.length; i++) {
+      volunteerTypes.push(checkboxes[i].value);
+    }
+    return volunteerTypes;
   }
-
-
-  function getCheckedVolunteerTypes() {
-  const volunteerTypes = [];
-  const checkboxes = document.querySelectorAll('#volunteer-types input[type="checkbox"]:checked');
-  for (let i = 0; i < checkboxes.length; i++) {
-    volunteerTypes.push(checkboxes[i].value);
-  }
-  return volunteerTypes;
-}
-
-
-
-
-
-
-
-    </script>
+      </script>
+    </div>
+    <footer>
+      <p class="copyright">
+          &copy; 2023 LevChedva. All rights reserved.
+        </p>
+  </footer>
   </body>
 </html>
