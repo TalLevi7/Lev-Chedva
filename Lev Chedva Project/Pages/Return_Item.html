@@ -15,22 +15,34 @@
       </div>
       <h1>החזר מוצר</h1>
       <div class="search-container">
-        <input type="text" id="search-input" placeholder="הכנס ת.ז.או מספר סידורי של המוצר" />
+        <input type="text" id="search-input" placeholder="הכנס ת.ז.או מספר אירוע המוצר" />
         <button id="search-by-id-btn">חפש לפי ת.ז</button>
-        <button id="search-by-cat-btn">חפש לפי מק"ט</button>
+        <button id="search-by-cat-btn">חפש לפי שם מוצר</button>
     </div>
     <div id="buttonContainer"></div>
     <div id="item-data" style="display: none;"></div>
     <div id="return-details" style="display: none;">
         <div id="accessories-list" style="display: none;"></div>
-        <label>כמות: <input type="number" id="return-quantity" /></label>
-        <label>"שם המתנדב <input type="text" id="return-name" /></label>
-        <label>מיקום:
-            <select id="return-location">
-            </select>
-        </label>
-        <button id="return-btn">החזר</button>
-    </div>
+        <label>כמות: <input type="number" id="return-quantity"/></label>
+        <label>שם המתנדב <input type="text" id="return-name" /></label>
+        <div id="bottom-div-container">
+            <div id="bottom-div">
+              <div class="label-wrapper">
+                <label for="remarks">הערות:</label>
+              </div>
+              <div class="textarea-wrapper">
+                <textarea id="remarks" name="remarks" rows="4" cols="50"></textarea>
+              </div>
+              <div class="input-group">
+                <label>מיקום:
+                  <select id="return-location"></select>
+                </label>
+                <button id="return-btn">החזר</button>
+              </div>
+            </div>
+          </div>
+          
+          
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -44,7 +56,7 @@
         const returnDetails = document.getElementById('return-details');
         const returnBtn = document.getElementById('return-btn');
         const returnName = document.getElementById('return-name');
-        const returnLocation = document.getElementById('return-location');
+        const returnLocation = document.getElementById('return-location')
         const accessoriesListDiv = document.getElementById('accessories-list');
         let foundItemId = null;
         let foundItemCategorialNumber = null;
@@ -93,7 +105,8 @@ for (let ticket of tickets) {
     const ticketRef = firebase.firestore().collection('Borrow Tickets').doc(ticket);
     const ticketSnapshot = await ticketRef.get();  
     const ticketButton = document.createElement('button');
-    ticketButton.textContent = ticketSnapshot.data().product_name;
+    ticketButton.id="ticketButton";
+    ticketButton.textContent = "מספר כרטיס השאלה:"+ticketRef.id +" שם המוצר:" + ticketSnapshot.data().categorialNumber + " ת.ז. איש קשר: "+ ticketSnapshot.data().contactId;
 
     // Create a row and a cell for the button
     const row = document.createElement('tr');
@@ -169,7 +182,11 @@ async function searchItemByCategorialNumber(categorialNumber) {
   for (let doc of querySnapshot.docs) {
       const ticket = doc.id;
       const ticketButton = document.createElement('button');
-      ticketButton.textContent = ticket;
+      ticketButton.id="ticketButton";
+    
+      const ticketSnapshot = await doc.ref.get();
+      ticketButton.textContent = "מספר כרטיס השאלה:"+ticket +" שם המוצר:" + ticketSnapshot.data().categorialNumber + " ת.ז. איש קשר: "+ ticketSnapshot.data().contactId;
+
 
       // Create a row and a cell for the button
       const row = document.createElement('tr');
@@ -227,7 +244,6 @@ async function searchItemByCategorialNumber(categorialNumber) {
 
 
  async function displayItemData(itemSnapshot,container) {
-        console.log()
         const borrowedItemsRef = firebase.firestore().collection('inventory').doc(itemSnapshot.data().categorialNumber);
         const borrowedItemSnapshot = await borrowedItemsRef.get();
         const item = borrowedItemSnapshot.data();
@@ -321,6 +337,7 @@ searchByCatBtn.addEventListener('click', () => {
 
     
 async function returnItem() {
+  
     try {
         console.log(ChosenTicket);
         const borrowedTicketsRef = firebase.firestore().collection('Borrow Tickets').doc(ChosenTicket);
@@ -347,15 +364,22 @@ async function returnItem() {
                 updatedCompanionAccessories.push(accessoryCheckboxes[i].value + '-חסר');
             }
         }
-
+        const remarks=document.getElementById('remarks');
         const returnQuantity = document.getElementById('return-quantity');
-        let updatedQuantity = parseInt(returnQuantity.value);
 
+        if (!returnQuantity.value) { // Prevent form submission
+             alert('אנא מלא את הכמות להחזרה');
+             return;
+             }
+
+        let updatedQuantity = parseInt(returnQuantity.value);
+        console.log(remarks.value);
         const borrowedArchiveData = {
             ...borrowedTicketSnapshot.data(),  // Copy the ticket data from 'Borrowed Tickets' collection
             returnedDate: new Date().toISOString().substring(0, 10),
             companion_accessories: updatedCompanionAccessories,  // Update the companion_accessories field
-            quantity: updatedQuantity  // Update the quantity field
+            quantity: updatedQuantity,
+            remarks:remarks.value
         };
 
         const borrowedArchiveRef = firebase.firestore().collection('Borrowed Archive').doc(ChosenTicket);
@@ -363,7 +387,7 @@ async function returnItem() {
 
         // Get the current quantity from the inventory first, and then add the returned quantity to it
         const inventoryItemSnapshot = await inventoryItemRef.get();
-        const currentQuantity = inventoryItemSnapshot.data().product_quantity;
+        const currentQuantity = parseInt(inventoryItemSnapshot.data().product_quantity);
         updatedQuantity += currentQuantity;
 
         // Remove the ticket number from the 'borrowTickets' field array in the 'Borrowed Items' collection
@@ -385,11 +409,11 @@ async function returnItem() {
     }
         await inventoryItemRef.update({ status: 'free', location: returnLocation.value, companion_accessories: updatedCompanionAccessories, product_quantity: updatedQuantity });
 
-        alert('Item has been successfully returned.');
+        alert('המוצר הוחזר בהצלחה');
         location.reload();
     } catch (error) {
         console.error('Error returning the borrowed item:', error);
-        alert('Failed to return the borrowed item.');
+        alert('שגיאה בהחזרת המוצר.');
     }
 }
 

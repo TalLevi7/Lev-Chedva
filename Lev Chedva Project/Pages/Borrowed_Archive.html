@@ -18,7 +18,9 @@
             <tr>
                 <th>איש קשר</th>
                 <th>שם המוצר</th>
-                <th>תאריך</th>
+                <th>תאריך השאלה</th>
+                <th>תאריך סגירה</th>
+                <th>הערות</th>
             </tr>
         </thead>
         <tbody id="borrowTableBody">
@@ -48,7 +50,9 @@ const hebrewLabels = {
         patientName: 'שם המטופל',
         loaning_volunteer: 'שם המתנדב',
         product_name:'שם המוצר',
-        returnedDate: 'תאריך החזרה'
+        returnedDate: 'תאריך החזרה',
+        remarks:'הערות',
+        companion_accessories: 'אביזרים נלווים'
         // Add more labels as necessary
     };
 
@@ -62,16 +66,23 @@ async function getBorrowList() {
 function displayDoc(doc) {
   let row = document.createElement('tr');
   let contactNameCell = document.createElement('td');
-  let dateCell = document.createElement('td');
+  let BorrowDatedCell = document.createElement('td');
   let nameCell = document.createElement('td');
+  let ReturnDateCell = document.createElement('td');
+  let RemarksCell = document.createElement('td');
   contactNameCell.textContent = doc.data().contactName;
-  let date = doc.data().returnedDate;
-  dateCell.textContent = new Date(date).toLocaleDateString('he-IL'); // Format the date to Israeli format
-  nameCell.textContent = doc.data().product_name;
+  let Borrowdate = doc.data().borrowingFrom;
+  BorrowDatedCell.textContent = new Date(Borrowdate).toLocaleDateString('he-IL'); // Format the date to Israeli format
+  let ReturnDate=doc.data().returnedDate;
+  ReturnDateCell.textContent = new Date(ReturnDate).toLocaleDateString('he-IL');  
 
+  nameCell.textContent = doc.data().categorialNumber;
+  RemarksCell.textContent=doc.data().remarks;
   row.appendChild(contactNameCell);
   row.appendChild(nameCell);
-  row.appendChild(dateCell);
+  row.appendChild(BorrowDatedCell);
+  row.appendChild(ReturnDateCell);
+  row.appendChild(RemarksCell);
 
   row.id = doc.id;
   row.classList.add('data-row');
@@ -96,7 +107,7 @@ function displayDetails(doc) {
     let detailsCell = document.createElement('td');
     let detailsList = document.createElement('ul');
 
-    detailsCell.colSpan = 3;
+    detailsCell.colSpan = 5;
 
     Object.entries(doc.data()).forEach(([key, value]) => {
         if (skipKeys.includes(key)) return;

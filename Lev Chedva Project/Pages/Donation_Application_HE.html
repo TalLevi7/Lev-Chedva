@@ -48,7 +48,8 @@ function submitData() {
   db.collection("Donation_List").add({
     name: name,
     Phone_Num: Phone_Num,
-    Product: Product
+    Product: Product,
+    date: firebase.firestore.Timestamp.fromDate(new Date()) // Current date and time
   })
   .then((docRef) => {
     console.log("Document written with ID: ", docRef.id);

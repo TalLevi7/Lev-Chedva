@@ -11,6 +11,9 @@ const patientName = document.getElementById('patient-name');
 const volunteerName = document.getElementById('volunteer-name');
 const reservationQuantity = document.getElementById('reservation-quantity');
 const reservedOn=document.getElementById('reservedOn');
+const reservedUntil=document.getElementById('reservedUntil');
+const remarks=document.getElementById('remarks');
+
 
 let foundItemCategorialNumber = null;
 let ProductName=null;
@@ -50,7 +53,6 @@ reserveBtn.addEventListener('click', async () => {
         alert('No item found to reserve.');
         return;
     }
-    console.log(reservedOn.value);
     const reservationData = {
         product_name:ProductName,
         categorial_number:CatNum,
@@ -61,7 +63,9 @@ reserveBtn.addEventListener('click', async () => {
         reservationDate: reservationDate.value,
         volunteerName: volunteerName.value,
         quantity: parseInt(reservationQuantity.value) || 0,
-        reservedOn: reservedOn.value
+        reservedOn: reservedOn.value,
+        reservedUntil:reservedUntil.value,
+        remarks:remarks.value
         
     };
     const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
@@ -113,11 +117,11 @@ reserveBtn.addEventListener('click', async () => {
             product_quantity: inventoryItemData.product_quantity - reservationData.quantity
         });
     
-        alert('Item has been successfully reserved.');
+        alert('המוצר הוזמן בהצלחה');
         location.reload();
     } catch (error) {
         console.error('Error reserving the itereservedOnm:', error);
-        alert('Failed to reserve the item.');
+        alert('שגיאה בהזמנת המוצר.');
     }
 });
 

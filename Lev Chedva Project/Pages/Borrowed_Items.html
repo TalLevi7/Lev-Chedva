@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borrowed Tickets Display</title>
-    <link rel="stylesheet" href="../styles/Telephone_Panel.css">
+    <title>מוצרים מושאלים</title>
+    <link rel="stylesheet" href="../styles/Borrowed_Items.css">
 </head>
 <body>
     <div class="logo-container">
@@ -24,6 +24,8 @@
                 <tr>
                     <th>שם המוצר</th>
                     <th>כמות</th>
+                    <th>שם איש קשר</th>
+                    <th id="remarks">הערות</th>
                 </tr>
             </thead>
             <tbody id="itemTableBody">
@@ -78,7 +80,9 @@
         categorialNumber: 'מספר סידורי',
         patientName: 'שם המטופל',
         loaning_volunteer: 'שם המתנדב',
-        product_name:'שם המוצר'
+        product_name:'שם המוצר',
+        remarks: 'הערות',
+        companion_accessories: 'אביזרים נלווים'
         // Add more labels as necessary
     };
 
@@ -97,20 +101,27 @@
         const inventoryData = (await inventoryRef.get()).data();
 
 
+        const cell1 = document.createElement('td');
+        cell1.textContent = inventoryData.categorial_number;
+        row.appendChild(cell1);
+
         const cell2 = document.createElement('td');
-        cell2.textContent = inventoryData.product_name;
+        cell2.textContent = data.quantity;
         row.appendChild(cell2);
 
         const cell3 = document.createElement('td');
-        cell3.textContent = data.quantity;
+        cell3.textContent = data.contactName;
         row.appendChild(cell3);
 
+        const cell4 = document.createElement('td');
+        cell4.textContent = data.remarks;
+        row.appendChild(cell4);
         tableBody.appendChild(row);
 
         const detailsRow = document.createElement('tr')
         const detailsCell = document.createElement('td');
         detailsCell.style.textAlign = 'right';
-        detailsCell.colSpan = 3; // Span across all columns
+        detailsCell.colSpan = 4; // Span across all columns
 
         // Create a list for the details
         const detailsList = document.createElement('ul');
@@ -127,15 +138,23 @@
 
         // Add Edit button
         const editButton = document.createElement('button');
-        editButton.textContent = 'עריכה';
-        editButton.addEventListener('click', async () => {
+editButton.textContent = 'עריכה';
+editButton.addEventListener('click', async () => {
     if (editButton.textContent === 'עריכה') {
         // Replace list items with input fields
         detailsList.childNodes.forEach(listItem => {
-            const inputField = document.createElement('input');
             const label = listItem.textContent.split(': ')[0];
             const key = reverseLabels[label]; // Translate back to the original key
+            let inputField;
+            if (label === 'remarks' || label === 'הערות') {
+                inputField = document.createElement('textarea');
+            } else {
+                inputField = document.createElement('input');
+            }
             inputField.value = data[key];
+            if (key === 'contactId') {
+                inputField.readOnly = true;
+            }
             listItem.textContent = `${label}: `;
             listItem.appendChild(inputField);
         });
@@ -144,14 +163,14 @@
         // Replace input fields with new values and update data
         let updatedData = {};
         detailsList.childNodes.forEach(listItem => {
-    if (listItem !== editButton) {  // Add this condition
-        const label = listItem.textContent.split(': ')[0];
-        const key = reverseLabels[label]; // Translate back to the original key
-        const value = listItem.children[0].value;
-        updatedData[key] = value;
-        listItem.textContent = `${label}: ${value}`;
-    }
-});
+            if (listItem !== editButton) {  // Add this condition
+                const label = listItem.textContent.split(': ')[0];
+                const key = reverseLabels[label]; // Translate back to the original key
+                const value = listItem.children[0].value;
+                updatedData[key] = value;
+                listItem.textContent = `${label}: ${value}`;
+            }
+        });
 
 
         // Update data in Firestore
@@ -159,7 +178,7 @@
         const ticketRef = borrowedTicketsRef.doc(doc.id);
         try {
             await ticketRef.update(updatedData);
-            alert('Document successfully updated!');
+            alert('עדכון הצליח');
             editButton.textContent = 'עריכה'; // Move this line here
         } catch (err) {
             console.error('Error updating document: ', err);
@@ -223,7 +242,7 @@ async function searchAcrossCollection(searchTerm, borrowedTicketsRef) {
                     }
                 }
             } else {
-                console.log("No such document!");
+                console.log("אין השאלה כזו!");
             }
         });
     } catch (error) {

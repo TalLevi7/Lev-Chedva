@@ -46,7 +46,7 @@ body {
     background-color: #d25757;
     color: white;
     font-size: 18px; /* Adjust to your preference */
-    padding: 6px 16; /* Adjust to your preference */
+    padding: 10px 20px; /* Adjust to your preference */
     border: none;
     cursor: pointer;
     border-radius: 8px;
@@ -55,11 +55,13 @@ body {
     width: 200px; /* Set a specific width */
     height: 50px; /* Set a specific height */
     text-align: center; /* Center the text */
+    border: 1.5px solid rgb(99, 98, 98);
   }
   
   
   #search-button,
   #ticket-search-btn {
+    border: 1.5px solid rgb(99, 98, 98);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -95,40 +97,17 @@ body {
     border: 2px solid #ccc;
     border-radius: 4px;
     width: 300px;
+    margin-bottom: 20px;
   }
 
-  #bottom-div {
+
+  .form-group {
     display: flex;
     flex-direction: column;
-  }
-  
-  .label-wrapper {
-    margin-bottom: 0.5em;
-  }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  .input-group label {
-    margin-right: 0.5em;
-  }
-  
-  
-  #ticketButton{
-    width: 150%;
-    text-align: center;
-    direction: rtl;
-    margin-top: 1em;
-    position: relative;
-    left:20%
-  }
-#return-location{
-  font-size: 18px;
-  padding: 8px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  width: 150px;
+    align-items: start;  /* aligns label and input to the start */
+    margin-bottom: 10px; /* spacing between each group */
+}
 
+.form-group label {
+    margin-bottom: 5px;  /* spacing between label and input */
 }

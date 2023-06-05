@@ -10,6 +10,20 @@ const VolunteersMagagmentDiv=document.getElementById('VolunteerTable');
 
 
 
+let isVolunteersMagagmentDivVisible=false;
+
+loadVolunteersBtn.addEventListener('click', ()=>
+{
+    isVolunteersMagagmentDivVisible = !isVolunteersMagagmentDivVisible;
+    VolunteersMagagmentDiv.style.display = isVolunteersMagagmentDivVisible ? 'block' : 'none';
+    locationManagementDiv.style.display = 'none';
+    messageManagementDiv.style.display = 'none';
+    messageListDiv.style.display = 'none';
+    loadWaitingVolunteers();
+
+
+
+});
 let isLocationManagementVisible = false;
 
 editLocationsBtn.addEventListener('click', () => {
@@ -323,19 +337,13 @@ async function deleteMessage(messageId) {
     }
 }
 
-let isVolunteersMagagmentDivVisible=false;
 let volunteersTableValid=false;
 
-loadVolunteersBtn.addEventListener('click', loadWaitingVolunteers());
+
 async function loadWaitingVolunteers()
 {
 
-    isVolunteersMagagmentDivVisible = !isVolunteersMagagmentDivVisible;
-    messageListDiv.style.display = isVolunteersMagagmentDivVisible ? 'block' : 'none';
-    locationManagementDiv.style.display = 'none';
-    messageManagementDiv.style.display = 'none';
-    messageListDiv.style.display = 'none';
-    VolunteersMagagmentDiv.style.display="block";
+
   
     const VolunteerTable = document.getElementById('VolunteerTable');
   

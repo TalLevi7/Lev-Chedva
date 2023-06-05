@@ -48,7 +48,7 @@
       </div>
       <div class="field-container">
         <label for="borrowing-quantity">כמות להשאלה:</label>
-        <input type="text" id="borrowing-quantity" name="borrowing-quantity" />
+        <input type="number" id="borrowing-quantity" name="borrowing-quantity" />
       </div>
       <div class="field-container">
         <label for="borrowing-from">משאיל מתאריך:</label>
@@ -57,6 +57,10 @@
       <div class="field-container">
         <label for="borrowing-until">משאיל עד לתאריך:</label>
         <input type="date" id="borrowing-until" name="borrowing-until" />
+      </div>
+      <div class="field-container">
+        <label for="remarks">הערות:</label>
+        <textarea id="remarks" name="remarks" rows="4" cols="50"></textarea>
       </div>
       <div class="field-container">
         <label for="loaning_volunteer">שם המתנדב:</label>
@@ -86,6 +90,7 @@
       const borrowingUntil = document.getElementById('borrowing-until');
       const address = document.getElementById('address');
       const loaning_volunteer = document.getElementById('loaning_volunteer');
+      const remarks=document.getElementById('remarks');
       const borrowingQuantity = document.getElementById('borrowing-quantity');
       const ticketSearchBtn = document.getElementById('ticket-search-btn');
       
@@ -141,7 +146,7 @@
       searchBtn.addEventListener('click', async () => {
     const itemName = searchInput.value;
 
-    const itemRef = firebase.firestore().collection('inventory').where('product_name', '==', itemName);
+    const itemRef = firebase.firestore().collection('inventory').where('categorial_number', '==', itemName);
 
     const itemSnapshot = await itemRef.get();
 
@@ -191,7 +196,7 @@ let CatNum=null;
           const itemSnapshot = await itemRef.get();
           
           if (itemSnapshot.exists) {
-            console.log("hello");
+        
             itemDetails.style.display = 'block';
             const item = itemSnapshot.data();
             let detailsList = document.getElementById('item-data');
@@ -225,6 +230,13 @@ let CatNum=null;
           if (!contactId.value) {
             event.preventDefault(); // Prevent form submission
              alert('אנא מלא את שדה ת.ז איש קשר');
+             return;
+             }
+
+             if (!borrowingQuantity.value) {
+            event.preventDefault(); // Prevent form submission
+             alert('אנא מלא את הכמות להשאלה');
+             return;
              }
 
             if(TicketValid)
@@ -236,14 +248,14 @@ let CatNum=null;
           const reservationListRef = firebase.firestore().collection('reservation list').doc(searchInput.value);
           const itemSnapshot = await itemRef.get();
           if (!itemSnapshot.exists || itemSnapshot.data().product_quantity <= 0) {
-              alert('Item not in inventory.');
+              alert('מוצר אינו במלאי');
               return;
           }
           let newQuantity =itemSnapshot.data().product_quantity;
           if(!TicketValid)
           newQuantity-= Number(borrowingQuantity.value);
           
-          if(newQuantity<=0){
+          if(newQuantity<0){
               alert("אין מספיק כמות במלאי");
               return;
           }
@@ -261,6 +273,7 @@ let CatNum=null;
               categorialNumber: itemName,
               address: address.value,
               loaning_volunteer: loaning_volunteer.value,
+              remarks:remarks.value,
               quantity: Number(borrowingQuantity.value)
           };
       

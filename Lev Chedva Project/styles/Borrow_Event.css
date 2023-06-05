@@ -1,69 +1,16 @@
 body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   font-family: 'Assistent', sans-serif;
-  background-color: #f2f2f2;
-  padding: 20px;
   direction: rtl;
-}
-
-input,
-button {
-  font-size: 16px;
-}
-
-input {
-  padding: 6px 12px;
-  margin: 4px 0;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #d25757;
-  color: white;
-  padding: 8px 16px;
-  margin: 4px 0;
-  border: none;
-  cursor: pointer;
-  border-radius: 8px;
-  font-family: 'Assistent', sans-serif;
-  margin-right: 10px;
-}
-
-button:hover {
-  background-color: #c61f1f;
-}
-
-label {
-  display: flex; /* Change to flex to align label and input horizontally */
-  align-items: center; 
-  margin: 8px 0;
-}
-
-#item-data {
-  background-color: #ffffff;
-  padding: 16px;
-  border-radius: 4px;
-  margin: 8px 0;
-  margin-top: 20px;
-  margin-right: 20px;
-  margin-left: 20px;
-}
-
-#item-details {
-  background-color: #ffffff;
-  padding: 16px;
-  border-radius: 4px;
-  margin: 8px 0;
-}
-
-pre {
-  font-family: monospace;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  background-color: #f9f9f9;
+  text-align: right;
 }
 
 #container {
   display: flex;
-  flex-direction: column; /* Change to column to stack elements vertically */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 100px;
@@ -77,4 +24,78 @@ pre {
 
 .logo-container img {
   max-width: 150px;
+}
+
+label {
+  font-size: 18px;
+  text-align: right;
+}
+
+input[type="text"],
+input[type="number"],
+#remarks {
+  font-size: 18px;
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+  margin-bottom: 20px;
+}
+
+button {
+  background-color: #d25757;
+  color: white;
+  font-size: 18px; /* Adjust to your preference */
+  padding: 10px 20px; /* Adjust to your preference */
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-right: 10px;
+  margin: 4px;
+  width: 200px; /* Set a specific width */
+  height: 50px; /* Set a specific height */
+  text-align: center; /* Center the text */
+  border: 1.5px solid rgb(99, 98, 98);
+}
+
+
+#search-button,
+#ticket-search-btn {
+  border: 1.5px solid rgb(99, 98, 98);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px; /* This will ensure the buttons have the same minimum width */
+}
+button:hover {
+  background-color: #c61f1f;
+}
+
+#item-data,
+#item-details {
+  display: flex;
+  flex-direction: column;
+  
+  padding: 16px;
+  border-radius: 4px;
+  width: 300px;
+  margin: 20px 0;
+}
+
+pre {
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+#remarks {
+  font-size: 18px;
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+  margin-bottom: 20px;
 }
