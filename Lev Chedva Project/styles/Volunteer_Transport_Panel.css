@@ -15,7 +15,7 @@ table {
   border-collapse: collapse;
   width: 80%;
   max-width: 800px;
-  background-color: #fbecec;
+  background-color: #fafafa;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 6px; /* Adjust the value to increase or decrease the rounding */
   overflow: hidden; /* Ensure the rounded corners are visible */
@@ -32,9 +32,7 @@ th {
   color: white;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
+
 
 /* Filter bar styles */
 label {
@@ -86,4 +84,28 @@ button {
 
 button:hover {
   background-color: #c61f1f;
+}
+
+.color-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.legend-label {
+  font-size: 14px;
+  margin-right: 6px;
 }

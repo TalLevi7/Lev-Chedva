@@ -14,6 +14,8 @@ async function readData() {
         console.log("אין מסמך כזה!");
       }
     });
+    eventArray.sort((a, b) => a.eventCounter - b.eventCounter); // Sort the eventArray based on eventCounter
+    preDisplayData("הכל");
   } catch (error) {
     console.log("שגיאה בקבלת המסמכים:", error);
   }
@@ -51,22 +53,18 @@ function DisplayData(eventData) {
   eventTable.appendChild(row);
   switch (eventData.status) {
     case "פתוח":
-      if (eventData.urgency == "Very Urgent") {
-        row.style.backgroundColor = "red";
-      } else if (eventData.urgency == "Urgent") {
-        row.style.backgroundColor = "pink";
-      } else if (eventData.jeepUnit) {
-        row.style.backgroundColor = "brown";
-      } else {
-        row.style.backgroundColor = "orange";
+      if (eventData.urgency === "Very Urgent" || eventData.urgency === "Urgent") {
+        row.style.backgroundColor = "#FFCDD2"; // Soft red
       }
       break;
     case "נלקח":
-      row.style.backgroundColor = "yellow";
+      row.style.backgroundColor = "#FFF9C4"; // Soft yellow
       break;
     case "בשינוע":
-      row.style.backgroundColor = "green";
+      row.style.backgroundColor = "#C8E6C9"; // Soft green
       break;
+      case "נמסר":
+        row.style.backgroundColor = "#f0ceff"; // Soft purple
     default:
       break;
   }
