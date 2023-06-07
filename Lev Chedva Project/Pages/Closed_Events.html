@@ -4,154 +4,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>אירועים סגורים</title>
     <link rel="stylesheet" href="../styles/Closed_Events.css">
+    <link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
 </head>
 <body>
-    <header>
-        <div class="logo-container">
-            <a href="#" onclick="validateUserAndRedirect(); return false;">
-              <img src="../Pictures/logoLevChedva.png" alt="Logo" />
-            </a>
-          </div>
-        <h1>אירועים סגורים</h1>
-    </header>
-
-    <div id="eventContainer"></div>
-
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="../firebase.js"></script>
-    <script src="../Scripts/auth.js"></script>
-    <script>
-        var db = firebase.firestore();
-
-        async function fetchAndDisplayEvents() {
-            const eventsRef = db.collection('Closed Events');
-            const snapshot = await eventsRef.get();
-
-            const eventContainer = document.getElementById('eventContainer');
-            const table = document.createElement('table');
-            eventContainer.appendChild(table);
-
-            // Create table headers
-            const headers = ['מספר אירוע ', 'שם מוצר', 'תאריך פתיחת אירוע', 'תאריך סגירת אירוע'];
-            const headerRow = document.createElement('tr');
-            headers.forEach(headerText => {
-                const header = document.createElement('th');
-                header.textContent = headerText;
-                headerRow.appendChild(header);
-            });
-            table.appendChild(headerRow);
-
-            snapshot.forEach(doc => {
-                const data = doc.data();
-
-                const row = document.createElement('tr');
-
-                // Access the nested properties within eventData
-                let productName = data.eventData.ProductName;
-                let eventCounter = data.eventData.eventCounter;
-                let timestamp = data.eventData.timestamp;
-
-                // Check if timestamp exists
-                let dateString = '';
-                if (timestamp) {
-                    // Convert timestamp to a date string in day/month/year format
-                    const date = timestamp.toDate();
-                    dateString = date.toLocaleDateString('he-IL');
-                }
-
-
-                // Create cells for each data
-                const eventCounterCell = document.createElement('td');
-                const productNameCell = document.createElement('td');
-                const dateCell = document.createElement('td');
-
-                eventCounterCell.textContent = eventCounter;
-                productNameCell.textContent = productName;
-                dateCell.textContent = dateString;
-
-                // Append cells to the row
-                row.appendChild(eventCounterCell);
-                row.appendChild(productNameCell);
-                row.appendChild(dateCell);
-
-                // Append row to the table
-                table.appendChild(row);
-
-                // Create a details row and a details cell for each event
-                const detailsRow = document.createElement('tr');
-                const detailsCell = document.createElement('td');
-                detailsCell.colSpan = headers.length;  // Let the details cell span all columns
-                detailsRow.appendChild(detailsCell);
-                // Create a details row and a details cell for each even
-                let eventData = data.eventData;
-                const detailsList = document.createElement('ul');
-                const ProductNameItem = document.createElement('li');
-                ProductNameItem.textContent = "שם המוצר:  " + eventData.ProductName;
-                const CatNumItem = document.createElement('li');
-                CatNumItem.textContent = "מספר סידורי: " + eventData.catgorial_number;
-                const QuantityItem = document.createElement('li');
-                QuantityItem.textContent = "כמות: " + eventData.quantity;
-                const AdressItem = document.createElement('li');
-
-                AdressItem.textContent = "כתובת: " + eventData.address;
-                const ContactNameItem = document.createElement('li');
-                ContactNameItem.textContent = "שם האיש קשר: " + eventData.contactName;
-                const ContactPhoneItem = document.createElement('li');
-                ContactPhoneItem.textContent = "טלפון איש קשר " + eventData.contactPhone;
-                const RemarksItem = document.createElement('li');
-                RemarksItem.textContent = "הערות: " + eventData.remarks;
-                //const timestamp = eventData.timestamp.seconds * 1000; // convert seconds to milliseconds
-                const date = new Date(eventData.timestamp.seconds * 1000);
-                const PostTimeItem = document.createElement('li');
-                PostTimeItem.textContent = "הועלה ב: " + date;
-                const TypeItem = document.createElement('li');
-                TypeItem.textContent = "סוג: " + eventData.type;
-                const SizeItem = document.createElement('li');
-                SizeItem.textContent = "גודל: " + eventData.size;
-                const UrgencyItem = document.createElement('li');
-                UrgencyItem.textContent = "דחיפות: " + eventData.urgency;
-                const WeightItem = document.createElement('li');
-                WeightItem.textContent = "משקל: " + eventData.weight;
-                const JeepItem = document.createElement('li');
-                JeepItem.textContent = "ג'יפים " + eventData.jeepUnit;
-
-                detailsList.appendChild(ProductNameItem);
-                detailsList.appendChild(CatNumItem);
-                detailsList.appendChild(QuantityItem);
-                detailsList.appendChild(AdressItem);
-                detailsList.appendChild(ContactNameItem);
-                detailsList.appendChild(ContactPhoneItem);
-                detailsList.appendChild(RemarksItem);
-                detailsList.appendChild(PostTimeItem);
-                detailsList.appendChild(TypeItem);
-                detailsList.appendChild(SizeItem);
-                detailsList.appendChild(UrgencyItem);
-                detailsList.appendChild(WeightItem);
-                detailsList.appendChild(JeepItem);
-                detailsCell.appendChild(detailsList);
-                detailsRow.appendChild(detailsCell);
-                row.after(detailsRow);
-
-                detailsCell.style.display = 'none';
-
-                // Add a click event listener to the row
-                row.addEventListener('click', () => {
-                    if (detailsRow.classList.contains('details-row-expanded')) {
-                        detailsRow.classList.remove('details-row-expanded');
-                        detailsCell.classList.remove('details-cell-expanded');
-                    } else {
-                        detailsRow.classList.add('details-row-expanded');
-                        detailsCell.classList.add('details-cell-expanded');
-                    }
+    <div class="content-wrapper">
+        <header>
+            <div class="logo-container">
+                <a href="#" onclick="validateUserAndRedirect(); return false;">
+                  <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+                </a>
+              </div>
+            <h1>אירועים סגורים</h1>
+        </header>
+    
+        <div id="eventContainer"></div>
+    
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+        <script src="../firebase.js"></script>
+        <script src="../Scripts/auth.js"></script>
+        <script>
+            var db = firebase.firestore();
+    
+            async function fetchAndDisplayEvents() {
+                const eventsRef = db.collection('Closed Events');
+                const snapshot = await eventsRef.get();
+    
+                const eventContainer = document.getElementById('eventContainer');
+                const table = document.createElement('table');
+                eventContainer.appendChild(table);
+    
+                // Create table headers
+                const headers = ['מספר אירוע ', 'שם מוצר', 'תאריך פתיחת אירוע', 'תאריך סגירת אירוע'];
+                const headerRow = document.createElement('tr');
+                headers.forEach(headerText => {
+                    const header = document.createElement('th');
+                    header.textContent = headerText;
+                    headerRow.appendChild(header);
                 });
-
-                // Append details row to the table
-                table.appendChild(detailsRow);
-            });
-        }
-        fetchAndDisplayEvents();
-    </script>
+                table.appendChild(headerRow);
+    
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+    
+                    const row = document.createElement('tr');
+    
+                    // Access the nested properties within eventData
+                    let productName = data.eventData.ProductName;
+                    let eventCounter = data.eventData.eventCounter;
+                    let timestamp = data.eventData.timestamp;
+    
+                    // Check if timestamp exists
+                    let dateString = '';
+                    if (timestamp) {
+                        // Convert timestamp to a date string in day/month/year format
+                        const date = timestamp.toDate();
+                        dateString = date.toLocaleDateString('he-IL');
+                    }
+    
+    
+                    // Create cells for each data
+                    const eventCounterCell = document.createElement('td');
+                    const productNameCell = document.createElement('td');
+                    const dateCell = document.createElement('td');
+    
+                    eventCounterCell.textContent = eventCounter;
+                    productNameCell.textContent = productName;
+                    dateCell.textContent = dateString;
+    
+                    // Append cells to the row
+                    row.appendChild(eventCounterCell);
+                    row.appendChild(productNameCell);
+                    row.appendChild(dateCell);
+    
+                    // Append row to the table
+                    table.appendChild(row);
+    
+                    // Create a details row and a details cell for each event
+                    const detailsRow = document.createElement('tr');
+                    const detailsCell = document.createElement('td');
+                    detailsCell.colSpan = headers.length;  // Let the details cell span all columns
+                    detailsRow.appendChild(detailsCell);
+                    // Create a details row and a details cell for each even
+                    let eventData = data.eventData;
+                    const detailsList = document.createElement('ul');
+                    const ProductNameItem = document.createElement('li');
+                    ProductNameItem.textContent = "שם המוצר:  " + eventData.ProductName;
+                    const CatNumItem = document.createElement('li');
+                    CatNumItem.textContent = "מספר סידורי: " + eventData.catgorial_number;
+                    const QuantityItem = document.createElement('li');
+                    QuantityItem.textContent = "כמות: " + eventData.quantity;
+                    const AdressItem = document.createElement('li');
+    
+                    AdressItem.textContent = "כתובת: " + eventData.address;
+                    const ContactNameItem = document.createElement('li');
+                    ContactNameItem.textContent = "שם האיש קשר: " + eventData.contactName;
+                    const ContactPhoneItem = document.createElement('li');
+                    ContactPhoneItem.textContent = "טלפון איש קשר " + eventData.contactPhone;
+                    const RemarksItem = document.createElement('li');
+                    RemarksItem.textContent = "הערות: " + eventData.remarks;
+                    //const timestamp = eventData.timestamp.seconds * 1000; // convert seconds to milliseconds
+                    const date = new Date(eventData.timestamp.seconds * 1000);
+                    const PostTimeItem = document.createElement('li');
+                    PostTimeItem.textContent = "הועלה ב: " + date;
+                    const TypeItem = document.createElement('li');
+                    TypeItem.textContent = "סוג: " + eventData.type;
+                    const SizeItem = document.createElement('li');
+                    SizeItem.textContent = "גודל: " + eventData.size;
+                    const UrgencyItem = document.createElement('li');
+                    UrgencyItem.textContent = "דחיפות: " + eventData.urgency;
+                    const WeightItem = document.createElement('li');
+                    WeightItem.textContent = "משקל: " + eventData.weight;
+                    const JeepItem = document.createElement('li');
+                    JeepItem.textContent = "ג'יפים " + eventData.jeepUnit;
+    
+                    detailsList.appendChild(ProductNameItem);
+                    detailsList.appendChild(CatNumItem);
+                    detailsList.appendChild(QuantityItem);
+                    detailsList.appendChild(AdressItem);
+                    detailsList.appendChild(ContactNameItem);
+                    detailsList.appendChild(ContactPhoneItem);
+                    detailsList.appendChild(RemarksItem);
+                    detailsList.appendChild(PostTimeItem);
+                    detailsList.appendChild(TypeItem);
+                    detailsList.appendChild(SizeItem);
+                    detailsList.appendChild(UrgencyItem);
+                    detailsList.appendChild(WeightItem);
+                    detailsList.appendChild(JeepItem);
+                    detailsCell.appendChild(detailsList);
+                    detailsRow.appendChild(detailsCell);
+                    row.after(detailsRow);
+    
+                    detailsCell.style.display = 'none';
+    
+                    // Add a click event listener to the row
+                    row.addEventListener('click', () => {
+                        if (detailsRow.classList.contains('details-row-expanded')) {
+                            detailsRow.classList.remove('details-row-expanded');
+                            detailsCell.classList.remove('details-cell-expanded');
+                        } else {
+                            detailsRow.classList.add('details-row-expanded');
+                            detailsCell.classList.add('details-cell-expanded');
+                        }
+                    });
+    
+                    // Append details row to the table
+                    table.appendChild(detailsRow);
+                });
+            }
+            fetchAndDisplayEvents();
+        </script>
+    </div>
+    <footer>
+        <p class="copyright">
+            &copy; 2023 LevChedva. All rights reserved.
+          </p>
+    </footer>
 </body>
+
 </html>

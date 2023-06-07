@@ -58,13 +58,7 @@ input[type="button"] {
 input[type="button"]:hover {
 	background-color: #c61f1f;
 }
-
-.logo-container {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 20px;
-  }
   
-  .logo-container img {
-	max-width: 150px; 
+  html, body {
+    height: 98% !important;
   }

@@ -1,0 +1,24 @@
+ footer{
+    background-color: #d25757;
+    direction: ltr;
+    width: 100%;
+    text-align: center;
+    height: 20px;
+  }
+  .content-wrapper {
+    min-height: calc(100% - 20px); 
+  }
+  html, body {
+    height: 99%;
+    margin: 0;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo-container img {
+    max-width: 150px; 
+  }

@@ -5,15 +5,38 @@ auth.onAuthStateChanged(user => {
   if (user) {
     // User is signed in.
     let email = user.email;
- 
-    db.collection('Volunteers').doc(email).get()
+
+    // Check if the user is in the "Volunteers Waiting" collection
+    db.collection('Volunteers Waiting').doc(email).get()
       .then(doc => {
         if (doc.exists) {
           let data = doc.data();
           document.getElementById('username').textContent = `${data.firstName} ${data.lastName}`;
-          let autorizations = data.Authorizations;
-          createButtons(autorizations);
-          loadMessages(autorizations);
+          // User is in the "Volunteers Waiting" collection
+          let confirmationMessage = document.createElement('div');
+          confirmationMessage.className = 'message';
+          confirmationMessage.style.width = 'auto';
+          confirmationMessage.style.height = 'fit-content'
+          confirmationMessage.innerHTML = `
+            <h2>בקשתך להתנדבות בטיפול</h2>
+            <p>תודה על הרשמתך. הבקשה שלך צריכה להתווסף על ידי מנהל המערכת.</p>
+          `;
+          messageContainer.appendChild(confirmationMessage);
+          document.getElementById('dashboard').textContent = 'בקשתך להתנדבות בטיפול';
+        } else {
+          // User is not in the "Volunteers Waiting" collection
+          db.collection('Volunteers').doc(email).get()
+            .then(doc => {
+              if (doc.exists) {
+                let data = doc.data();
+                document.getElementById('username').textContent = `${data.firstName} ${data.lastName}`;
+                let autorizations = data.Authorizations;
+                autorizations.sort();
+                console.log(autorizations);
+                createButtons(autorizations);
+                loadMessages(autorizations);
+              }
+            });
         }
       });
   } else {
@@ -21,6 +44,7 @@ auth.onAuthStateChanged(user => {
     console.log('No user is signed in');
   }
 });
+
 
 function createButtons(autorizations) {
   let navbar = document.getElementById('navbar');

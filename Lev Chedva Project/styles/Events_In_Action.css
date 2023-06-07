@@ -62,31 +62,6 @@ li {
   margin-bottom: 5px;
 }
 
-/* Status-specific row styles */
-tr.status-open {
-  background-color: orange;
-}
-
-tr.status-open.urgent {
-  background-color: pink;
-}
-
-tr.status-open.very-urgent {
-  background-color: red;
-}
-
-tr.status-open.brown {
-  background-color: brown;
-}
-
-tr.status-taken {
-  background-color: yellow;
-}
-
-tr.status-transport {
-  background-color: green;
-}
-
 .container {
   display: flex;
   flex-direction: column;
@@ -114,12 +89,26 @@ button:hover {
   background-color: #c61f1f;
 }
 
-.logo-container {
+.color-legend {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
-.logo-container img {
-  max-width: 150px; 
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.legend-label {
+  font-size: 14px;
+  margin-right: 6px;
 }

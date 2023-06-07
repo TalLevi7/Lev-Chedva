@@ -144,16 +144,6 @@ textarea {
     right: 20px;
 }
 
-.logo-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.logo-container img {
-    max-width: 150px;
-}
-
 .finish-button {
     background-color: #d25757;
     border: none;
@@ -207,4 +197,8 @@ textarea {
   .checkbox-label {
     font-size: 14px;
   }
+  
+html, body {
+  height: 98% !important;
+}
   

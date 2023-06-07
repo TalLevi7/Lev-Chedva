@@ -5,36 +5,67 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../styles/Borrow_Event.css">
-
+	<link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
     <title>הזמנה עתידית</title>
 </head>
 <body>
-    <div class="logo-container">
-        <a href="#" onclick="validateUserAndRedirect(); return false;">
-          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
-        </a>
-      </div>
-    <div id="container">
-        <input type="text" id="cat-number-input" placeholder="הכנס מספר סידורי.." />
-        <button id="search-cat-number-btn">חפש לפי מספר סידורי</button>
-        <div id="item-data" style="display: none;"></div>
-        <div id="reservation-details" style="display: none;">
-            <label>שם האיש קשר <input type="text" id="contact-name" /></label>
-            <label>טלפון איש קשר <input type="tel" id="phone-number-1" /></label>
-            <label>טלפון איש קשר נוסף <input type="tel" id="phone-number-2" /></label>
-            <label>כמות להזמנה <input type="number" id="reservation-quantity" min="1" /></label>
-            <label> הוזמן בתאריך <input type="date" id="reservedOn" /></label>
-            <label> הזמנה לתאריך <input type="date" id="reservation-date" /></label>
-            <label>שם המטופל <input type="text" id="patient-name" /></label>
-            <label>שם המתנדב <input type="text" id="volunteer-name" /></label>
-            <button id="reserve-btn">שמור</button>
+    <div class="content-wrapper">
+        <div class="logo-container">
+            <a href="#" onclick="validateUserAndRedirect(); return false;">
+              <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+            </a>
+          </div>
+        <div id="container">
+            <input type="text" id="cat-number-input" placeholder="הכנס שם מוצר.." />
+            <button id="search-cat-number-btn">חפש לפי שם מוצר</button>
+            <div id="item-data" style="display: none;"></div>
+            <div id="reservation-details" style="display: none;">
+                <div class="field-container">
+                    <label for="patient-name">שם המטופל:</label>
+                    <input type="text" id="patient-name" name="patient-name" />
+                  </div>
+                  <div class="field-container">
+                    <label for="contact-name">שם האיש קשר:</label>
+                    <input type="text" id="contact-name" name="contact-name" />
+                  </div>
+                  <div class="field-container">
+                    <label for="phone-number-1">טלפון איש קשר:</label>
+                    <input type="tel" id="phone-number-1" name="phone-number-1" />
+                  </div>
+                  <div class="field-container">
+                    <label for="phone-number-2">טלפון איש קשר נוסף:</label>
+                    <input type="tel" id="phone-number-2" name="phone-number-2" />
+                  </div>
+                  <div class="field-container">
+                    <label for="reservation-quantity">כמות להזמנה:</label>
+                    <input type="text" id="reservation-quantity" min="1" name="reservation-quantity" />
+                  </div>
+                  <div class="field-container">
+                    <label for="reservedOn">הוזמן בתאריך:</label>
+                    <input type="date" id="reservedOn" name="reservedOn" />
+                  </div>
+                  <div class="field-container">
+                    <label for="reservation-date">הזמנה לתאריך:</label>
+                    <input type="date" id="reservation-date" name="reservation-date" />
+                  </div>
+                  <div class="field-container">
+                    <label for="volunteer-name">שם המתנדב:</label>
+                    <input type="text" id="volunteer-name" name="volunteer-name" />
+                  </div>
+                <button id="reserve-btn">שמור</button>
+            </div>
         </div>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+        <script src="../firebase.js"></script>
+        <script src="../Scripts/auth.js"></script>
+        <script src="../Scripts/reservation.js"></script>
     </div>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="../firebase.js"></script>
-    <script src="../Scripts/auth.js"></script>
-    <script src="../Scripts/reservation.js"></script>
+    <footer>
+        <p class="copyright">
+            &copy; 2023 LevChedva. All rights reserved.
+          </p>
+    </footer>
 </body>
 </html>
