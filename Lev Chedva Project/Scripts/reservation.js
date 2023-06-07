@@ -15,6 +15,29 @@ const reservedOn=document.getElementById('reservedOn');
 let foundItemCategorialNumber = null;
 let ProductName=null;
 let CatNum=null;
+async function searchItemByProductName(productName) {
+    const inventoryItemRef = firebase.firestore().collection('inventory').where('product_name', '==', productName);
+    const inventoryItemSnapshot = await inventoryItemRef.get();
+
+    if (inventoryItemSnapshot.empty) {
+        alert('מוצר לא נמצא');
+        return;
+    }
+
+    const firstItemSnapshot = inventoryItemSnapshot.docs[0];
+    ProductName = firstItemSnapshot.data().product_name;
+    CatNum = firstItemSnapshot.id;
+    const inventoryItemData = firstItemSnapshot.data();
+
+    if (inventoryItemData.product_quantity <= 0) {
+        alert('Not enough in inventory');
+        return;
+    }
+
+    foundItemCategorialNumber = CatNum;
+    displayItemData(firstItemSnapshot);
+}
+
 async function searchItemByCategorialNumber(categorialNumber) {
     const inventoryItemRef = firebase.firestore().collection('inventory').doc(categorialNumber);
     const inventoryItemSnapshot = await inventoryItemRef.get();
@@ -42,8 +65,9 @@ function displayItemData(itemSnapshot) {
 }
 
 searchCatNumberBtn.addEventListener('click', () => {
-    searchItemByCategorialNumber(catNumberInput.value);
+    searchItemByProductName(catNumberInput.value);
 });
+
 
 reserveBtn.addEventListener('click', async () => {
     if (!foundItemCategorialNumber) {

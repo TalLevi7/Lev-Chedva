@@ -1,5 +1,4 @@
 body {
-    background-color: white;
     color: black;
     direction: rtl;
     font-family: 'Assistent', sans-serif;
@@ -42,16 +41,6 @@ ul {
 li {
     padding: 5px;
 }
-
-.logo-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .logo-container img {
-    max-width: 150px; 
-  }
 
   .details-row-expanded {
     display: table-row !important;
