@@ -14,8 +14,10 @@
 	</head>
 	<body class="is-preload">
 		<div id="page-wrapper">
-	
 				<div id="header">
+					<div id="floating-button">
+						<button onclick="handleButtonClick()">x</button>
+					</div>
 					<div id="languages">
 						<a href="#" class="language-button" id="hebrew">עברית</a>
 						<a href="#" class="language-button" id="english">English</a>
@@ -39,7 +41,15 @@
 				</div>
 				<style>
 					/* Existing CSS for the navbar */
-				
+					#floating-button {
+						position: fixed;
+						bottom: 90%; /* adjust as needed */
+						right: 93.5%; /* adjust as needed */
+					}
+					.content {
+
+					}
+
 					#languages {
 						display: flex;
 						align-items: flex-start;
