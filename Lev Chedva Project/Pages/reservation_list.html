@@ -52,7 +52,9 @@
         reservationDate: 'הוזמן לתאריך',
         patientName: 'שם המטופל',
         volunteerName: 'שם המתנדב',
-        reservedOn:'הוזמן בתאריך'
+        reservedOn:'הוזמן בתאריך',
+        reservedUntil:'מוזמן עד',
+        remarks:'הערות'
     };
 
     searchAcrossCollection("");
@@ -172,6 +174,25 @@
             };
         });
     }
+
+    const reverseHebrewLabels = {
+        'מספר סידורי': 'categorial_number',
+  'שם איש קשר': 'contactName',
+  'כמות': 'quantity',
+  'טלפון איש קשר': 'phoneNumber1',
+  'טלפון איש קשר נוסף': 'phoneNumber2',
+  'שם המוצר': 'product_name',
+  'הוזמן לתאריך': 'reservationDate',
+  'שם המטופל': 'patientName',
+  'שם המתנדב': 'volunteerName',
+  'הוזמן בתאריך': 'reservedOn',
+  'מוזמן עד': 'reservedUntil',
+  'הערות': 'remarks'
+};
+
+
+
+
 
     function editReservation(docId) {
         let docRef = db.collection("reservation list").doc(docId);

@@ -29,8 +29,8 @@ async function searchItemByCategorialNumber(categorialNumber) {
     ProductName=inventoryItemSnapshot.data().product_name;
     CatNum=categorialNumber;
     const inventoryItemData = inventoryItemSnapshot.data();
-    if (inventoryItemData.product_quantity <= 0) {
-        alert('Not enough in inventory');
+    if (parseInt(reservationQuantity.value) <0) {
+        alert('אין מספיק בלאי');
         return;
     }
     foundItemCategorialNumber = categorialNumber;
@@ -50,7 +50,7 @@ searchCatNumberBtn.addEventListener('click', () => {
 
 reserveBtn.addEventListener('click', async () => {
     if (!foundItemCategorialNumber) {
-        alert('No item found to reserve.');
+        alert('מוצר לא נמצא');
         return;
     }
     const reservationData = {
@@ -72,8 +72,8 @@ reserveBtn.addEventListener('click', async () => {
     const inventoryItemSnapshot = await inventoryItemRef.get();
     const inventoryItemData = inventoryItemSnapshot.data();
     
-    if (inventoryItemData.product_quantity < reservationData.quantity) {
-        alert('Not enough in inventory');
+    if (parseInt(inventoryItemData.product_quantity) < reservationData.quantity) {
+        alert('אין מספיק במלאי');
         return;
     }
     
@@ -113,8 +113,8 @@ reserveBtn.addEventListener('click', async () => {
         await borrowCounterRef.update({ 'reservation counter': reservationCounter + 1 });
 
         await inventoryItemRef.update({ 
-            reserved_quantity: inventoryItemData.reserved_quantity + reservationData.quantity,
-            product_quantity: inventoryItemData.product_quantity - reservationData.quantity
+            reserved_quantity: parseInt(inventoryItemData.reserved_quantity) + reservationData.quantity,
+            product_quantity: parseInt(inventoryItemData.product_quantity) - reservationData.quantity
         });
     
         alert('המוצר הוזמן בהצלחה');
