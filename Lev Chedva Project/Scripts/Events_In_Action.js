@@ -46,7 +46,7 @@ function preDisplayData(filter) {
 function DisplayData(eventData) {
   const row = document.createElement('tr');
   const nameCell = document.createElement('td');
-  nameCell.textContent = eventData.eventCounter + " " + eventData.ProductName + " " + eventData.address;
+  nameCell.textContent = "שם מוצר: " + eventData.ProductName + ", כתובת מקור: " + eventData.Source_Address + " , כתובת יעד: " + eventData.Destination_Address;
   const emailCell = document.createElement('td');
   emailCell.textContent = eventData.email;
   row.appendChild(nameCell);
@@ -81,7 +81,9 @@ function DisplayData(eventData) {
       const ProductNameItem = document.createElement('li');
       ProductNameItem.textContent = "שם המוצר: " + eventData.ProductName;
       const AdressItem = document.createElement('li');
-      AdressItem.textContent = "כתובת: " + eventData.address;
+      AdressItem.textContent = "כתובת מקור: " + eventData.Source_Address;
+      const AdressItem2 = document.createElement('li');
+      AdressItem2.textContent = "כתובת יעד: " + eventData.Destination_Address;
       const ContactNameItem = document.createElement('li');
       ContactNameItem.textContent = "שם איש קשר: " + eventData.contactName;
       const ContactPhoneItem = document.createElement('li');
@@ -116,6 +118,7 @@ function DisplayData(eventData) {
 
       detailsList.appendChild(ProductNameItem);
       detailsList.appendChild(AdressItem);
+      detailsList.appendChild(AdressItem2);
       detailsList.appendChild(ContactNameItem);
       detailsList.appendChild(ContactPhoneItem);
       detailsList.appendChild(RemarksItem);

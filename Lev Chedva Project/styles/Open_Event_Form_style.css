@@ -34,6 +34,7 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 3px;
   font-size: 1em;
+  direction: rtl;
 }
 
 textarea {
@@ -50,6 +51,7 @@ fieldset {
   border: none;
   margin: 0;
   padding: 0;
+  direction: rtl;
 }
 
 legend {
