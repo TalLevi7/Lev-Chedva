@@ -1,7 +1,7 @@
 
 /* General styling */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Assistent', sans-serif;
   direction: rtl;
 }
 
@@ -21,7 +21,7 @@ h1 {
 #filter-bar {
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-between; */
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
   position: relative;
@@ -50,16 +50,13 @@ h1 {
 #search-input {
   flex-grow: 0;
   margin-right: 10px;
-  position:relative;
 }
 
 /* Product table */
 table {
-  width: 85%;
+  width: 100%;
   border-collapse: collapse;
-  margin: 0 auto;
-  border-radius: 8px;
-  overflow: hidden;
+
 }
 
 th, td {
@@ -159,5 +156,5 @@ button:hover {
 }
 
 .logo-container img {
-  max-width: 8em; 
+  max-width: 150px; 
 }

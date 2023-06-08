@@ -61,7 +61,7 @@
       // Load and set category number
       const counterSnapshot = await db.collection('Tools').doc('Categorical Number').get();
       counterValue = counterSnapshot.data().counter;
-  
+      document.getElementById('category-number') = counterValue + 1;
 
       // Load locations
       const locationSelect = document.getElementById('location');

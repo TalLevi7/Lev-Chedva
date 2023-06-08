@@ -4,6 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ארכיב השאלות</title>
     <link rel="stylesheet" type="text/css" href="../styles/reservation_archive.css">
+	<link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
 </head>
 <body>
     <div class="logo-container">
@@ -102,7 +103,7 @@ function displayDoc(doc) {
 
 // Displaying details of each document
 function displayDetails(doc) {
-    const skipKeys = ['contactName', 'returnedDate', 'product_name'];
+    const skipKeys = ['contactName', 'returnedDate', 'catergorialNumber'];
     let detailsRow = document.createElement('tr');
     let detailsCell = document.createElement('td');
     let detailsList = document.createElement('ul');
@@ -147,18 +148,30 @@ async function searchAcrossCollection(searchTerm) {
                 }
             }
         } else {
-            console.log("No such document!");
+          // Otherwise, create and display it
+          displayDetails(doc);
         }
-    });
-    displayBorrowList([...borrowListSet]);
-}
-
-// Displaying filtered data
-function displayBorrowList(docs) {
-    borrowTableBody.innerHTML = '';
-    docs.forEach(displayDoc);
-}
-</script>
-
+      });
+    
+      borrowTableBody.appendChild(row);
+    }
+    
+    // Displaying details of each document
+ 
+    
+  
+    
+    // Displaying filtered data
+    function displayBorrowList(docs) {
+        borrowTableBody.innerHTML = '';
+        docs.forEach(displayDoc);
+    }
+    </script>
+    </div>
+    <footer>
+        <p class="copyright">
+            &copy; 2023 LevChedva. All rights reserved.
+          </p>
+    </footer>
 </body>
 </html>

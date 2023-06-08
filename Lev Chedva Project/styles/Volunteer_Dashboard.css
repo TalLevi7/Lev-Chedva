@@ -1,11 +1,5 @@
-body {
-  font-family: Arial, sans-serif;
-  direction: rtl;
-}
-
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
   border-bottom: 1px solid #ddd;
@@ -17,32 +11,37 @@ body {
 
 #navbar {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
   padding: 1em;
 }
 
 #navbar button {
   flex: 1;
-  min-width: 100px;
-  max-width: 200px;
   padding: 0.5em 1em 0.5em 1em;
   border-radius: 20px;
   background-color: #d25757;
   color: white;
   border: none;
-  font-size: 14px;
-  margin: 0.5em;
+  font-size: 20px;
+  margin: 20px;
   text-align: center;
   transition: background-color 0.3s ease;
+  width: 200px; 
 }
 
 #navbar button:hover {
   background-color: #c61f1f;
   cursor: pointer;
 }
+#settingsButton{
+  background-color: transparent !important;
+}
 
 
+.fa-cog {
+  font-size: 40px;
+  color: #d25757;
+}
 
 #messageContainer {
   display: flex;
@@ -53,6 +52,7 @@ body {
   direction: rtl;
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
+  margin-top: 20px;
 }
 
 #messageContainer::-webkit-scrollbar {
@@ -193,12 +193,11 @@ body {
   display: block;
 }
 
-.logo-container {
+.content-wrapper{
+  font-family: 'Assistent', sans-serif;
+  direction: rtl;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-bottom: 20px;
-}
-
-.logo-container img {
-  max-width: 150px; 
+  align-items: center;
 }

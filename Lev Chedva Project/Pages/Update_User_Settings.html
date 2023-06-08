@@ -10,26 +10,34 @@
         <script src="../firebase.js"></script>
         <script src="../Scripts/auth.js"></script>
         <link rel="stylesheet" type="text/css" href="../styles/Update_User_Settings.css">
+        <link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
     </head>
     <body>
-        <div class="logo-container">
-            <a href="#" onclick="validateUserAndRedirect(); return false;">
-              <img src="../Pictures/logoLevChedva.png" alt="Logo" />
-            </a>
-          </div>
-        <div class="container">
-            <!-- Your code here -->
-        
-        <div id="userDetails">
-            <button id="updatePersonalDetails">עדכן פרטים אישיים</button>
-            <div id="personalDetailsDiv" style="display: none;"></div>
+        <div class="content-wrapper">
+            <div class="logo-container">
+                <a href="#" onclick="validateUserAndRedirect(); return false;">
+                  <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+                </a>
+              </div>
+            <div class="container">
+                <h1>עדכון הגדרות משתמש</h1>
+            
+            <div id="userDetails">
+                <button id="updatePersonalDetails">עדכן פרטים אישיים</button>
+                <div id="personalDetailsDiv" style="display: none;"></div>
+            </div>
+    
+            <div id="userCredentials">
+                <button id="updateCredentials">עדכן שם אימייל וסיסמא</button>
+                <div id="credentialsDiv" style="display: none;"></div>
+            </div>
         </div>
-
-        <div id="userCredentials">
-            <button id="updateCredentials">עדכן שם אימייל וסיסמא</button>
-            <div id="credentialsDiv" style="display: none;"></div>
+            <script src="../Scripts/user-settings.js"></script>
         </div>
-    </div>
-        <script src="../Scripts/user-settings.js"></script>
+        <footer>
+            <p class="copyright">
+                &copy; 2023 LevChedva. All rights reserved.
+              </p>
+        </footer>
     </body>
 </html>

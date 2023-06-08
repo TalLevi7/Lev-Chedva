@@ -6,20 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../styles/Borrow_Event.css">
+    <link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
+
     <title>השאלת מוצר</title>
 </head>
 
 <body>
+  <div class="content-wrapper">
     <div class="logo-container">
-        <a href="#" onclick="validateUserAndRedirect(); return false;">
-            <img src="../Pictures/logoLevChedva.png" alt="Logo" />
-        </a>
-    </div>
-    <div id="container">
-        <input type="text" id="search-input" placeholder="הכנס שם מוצר" />
-        <button id="search-button">חפש לפי שם מוצר</button>
-        <button id="ticket-search-btn">חפש לפי כרטיס הזמנה</button>
-    </div>
+      <a href="#" onclick="validateUserAndRedirect(); return false;">
+          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+      </a>
+  </div>
+  <div id="container">
+      <input type="text" id="search-input" placeholder="הכנס שם מוצר" />
+      <button id="search-button">חפש לפי שם מוצר</button>
+      <button id="ticket-search-btn">חפש לפי כרטיס הזמנה</button>
+  </div>
+
+
+
+
     <div id="item-data" style="display: none;"></div>
     <div id="item-details" style="display: none;">
       <div class="field-container">
@@ -65,8 +72,7 @@
       <div class="field-container">
         <label for="loaning_volunteer">שם המתנדב:</label>
         <input type="text" id="loaning_volunteer" name="loaning_volunteer" />
-      </div>
-        
+      </div>  
         <button id="save-btn">השאל</button>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -93,56 +99,57 @@
       const remarks=document.getElementById('remarks');
       const borrowingQuantity = document.getElementById('borrowing-quantity');
       const ticketSearchBtn = document.getElementById('ticket-search-btn');
-      
-      let borrowCounter = null;
-      let borrowCounterRef = firebase.firestore().collection('Tools').doc('Events Counter');
-      
-      function getHebrewLabel(key) {
-  switch (key) {
-    case 'categorial_number':
-      return 'שם מוצר';
-    case 'status':
-      return 'סטאטוס';
-    case 'keywords':
-      return 'מילות מפתח';
-    case 'product_description':
-      return 'תיאור מוצר';
-    case 'remarks':
-      return 'הערות';
-    case 'product_quantity':
-      return 'כמות במלאי';
-    case 'companion_accessories':
-      return 'מוצרים נלווים';
-    case 'location':
-      return 'מיקום';
-    case 'free':
-      return 'במלאי';
-    case 'reserved_quantity':
-      return 'כמות שמורה';
-    default:
-      return key;
-  }
+
+
+
+    let borrowCounter = null;
+    let borrowCounterRef = firebase.firestore().collection('Tools').doc('Events Counter');
+    
+    function getHebrewLabel(key) {
+switch (key) {
+  case 'categorial_number':
+    return 'שם מוצר';
+  case 'status':
+    return 'סטאטוס';
+  case 'keywords':
+    return 'מילות מפתח';
+  case 'product_description':
+    return 'תיאור מוצר';
+  case 'remarks':
+    return 'הערות';
+  case 'product_quantity':
+    return 'כמות במלאי';
+  case 'companion_accessories':
+    return 'מוצרים נלווים';
+  case 'location':
+    return 'מיקום';
+  case 'free':
+    return 'במלאי';
+  case 'reserved_quantity':
+    return 'כמות שמורה';
+  default:
+    return key;
+}
 }
 
-        let statusTranslations = {
-        'free': 'במלאי',
-        'borrowed': 'מושאל',
-        'none': 'אין במלאי',
-        'reserved': 'שמור'
+      let statusTranslations = {
+      'free': 'במלאי',
+      'borrowed': 'מושאל',
+      'none': 'אין במלאי',
+      'reserved': 'שמור'
 };
 
 
-      // Get borrow counter
-      async function getBorrowCounter() {
-        const doc = await borrowCounterRef.get();
-        if (!doc.exists) {
-        } else {
-          borrowCounter = doc.data()['borrow counter'];
-        }
+    // Get borrow counter
+    async function getBorrowCounter() {
+      const doc = await borrowCounterRef.get();
+      if (!doc.exists) {
+      } else {
+        borrowCounter = doc.data()['borrow counter'];
       }
       
       getBorrowCounter();
-      
+    }
       searchBtn.addEventListener('click', async () => {
     const itemName = searchInput.value;
 
@@ -176,12 +183,17 @@
     } else {
         // Item not found
         alert('המוצר לא נמצא או לא זמין');
+
     }
-});
+    
+    getBorrowCounter();
+  });
+  
 
 let TicketValid=false;
 let OldBorrow=null;     
 let CatNum=null;
+
 
     ticketSearchBtn.addEventListener('click', async () => {
         const ticketNumber = searchInput.value;
@@ -203,27 +215,27 @@ let CatNum=null;
         detailsList.innerHTML = '';
         detailsList.style.display = 'block'; // Make the item data list visible
 
-        for (let [key, value] of Object.entries(item)) {
-    let label = hebrewLabels[key] ? hebrewLabels[key] : key;
+      for (let [key, value] of Object.entries(item)) {
+  let label = hebrewLabels[key] ? hebrewLabels[key] : key;
 
-    if (key === 'status') {
-        value = statusTranslations[value] ? statusTranslations[value] : value;
-    }
+  if (key === 'status') {
+      value = statusTranslations[value] ? statusTranslations[value] : value;
+  }
 
-    const listItem = document.createElement('li');
-    listItem.textContent = `${label}: ${value}`;
-    detailsList.appendChild(listItem);
+  const listItem = document.createElement('li');
+  listItem.textContent = `${label}: ${value}`;
+  detailsList.appendChild(listItem);
 }
-            borrowingQuantity.value = reservationData.quantity;  
-            TicketValid=true;
-            OldBorrow=reservationData.quantity;
-          } else {
-            alert('המוצר לא נמצא או לא זמין');
-          }
+          borrowingQuantity.value = reservationData.quantity;  
+          TicketValid=true;
+          OldBorrow=reservationData.quantity;
         } else {
-          alert('הזמנה לא נמצאה');
+          alert('המוצר לא נמצא או לא זמין');
         }
-      });
+      } else {
+        alert('הזמנה לא נמצאה');
+      }
+    });
 
       saveBtn.addEventListener('click', async () => {
           let itemName = searchInput.value;
@@ -277,7 +289,7 @@ let CatNum=null;
               quantity: Number(borrowingQuantity.value)
           };
       
-          try {
+       
               if (TicketValid) {
                 const itemUpdateData = { status: newStatus };
                 itemUpdateData.product_quantity = itemSnapshot.data().product_quantity;
@@ -298,52 +310,31 @@ let CatNum=null;
                 
                     
               }
-              
-              await borrowedItemsRef.get().then((docSnapshot) => {
-                  if (docSnapshot.exists) {
-                      borrowedItemsRef.update({
-                          borrowTickets: firebase.firestore.FieldValue.arrayUnion(borrowCounter),
-                          ID: contactId.value,
-                          Name: contactName.value
-                      });
-                  } else {
-                      borrowedItemsRef.set({
-                          borrowTickets: [borrowCounter],
-                          ID: contactId.value,
-                          Name: contactName.value
-                      });
-                  }
-              });
+            
+            
+
+        let answer = window.confirm('האם תרצה להשאיל מוצר נוסף');
+        if (answer) {
+            // If the user clicked "Yes"
+            // Clear the search input field to allow for a new search
+            searchInput.value = '';
+            borrowingQuantity.value='';
+            borrowingFrom.value='';
+            borrowingUntil.value='';
+            // Hide item data and details
+            itemData.style.display = 'none';
+            itemDetails.style.display = 'none';
+        } else {
+            // If the user clicked "No"
+            // Refresh the page
+            location.reload();
+        }
       
-              await borrowTicketsRef.set(borrowedItemData);
-              await itemRef.update({ status: newStatus, product_quantity: newQuantity });
-              await borrowCounterRef.update({ 'borrow counter': borrowCounter + 1 });
-              alert('המוצר הושאל בהצלחה');
-          } catch (error) {
-              console.error('Error saving the borrowed item:', error);
-              alert('שגיאה בהשאלת המוצר');
-          }
+    });
 
+  </script>
+  </div>
+    
 
-          let answer = window.confirm('האם תרצה להשאיל מוצר נוסף');
-          if (answer) {
-              // If the user clicked "Yes"
-              // Clear the search input field to allow for a new search
-              searchInput.value = '';
-              borrowingQuantity.value='';
-              borrowingFrom.value='';
-              borrowingUntil.value='';
-              // Hide item data and details
-              itemData.style.display = 'none';
-              itemDetails.style.display = 'none';
-          } else {
-              // If the user clicked "No"
-              // Refresh the page
-              location.reload();
-          }
-      });
-
-    </script>
 </body>
-
 </html>
