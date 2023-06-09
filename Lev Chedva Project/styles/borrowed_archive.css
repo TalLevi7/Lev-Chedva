@@ -1,12 +1,11 @@
 body{
 
-    direction:rtl;
-    font-family: 'Assistent', sans-serif;
+    direction:rtl
 }
 
 table {
     position: relative;
-    
+    right: 5%;
     width: 90%;
     border-collapse: collapse;
     margin: 20px 0;
@@ -17,7 +16,7 @@ table {
 h1{
 
     position: relative;
-    
+    right: 45%;
 }
 th, td {
     border: 1px solid #888;
@@ -51,27 +50,13 @@ input[type='text'] {
     padding: 5px;
     margin: 10px 0;
     position: relative;
-    top:60%
-   
+    right:5%;
 }
 
-#searchContainer {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: -20px;
-    left:37%;
-  }
-  
-  #search-input {
-    margin-right: 10px;
-  }
-  
   #search-btn {
-    display: inline-block;
+    display: block;
     padding: 10px;
+    margin-top: 20px;
     font-size: 16px;
     color: #fff;
     background-color: #d25757;
@@ -79,9 +64,7 @@ input[type='text'] {
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Assistent', sans-serif;
-    margin-right: 5px;
   }
-  
   button{
     display: block;
     padding: 10px;

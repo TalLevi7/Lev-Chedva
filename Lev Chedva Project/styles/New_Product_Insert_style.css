@@ -16,28 +16,17 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 350px;
-}
-
-button.delButton {
-  background-color: #d25757;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
-  font-size: 16px;
-  padding: 5px 10px;
+  width: 300px;
 }
 
 button.delButton:hover {
-  background-color: #c61f1f;
+  background-color: #d32f2f;
 }
 
 form {
   display: flex;
   flex-direction: column;
- 
+  align-items: flex-end;
   margin-top: 50px;
   position: relative;
 }
@@ -46,8 +35,6 @@ form {
 label {
   font-size: 18px;
   margin-bottom: 10px;
-  text-align: right;
-  float: right;
 }
 
 input[type="text"],
@@ -73,7 +60,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-  background-color: #c61f1f;
+  background-color: #3e8e41;
 }
 
 /* Style the form header */
@@ -107,7 +94,7 @@ input:invalid + span {
 button.square-button {
   display: block;
   margin: 0 auto 20px;
-  background-color: #d25757;
+  background-color: #009578;
   color: white;
   font-size: 1.2rem;
   padding: 10px;
@@ -124,28 +111,7 @@ button.square-button a {
 }
 
 button.square-button:hover {
-  background-color: #c61f1f;
-}
-
-/* Style the keywords dropdown */
-.dropdown {
-  position: relative;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 5px;
-  z-index: 1;
-  width: calc(100% - 12px);
-  margin-top: 5px;
-  right: 0;
-}
-
-.dropdown div {
-  padding: 5px;
-  cursor: pointer;
-}
-
-.dropdown div:hover {
-  background-color: #f1f1f1;
+  background-color: #007c65;
 }
 
 /* Style the accessories container */
@@ -154,72 +120,29 @@ button.square-button:hover {
   flex-direction: column;
 }
 
-#accessories-container input {
-  margin-top: 5px;
+.center-label {
+  display: flex;
+  justify-content: center;
+}
+.center-label label {
+  font-size: 24px; /* Adjust the font size as desired */
 }
 
-#add-accessory {
-  margin-top: 10px;
-  align-self: flex-end;
-}
-
-button#add-accessory {
-  padding: 8px 16px;
+.search-button {
+  background-color: #d25757;
+  color: white;
+  font-size: 20px;
+  padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  background-color:  #d25757;
-  color: white;
-  font-size: 14px;
   cursor: pointer;
-  font-family: 'Assistent', sans-serif;
-  width: 150px;
-  height:50px;
-  align-self: center; /* This aligns the button to the center */
+  align-self: center;
+  transition: background-color 0.2s;
 }
 
-button#add-accessory:hover {
+.search-button:hover {
   background-color: #c61f1f;
 }
-
-select#location {
-  align-self: center; /* This aligns the location dropdown to the center */
-  width: 320px;
-  font-size: 18px;
-  padding: 8px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 20px;
-}
-
-
-/* Style the accessories container */
-
-
-/* Style the accessories container */
-#accessories-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.accessory-div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 320px; /* This makes the div a little longer */
-  position: relative;
-}
-
-.accessory {
-  flex-grow: 1; /* This makes the input field take up the remaining space */
-}
-
-.delButton {
-  position: absolute;
-  left: -100px; /* Adjust this value to set the button's position */
-}
-
-
 .logo-container {
   display: flex;
   justify-content: center;
@@ -229,3 +152,4 @@ select#location {
 .logo-container img {
   max-width: 150px; 
 }
+

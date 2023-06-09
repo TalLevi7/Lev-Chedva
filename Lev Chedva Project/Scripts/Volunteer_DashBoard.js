@@ -51,7 +51,7 @@ function createButtons(autorizations) {
 
   const authMap = {
     "10": { text: "פתיחת שינוע חדש", href: "New_Event.html" },
-    "11": { text: "סטאטוס אירועים פתוחים", href: "Events_In_Action.html" },
+    "11": { text: "אירועים בטיפול", href: "Events_In_Action.html" },
     "12": { text: "אירועים פתוחים", href: "Volunteer_Transport_Panel.html" },
     "13": { text: "האירועים שלי", href: "Volunteer_Events.html" },
     "14": { text: "אירועים סגורים", href: "Closed_Events.html" },

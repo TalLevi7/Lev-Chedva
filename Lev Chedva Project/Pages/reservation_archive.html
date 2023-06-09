@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation Archive</title>
+    <title>ארכיב הזמנות</title>
     <link rel="stylesheet" href="../styles/reservation_archive.css">
     <link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
 </head>
@@ -14,8 +14,11 @@
               <img src="../Pictures/logoLevChedva.png" alt="Logo" />
             </a>
           </div>
+          <h1>ארכיב הזמנות</h1>
+          <div id="searchContainer">
         <input type="text" id="search-input" placeholder="Search" />
         <button id="search-btn">Search</button>
+    </div>
         <table id="reservation-table">
             <thead>
                 <tr>
@@ -44,13 +47,20 @@
     const reservationTableBody = document.getElementById('reservation-table-body');
     
     // Function to get the reservation archive
-    async function getReservationArchive() {
-        const snapshot = await db.collection("reservation archive").get();
-        snapshot.forEach(doc => {
-            displayDoc(doc);
-        });
-    }
-    
+// Function to get the reservation archive
+async function getReservationArchive() {
+  const snapshot = await db
+    .collection("reservation archive")
+    .get();
+
+  const docs = snapshot.docs.map(doc => doc); // Convert the snapshot to an array of documents
+  const sortedDocs = docs.sort((a, b) => b.id.localeCompare(a.id)); // Sort the documents by document ID in descending order
+
+  sortedDocs.forEach((doc) => {
+    displayDoc(doc);
+  });
+}
+ 
     const hebrewLabels = {
         categorial_number: 'מספר סידורי',
         contactName: 'שם איש קשר',
@@ -133,21 +143,31 @@
     }
     
     // Function to search across the collection
-    async function searchAcrossCollection(searchTerm) {
-        reservationTableBody.innerHTML = "";
-        const snapshot = await db.collection("reservation archive").orderBy("reservationDate", "asc").get();
-    
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            for (let key in data) {
-                if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
-                    displayDoc(doc);
-                    break;
-                }
-            }
-        });
+   // Function to search across the collection
+// Function to search across the collection
+// Function to search across the collection
+async function searchAcrossCollection(searchTerm) {
+  reservationTableBody.innerHTML = "";
+  const snapshot = await db
+    .collection("reservation archive")
+    .orderBy(firebase.firestore.FieldPath.documentId(), "asc")
+    .get();
+
+  const docs = snapshot.docs.reverse(); // Reverse the order of the documents
+
+  docs.forEach((doc) => {
+    const data = doc.data();
+    for (let key in data) {
+      if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+        displayDoc(doc);
+        break;
+      }
     }
-    
+  });
+}
+
+
+
     searchBtn.onclick = function() {
         searchAcrossCollection(searchInput.value);
     }
@@ -156,10 +176,10 @@
     getReservationArchive();
         </script>
     </div>
-    <footer>
+    <!-- <footer>
         <p class="copyright">
             &copy; 2023 LevChedva. All rights reserved.
           </p>
-    </footer>
+    </footer> -->
 </body>
 </html>

@@ -51,13 +51,13 @@
   
       async function searchProduct() {
         const productName = document.getElementById('product-name').value;
-        const querySnapshot = await db.collection('inventory').where('product_name', '==', productName).get();
+        const querySnapshot = await db.collection('inventory').where('categorial_number', '==', productName).get();
   
         if (!querySnapshot.empty) {
           const docSnapshot = querySnapshot.docs[0];
           const data = docSnapshot.data();
   
-          document.getElementById('product-name').value = data.product_name;
+          document.getElementById('product-name').value = data.categorial_number;
           document.getElementById('product-description').value = data.product_description;
           document.getElementById('product-quantity').value = data.product_quantity;
           document.getElementById('update-form').style.display = 'block';
@@ -79,7 +79,7 @@
         const querySnapshot = await db.collection('inventory').where('product_name', '==', productName).get();
   
         if (querySnapshot.empty) {
-          alert('No product found with this name.');
+          alert('לא נמצא מוצר בשם זה');
           return;
         }
   
@@ -91,23 +91,23 @@
             'product_quantity': parseInt(docSnapshot.data().product_quantity) + parseInt(quantityUpdate)
           })
           .then(() => {
-            alert('Product quantity updated successfully!');
+            alert('כמות המוצר עודכנה בהצלחה');
             form.reset();
             // Refresh the page
             location.reload();
           })
           .catch((error) => {
             console.error('Error updating product quantity: ', error);
-            alert('Failed to update product quantity.');
+            alert('שגיאה בעדכון הכמות');
           });
       });
     </script>
   </div>
-  <footer>
+  <!-- <footer>
     <p class="copyright">
         &copy; 2023 LevChedva. All rights reserved.
       </p>
-</footer>
+</footer> -->
 </body>
 
 </html>
