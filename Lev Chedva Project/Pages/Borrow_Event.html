@@ -18,6 +18,7 @@
           <img src="../Pictures/logoLevChedva.png" alt="Logo" />
       </a>
   </div>
+  <h1>השאלת מוצר</h1>
   <div id="container">
       <input type="text" id="search-input" placeholder="הכנס שם מוצר" />
       <button id="search-button">חפש לפי שם מוצר</button>
@@ -150,7 +151,7 @@ switch (key) {
     }
       getBorrowCounter();
     
-      searchBtn.addEventListener('click', async () => {
+    searchBtn.addEventListener('click', async () => {
     const itemName = searchInput.value;
 
     const itemRef = firebase.firestore().collection('inventory').where('categorial_number', '==', itemName);
@@ -206,7 +207,7 @@ let CatNum=null;
           const itemRef = firebase.firestore().collection('inventory').doc(reservationData.categorial_number);
           CatNum=reservationData.categorial_number;
           const itemSnapshot = await itemRef.get();
-          
+
           if (itemSnapshot.exists) {
         
             itemDetails.style.display = 'block';
@@ -277,7 +278,7 @@ let CatNum=null;
           const newStatus = newQuantity > 0 ? 'free' : 'none';
           
           const borrowedItemData = {
-              product_name:itemSnapshot.data().product_name,
+              // product_name:itemSnapshot.data().product_name,
               contactName: contactName.value,
               contactPhone: contactPhone.value,
               contactPhone2: contactPhone2.value,

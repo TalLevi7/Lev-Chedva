@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ארכיב השאלות</title>
-    <link rel="stylesheet" type="text/css" href="../styles/reservation_archive.css">
+    <link rel="stylesheet" type="text/css" href="../styles/borrowed_archive.css">
 	<link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
 </head>
 <body>
@@ -103,26 +103,26 @@ function displayDoc(doc) {
 
 // Displaying details of each document
 function displayDetails(doc) {
-    const skipKeys = ['contactName', 'returnedDate', 'catergorialNumber'];
-    let detailsRow = document.createElement('tr');
-    let detailsCell = document.createElement('td');
-    let detailsList = document.createElement('ul');
+  const skipKeys = ['contactName', 'returnedDate', 'catergorialNumber'];
+  let detailsRow = document.createElement('tr');
+  let detailsCell = document.createElement('td');
+  let detailsList = document.createElement('ul');
 
-    detailsCell.colSpan = 5;
+  detailsCell.colSpan = 5;
 
-    Object.entries(doc.data()).forEach(([key, value]) => {
-        if (skipKeys.includes(key)) return;
-        let listItem = document.createElement('li');
-        listItem.textContent = hebrewLabels[key] + ": " + value;
-        detailsList.appendChild(listItem);
-    });
+  Object.entries(doc.data()).forEach(([key, value]) => {
+    if (skipKeys.includes(key)) return;
+    let listItem = document.createElement('li');
+    listItem.textContent = hebrewLabels[key] + ": " + value;
+    detailsList.appendChild(listItem);
+  });
 
-    detailsCell.appendChild(detailsList);
-    detailsRow.appendChild(detailsCell);
-    detailsRow.id = 'details-' + doc.id;
+  detailsCell.appendChild(detailsList);
+  detailsRow.appendChild(detailsCell);
+  detailsRow.id = 'details-' + doc.id;
 
-    let mainRow = document.getElementById(doc.id);
-    mainRow.parentNode.insertBefore(detailsRow, mainRow.nextSibling);
+  let mainRow = document.getElementById(doc.id);
+  mainRow.parentNode.insertBefore(detailsRow, mainRow.nextSibling);
 }
 
 // Get the borrow list on initial page load
@@ -130,48 +130,47 @@ getBorrowList();
 
 // Filter function for the search bar
 searchInput.addEventListener('input', function() {
-    searchAcrossCollection(this.value);
+  searchAcrossCollection(this.value);
 });
 
 // Searching across the collection
 async function searchAcrossCollection(searchTerm) {
-    borrowTableBody.innerHTML = "";
-    const borrowListSet = new Set();
-    const snapshot = await db.collection("Borrowed Archive").get();
+  borrowTableBody.innerHTML = "";
+  const borrowMap = new Map(); // Map to store the unique documents
 
-    snapshot.forEach((doc) => {
-        if (doc.exists) {
-            const data = doc.data();
-            for (let key in data) {
-                if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
-                    borrowListSet.add(doc);
-                }
-            }
-        } else {
-          // Otherwise, create and display it
-          displayDetails(doc);
+  const snapshot = await db.collection("Borrowed Archive").get();
+
+  snapshot.forEach((doc) => {
+    if (doc.exists) {
+      const data = doc.data();
+      for (let key in data) {
+        if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+          borrowMap.set(doc.id, doc); // Store the document in the map with its ID as the key
         }
-      });
-    
-      borrowTableBody.appendChild(row);
+      }
+    } else {
+      // Otherwise, create and display details
+      displayDetails(doc);
     }
-    
-    // Displaying details of each document
- 
-    
-  
-    
-    // Displaying filtered data
-    function displayBorrowList(docs) {
-        borrowTableBody.innerHTML = '';
-        docs.forEach(displayDoc);
-    }
+  });
+
+  const uniqueDocs = Array.from(borrowMap.values()); // Get the unique documents from the map
+
+  displayBorrowList(uniqueDocs); // Pass the unique documents to displayBorrowList
+}
+
+// Displaying filtered data
+function displayBorrowList(docs) {
+  borrowTableBody.innerHTML = '';
+  docs.forEach(displayDoc);
+}
+
     </script>
     </div>
-    <footer>
+    <!-- <footer>
         <p class="copyright">
             &copy; 2023 LevChedva. All rights reserved.
           </p>
-    </footer>
+    </footer> -->
 </body>
 </html>

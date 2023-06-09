@@ -28,7 +28,7 @@ async function searchItemByProductName(productName) {
     }
 
     const firstItemSnapshot = inventoryItemSnapshot.docs[0];
-    ProductName = firstItemSnapshot.data().product_name;
+    ProductName = firstItemSnapshot.data().categorialNumber;
     CatNum = firstItemSnapshot.id;
     const inventoryItemData = firstItemSnapshot.data();
 
@@ -49,7 +49,7 @@ async function searchItemByCategorialNumber(categorialNumber) {
         alert('מוצר לא נמצא');
         return;
     }
-    ProductName=inventoryItemSnapshot.data().product_name;
+    ProductName=inventoryItemSnapshot.data().categorialNumber;
     CatNum=categorialNumber;
     const inventoryItemData = inventoryItemSnapshot.data();
     if (parseInt(reservationQuantity.value) <0) {
@@ -78,7 +78,7 @@ reserveBtn.addEventListener('click', async () => {
         return;
     }
     const reservationData = {
-        product_name:ProductName,
+        // product_name:ProductName,
         categorial_number:CatNum,
         contactName:contactName.value,
         patientName: patientName.value,
@@ -158,8 +158,7 @@ function displayItemDetails(ProductData) {
     detailsCell.appendChild(detailsList);
 
     const dataItems = [
-        { label: 'מס סידורי: ', value: ProductData.categorial_number },
-        { label: 'שם: ', value: ProductData.product_name },
+        { label: 'שם: ', value: ProductData.categorial_number },
         { label: 'תיאור: ', value: ProductData.product_description },
         { label: 'מילות מפתח: ', value: ProductData.keywords },
         { label: 'כמות: ', value: ProductData.product_quantity },
