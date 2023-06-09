@@ -71,16 +71,34 @@ function createButtons(autorizations) {
     // Add more mappings here...
   };
 
-  autorizations.forEach(auth => {
-    if (authMap[auth]) {
-      let btn = document.createElement('button');
-      btn.textContent = authMap[auth].text;
-      btn.onclick = function() {
-        window.location.href = authMap[auth].href;
-      };
-      navbar.appendChild(btn);
-    }
-  });
+  const mobileButtons = ["12", "13"]; // Example: Display buttons with authorization "10" and "11"
+
+  if (window.matchMedia('(max-width: 767px)').matches) {
+    // Mobile devices: Display only mobile buttons
+    mobileButtons.forEach(auth => {
+      if (authMap[auth] && autorizations.includes(auth)) {
+        let btn = document.createElement('button');
+        btn.textContent = authMap[auth].text;
+        btn.onclick = function() {
+          window.location.href = authMap[auth].href;
+        };
+        btn.classList.add('mobile-button');
+        navbar.appendChild(btn);
+      }
+    });
+  } else {
+    // Desktop devices: Display all buttons
+    Object.keys(authMap).forEach(auth => {
+      if (authMap[auth] && autorizations.includes(auth)) {
+        let btn = document.createElement('button');
+        btn.textContent = authMap[auth].text;
+        btn.onclick = function() {
+          window.location.href = authMap[auth].href;
+        };
+        navbar.appendChild(btn);
+      }
+    });
+  }
 }
 
 
