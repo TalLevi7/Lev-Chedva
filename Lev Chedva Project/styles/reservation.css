@@ -33,6 +33,8 @@ label {
 
 input[type="text"],
 input[type="number"],
+input[type="tel"],
+input[type="date"],
 #remarks {
   font-size: 18px;
   padding: 8px;
@@ -45,19 +47,18 @@ input[type="number"],
 button {
   background-color: #d25757;
   color: white;
-  font-size: 18px; /* Adjust to your preference */
-  padding: 10px 20px; /* Adjust to your preference */
+  font-size: 18px;
+  padding: 10px 20px;
   border: none;
   cursor: pointer;
   border-radius: 8px;
   margin-right: 10px;
   margin: 4px;
-  width: 200px; /* Set a specific width */
-  height: 50px; /* Set a specific height */
-  text-align: center; /* Center the text */
+  width: 200px;
+  height: 50px;
+  text-align: center;
   border: 1.5px solid rgb(99, 98, 98);
 }
-
 
 #search-button,
 #ticket-search-btn {
@@ -65,8 +66,9 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 200px; /* This will ensure the buttons have the same minimum width */
+  min-width: 200px;
 }
+
 button:hover {
   background-color: #c61f1f;
 }
@@ -75,7 +77,6 @@ button:hover {
 #item-details {
   display: flex;
   flex-direction: column;
-  
   padding: 16px;
   border-radius: 4px;
   width: 300px;
@@ -88,14 +89,13 @@ pre {
   word-wrap: break-word;
 }
 
-input[type="text"],
-input[type="number"],
-input[type="date"],
-#remarks {
-  font-size: 18px;
-  padding: 8px;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  width: 300px;
-  margin-bottom: 20px;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  margin-bottom: 5px;
 }

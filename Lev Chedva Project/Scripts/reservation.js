@@ -11,12 +11,15 @@ const patientName = document.getElementById('patient-name');
 const volunteerName = document.getElementById('volunteer-name');
 const reservationQuantity = document.getElementById('reservation-quantity');
 const reservedOn=document.getElementById('reservedOn');
+const reservedUntil=document.getElementById('reservedUntil');
+const remarks=document.getElementById('remarks');
+
 
 let foundItemCategorialNumber = null;
 let ProductName=null;
 let CatNum=null;
 async function searchItemByProductName(productName) {
-    const inventoryItemRef = firebase.firestore().collection('inventory').where('product_name', '==', productName);
+    const inventoryItemRef = firebase.firestore().collection('inventory').where('categorialNumber', '==', productName);
     const inventoryItemSnapshot = await inventoryItemRef.get();
 
     if (inventoryItemSnapshot.empty) {
@@ -49,8 +52,8 @@ async function searchItemByCategorialNumber(categorialNumber) {
     ProductName=inventoryItemSnapshot.data().product_name;
     CatNum=categorialNumber;
     const inventoryItemData = inventoryItemSnapshot.data();
-    if (inventoryItemData.product_quantity <= 0) {
-        alert('Not enough in inventory');
+    if (parseInt(reservationQuantity.value) <0) {
+        alert('אין מספיק בלאי');
         return;
     }
     foundItemCategorialNumber = categorialNumber;
@@ -65,16 +68,15 @@ function displayItemData(itemSnapshot) {
 }
 
 searchCatNumberBtn.addEventListener('click', () => {
-    searchItemByProductName(catNumberInput.value);
+    searchItemByCategorialNumber(catNumberInput.value);
 });
 
 
 reserveBtn.addEventListener('click', async () => {
     if (!foundItemCategorialNumber) {
-        alert('No item found to reserve.');
+        alert('מוצר לא נמצא');
         return;
     }
-    console.log(reservedOn.value);
     const reservationData = {
         product_name:ProductName,
         categorial_number:CatNum,
@@ -85,15 +87,17 @@ reserveBtn.addEventListener('click', async () => {
         reservationDate: reservationDate.value,
         volunteerName: volunteerName.value,
         quantity: parseInt(reservationQuantity.value) || 0,
-        reservedOn: reservedOn.value
+        reservedOn: reservedOn.value,
+        reservedUntil:reservedUntil.value,
+        remarks:remarks.value
         
     };
     const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
     const inventoryItemSnapshot = await inventoryItemRef.get();
     const inventoryItemData = inventoryItemSnapshot.data();
     
-    if (inventoryItemData.product_quantity < reservationData.quantity) {
-        alert('Not enough in inventory');
+    if (parseInt(inventoryItemData.product_quantity) < reservationData.quantity) {
+        alert('אין מספיק במלאי');
         return;
     }
     
@@ -123,9 +127,8 @@ reserveBtn.addEventListener('click', async () => {
     try {
         await  getBorrowCounter();
         
-        // Get borrow counter
-     
-         
+        
+    
         const reservationListRef = firebase.firestore().collection('reservation list').doc(reservationCounter.toString());
         const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
     
@@ -133,15 +136,15 @@ reserveBtn.addEventListener('click', async () => {
         await borrowCounterRef.update({ 'reservation counter': reservationCounter + 1 });
 
         await inventoryItemRef.update({ 
-            reserved_quantity: inventoryItemData.reserved_quantity + reservationData.quantity,
-            product_quantity: inventoryItemData.product_quantity - reservationData.quantity
+            reserved_quantity: parseInt(inventoryItemData.reserved_quantity) + reservationData.quantity,
+            product_quantity: parseInt(inventoryItemData.product_quantity) - reservationData.quantity
         });
     
-        alert('Item has been successfully reserved.');
+        alert('המוצר הוזמן בהצלחה');
         location.reload();
     } catch (error) {
         console.error('Error reserving the itereservedOnm:', error);
-        alert('Failed to reserve the item.');
+        alert('שגיאה בהזמנת המוצר.');
     }
 });
 

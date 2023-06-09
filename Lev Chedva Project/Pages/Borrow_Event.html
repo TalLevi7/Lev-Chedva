@@ -23,75 +23,85 @@
       <button id="search-button">חפש לפי שם מוצר</button>
       <button id="ticket-search-btn">חפש לפי כרטיס הזמנה</button>
   </div>
-  <div id="item-data" style="display: none;"></div>
-  <div id="item-details" style="display: none;">
-    <div class="field-container">
-      <label for="patient-name">שם מטופל:</label>
-      <input type="text" id="patient-name" name="patient-name" />
+
+
+
+
+    <div id="item-data" style="display: none;"></div>
+    <div id="item-details" style="display: none;">
+      <div class="field-container">
+        <label for="patient-name">שם מטופל:</label>
+        <input type="text" id="patient-name" name="patient-name" />
+      </div>
+      <div class="field-container">
+        <label for="address">כתובת מטופל:</label>
+        <input type="text" id="address" name="address" />
+      </div>
+      <div class="field-container">
+        <label for="contact-name">שם האיש קשר:</label>
+        <input type="text" id="contact-name" name="contact-name" />
+      </div>
+      <div class="field-container">
+        <label for="contact-id">ת.ז איש קשר:</label>
+        <input type="text" id="contact-id" name="contact-id" />
+      </div>
+      <div class="field-container">
+        <label for="contact-phone">טלפון איש קשר:</label>
+        <input type="text" id="contact-phone" name="contact-phone" />
+      </div>
+      <div class="field-container">
+        <label for="contact-phone2">טלפון איש קשר נוסף:</label>
+        <input type="text" id="contact-phone2" name="contact-phone2" />
+      </div>
+      <div class="field-container">
+        <label for="borrowing-quantity">כמות להשאלה:</label>
+        <input type="number" id="borrowing-quantity" name="borrowing-quantity" />
+      </div>
+      <div class="field-container">
+        <label for="borrowing-from">משאיל מתאריך:</label>
+        <input type="date" id="borrowing-from" name="borrowing-from" />
+      </div>
+      <div class="field-container">
+        <label for="borrowing-until">משאיל עד לתאריך:</label>
+        <input type="date" id="borrowing-until" name="borrowing-until" />
+      </div>
+      <div class="field-container">
+        <label for="remarks">הערות:</label>
+        <textarea id="remarks" name="remarks" rows="4" cols="50"></textarea>
+      </div>
+      <div class="field-container">
+        <label for="loaning_volunteer">שם המתנדב:</label>
+        <input type="text" id="loaning_volunteer" name="loaning_volunteer" />
+      </div>  
+        <button id="save-btn">השאל</button>
     </div>
-    <div class="field-container">
-      <label for="address">כתובת מטופל:</label>
-      <input type="text" id="address" name="address" />
-    </div>
-    <div class="field-container">
-      <label for="contact-name">שם האיש קשר:</label>
-      <input type="text" id="contact-name" name="contact-name" />
-    </div>
-    <div class="field-container">
-      <label for="contact-id">ת.ז איש קשר:</label>
-      <input type="text" id="contact-id" name="contact-id" />
-    </div>
-    <div class="field-container">
-      <label for="contact-phone">טלפון איש קשר:</label>
-      <input type="text" id="contact-phone" name="contact-phone" />
-    </div>
-    <div class="field-container">
-      <label for="contact-phone2">טלפון איש קשר נוסף:</label>
-      <input type="text" id="contact-phone2" name="contact-phone2" />
-    </div>
-    <div class="field-container">
-      <label for="borrowing-quantity">כמות להשאלה:</label>
-      <input type="text" id="borrowing-quantity" name="borrowing-quantity" />
-    </div>
-    <div class="field-container">
-      <label for="borrowing-from">משאיל מתאריך:</label>
-      <input type="date" id="borrowing-from" name="borrowing-from" />
-    </div>
-    <div class="field-container">
-      <label for="borrowing-until">משאיל עד לתאריך:</label>
-      <input type="date" id="borrowing-until" name="borrowing-until" />
-    </div>
-    <div class="field-container">
-      <label for="loaning_volunteer">שם המתנדב:</label>
-      <input type="text" id="loaning_volunteer" name="loaning_volunteer" />
-    </div>
-      
-      <button id="save-btn">השאל</button>
-  </div>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
-  <script src="../firebase.js"></script>
-  <script src="../Scripts/auth.js"></script>
-  <script>
-      const searchInput = document.getElementById('search-input');
-    const searchBtn = document.getElementById('search-button');
-    const itemData = document.getElementById('item-data');
-    const itemDetails = document.getElementById('item-details');
-    const saveBtn = document.getElementById('save-btn');
-    const contactName = document.getElementById('contact-name');
-    const contactPhone = document.getElementById('contact-phone');
-    const contactPhone2 = document.getElementById('contact-phone2');
-    const contactId = document.getElementById('contact-id');
-    const patientName = document.getElementById('patient-name');
-    const borrowingFrom = document.getElementById('borrowing-from');
-    const borrowingUntil = document.getElementById('borrowing-until');
-    const address = document.getElementById('address');
-    const loaning_volunteer = document.getElementById('loaning_volunteer');
-    const borrowingQuantity = document.getElementById('borrowing-quantity');
-    const ticketSearchBtn = document.getElementById('ticket-search-btn');
-    
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <script src="../firebase.js"></script>
+    <script src="../Scripts/auth.js"></script>
+    <script>
+        const searchInput = document.getElementById('search-input');
+      const searchBtn = document.getElementById('search-button');
+      const itemData = document.getElementById('item-data');
+      const itemDetails = document.getElementById('item-details');
+      const saveBtn = document.getElementById('save-btn');
+      const contactName = document.getElementById('contact-name');
+      const contactPhone = document.getElementById('contact-phone');
+      const contactPhone2 = document.getElementById('contact-phone2');
+      const contactId = document.getElementById('contact-id');
+      const patientName = document.getElementById('patient-name');
+      const borrowingFrom = document.getElementById('borrowing-from');
+      const borrowingUntil = document.getElementById('borrowing-until');
+      const address = document.getElementById('address');
+      const loaning_volunteer = document.getElementById('loaning_volunteer');
+      const remarks=document.getElementById('remarks');
+      const borrowingQuantity = document.getElementById('borrowing-quantity');
+      const ticketSearchBtn = document.getElementById('ticket-search-btn');
+
+
+
     let borrowCounter = null;
     let borrowCounterRef = firebase.firestore().collection('Tools').doc('Events Counter');
     
@@ -138,71 +148,75 @@ switch (key) {
         borrowCounter = doc.data()['borrow counter'];
       }
     }
+      getBorrowCounter();
     
-    getBorrowCounter();
+      searchBtn.addEventListener('click', async () => {
+    const itemName = searchInput.value;
+
+    const itemRef = firebase.firestore().collection('inventory').where('categorial_number', '==', itemName);
+
+    const itemSnapshot = await itemRef.get();
+
+    if (!itemSnapshot.empty) {
+        // Item found, display details
+        itemDetails.style.display = 'block';
+        const item = itemSnapshot.docs[0].data();
+
+        // Display item details in the item-data section
+        let detailsList = document.getElementById('item-data');
+        detailsList.innerHTML = '';
+        detailsList.style.display = 'block'; // Make the item data list visible
+
+        // Iterate over item properties and display them
+        for (let [key, value] of Object.entries(item)) {
+          if (key === 'categorial_number') {
+            key = 'שם מוצר'; // Change the label from 'מספר סידורי' to 'שם מוצר'
+          } else if (key === 'status') {
+            value = statusTranslations[value] ? statusTranslations[value] : value;
+            } else if (key === 'product_name') {
+              continue; // Skip displaying the "product_name" field
+            }
+          const listItem = document.createElement('li');
+          listItem.textContent = `${getHebrewLabel(key)}: ${value}`;
+          detailsList.appendChild(listItem);
+        }
+    } else {
+        // Item not found
+        alert('המוצר לא נמצא או לא זמין');
+
+    }
     
-    searchBtn.addEventListener('click', async () => {
-  const itemName = searchInput.value;
-
-  const itemRef = firebase.firestore().collection('inventory').where('product_name', '==', itemName);
-
-  const itemSnapshot = await itemRef.get();
-
-  if (!itemSnapshot.empty) {
-      // Item found, display details
-      itemDetails.style.display = 'block';
-      const item = itemSnapshot.docs[0].data();
-
-      // Display item details in the item-data section
-      let detailsList = document.getElementById('item-data');
-      detailsList.innerHTML = '';
-      detailsList.style.display = 'block'; // Make the item data list visible
-
-      // Iterate over item properties and display them
-      for (let [key, value] of Object.entries(item)) {
-        if (key === 'categorial_number') {
-          key = 'שם מוצר'; // Change the label from 'מספר סידורי' to 'שם מוצר'
-        } else if (key === 'status') {
-          value = statusTranslations[value] ? statusTranslations[value] : value;
-          } else if (key === 'product_name') {
-            continue; // Skip displaying the "product_name" field
-          }
-        const listItem = document.createElement('li');
-        listItem.textContent = `${getHebrewLabel(key)}: ${value}`;
-        detailsList.appendChild(listItem);
-      }
-  } else {
-      // Item not found
-      alert('המוצר לא נמצא או לא זמין');
-  }
-});
+    
+  });
+  
 
 let TicketValid=false;
 let OldBorrow=null;     
 let CatNum=null;
 
-  ticketSearchBtn.addEventListener('click', async () => {
-      const ticketNumber = searchInput.value;
-   
-      const reservationListRef = firebase.firestore().collection('reservation list');
-      const reservationDoc = await reservationListRef.doc(ticketNumber).get();
-    
-      if (reservationDoc.exists) {
-        const reservationData = reservationDoc.data();
-        const itemRef = firebase.firestore().collection('inventory').doc(reservationData.categorial_number);
-        CatNum=reservationData.categorial_number;
-        const itemSnapshot = await itemRef.get();
+
+    ticketSearchBtn.addEventListener('click', async () => {
+        const ticketNumber = searchInput.value;
+     
+        const reservationListRef = firebase.firestore().collection('reservation list');
+        const reservationDoc = await reservationListRef.doc(ticketNumber).get();
+      
+        if (reservationDoc.exists) {
+          const reservationData = reservationDoc.data();
+          const itemRef = firebase.firestore().collection('inventory').doc(reservationData.categorial_number);
+          CatNum=reservationData.categorial_number;
+          const itemSnapshot = await itemRef.get();
+          
+          if (itemSnapshot.exists) {
         
-        if (itemSnapshot.exists) {
-          console.log("hello");
-          itemDetails.style.display = 'block';
-          const item = itemSnapshot.data();
-          let detailsList = document.getElementById('item-data');
-      detailsList.innerHTML = '';
-      detailsList.style.display = 'block'; // Make the item data list visible
+            itemDetails.style.display = 'block';
+            const item = itemSnapshot.data();
+            let detailsList = document.getElementById('item-data');
+        detailsList.innerHTML = '';
+        detailsList.style.display = 'block'; // Make the item data list visible
 
       for (let [key, value] of Object.entries(item)) {
-  let label = hebrewLabels[key] ? hebrewLabels[key] : key;
+  let label =getHebrewLabel(key);
 
   if (key === 'status') {
       value = statusTranslations[value] ? statusTranslations[value] : value;
@@ -223,71 +237,86 @@ let CatNum=null;
       }
     });
 
-    saveBtn.addEventListener('click', async () => {
-        let itemName = searchInput.value;
-        if (!contactId.value) {
-          event.preventDefault(); // Prevent form submission
-           alert('אנא מלא את שדה ת.ז איש קשר');
-           }
 
-          if(TicketValid)
-              itemName=CatNum;
-        const itemRef = firebase.firestore().collection('inventory').doc(itemName);
-        const borrowedItemsRef = firebase.firestore().collection('Borrowed Items').doc(contactId.value);
-        const borrowTicketsRef = firebase.firestore().collection('Borrow Tickets').doc(borrowCounter.toString());
-       
-        const reservationListRef = firebase.firestore().collection('reservation list').doc(searchInput.value);
-        const itemSnapshot = await itemRef.get();
-        if (!itemSnapshot.exists || itemSnapshot.data().product_quantity <= 0) {
-            alert('Item not in inventory.');
-            return;
-        }
-        let newQuantity =itemSnapshot.data().product_quantity;
-        if(!TicketValid)
-        newQuantity-= Number(borrowingQuantity.value);
-        
-        if(newQuantity<=0){
-            alert("אין מספיק כמות במלאי");
-            return;
-        }
-        const newStatus = newQuantity > 0 ? 'free' : 'none';
-        
-        const borrowedItemData = {
-            product_name:itemSnapshot.data().product_name,
-            contactName: contactName.value,
-            contactPhone: contactPhone.value,
-            contactPhone2: contactPhone2.value,
-            contactId: contactId.value,
-            patientName: patientName.value,
-            borrowingFrom: borrowingFrom.value,
-            borrowingUntil: borrowingUntil.value,
-            categorialNumber: itemName,
-            address: address.value,
-            loaning_volunteer: loaning_volunteer.value,
-            quantity: Number(borrowingQuantity.value)
-        };
     
-        try {
-            if (TicketValid) {
-              const itemUpdateData = { status: newStatus };
-              itemUpdateData.product_quantity = itemSnapshot.data().product_quantity;
-              const reservationSnapshot = await reservationListRef.get();
-              const reservationData = reservationSnapshot.data();
-              const reservationArchiveRef = firebase.firestore().collection('reservation archive').doc(searchInput.value);
-              const oldBorrow = reservationData.quantity;
-                if (oldBorrow !== borrowedItemData.quantity) {
-                   const difference = oldBorrow - borrowedItemData.quantity;
-                   itemUpdateData.product_quantity = itemSnapshot.data().product_quantity + difference;
-                  
-                }
-                    itemUpdateData.reserved_quantity=0; 
-                    newQuantity=itemUpdateData.product_quantity;
-                    await itemRef.update(itemUpdateData);
-                    await reservationArchiveRef.set(reservationData);
-                    await reservationListRef.delete();
-              
-                  
-            }
+
+      saveBtn.addEventListener('click', async () => {
+          let itemName = searchInput.value;
+          if (!contactId.value) {
+            event.preventDefault(); // Prevent form submission
+             alert('אנא מלא את שדה ת.ז איש קשר');
+             return;
+             }
+
+             if (!borrowingQuantity.value) {
+            event.preventDefault(); // Prevent form submission
+             alert('אנא מלא את הכמות להשאלה');
+             return;
+             }
+
+            if(TicketValid)
+                itemName=CatNum;
+          const itemRef = firebase.firestore().collection('inventory').doc(itemName);
+          const borrowedItemsRef = firebase.firestore().collection('Borrowed Items').doc(contactId.value);
+          const borrowTicketsRef = firebase.firestore().collection('Borrow Tickets').doc(borrowCounter.toString());
+         
+          const reservationListRef = firebase.firestore().collection('reservation list').doc(searchInput.value);
+          const itemSnapshot = await itemRef.get();
+          if (!itemSnapshot.exists || itemSnapshot.data().product_quantity <= 0) {
+              alert('מוצר אינו במלאי');
+              return;
+          }
+          let newQuantity =itemSnapshot.data().product_quantity;
+          if(!TicketValid)
+          newQuantity-= Number(borrowingQuantity.value);
+          
+          if(newQuantity<0){
+              alert("אין מספיק כמות במלאי");
+              return;
+          }
+          const newStatus = newQuantity > 0 ? 'free' : 'none';
+          
+          const borrowedItemData = {
+              product_name:itemSnapshot.data().product_name,
+              contactName: contactName.value,
+              contactPhone: contactPhone.value,
+              contactPhone2: contactPhone2.value,
+              contactId: contactId.value,
+              patientName: patientName.value,
+              borrowingFrom: borrowingFrom.value,
+              borrowingUntil: borrowingUntil.value,
+              categorialNumber: itemName,
+              address: address.value,
+              loaning_volunteer: loaning_volunteer.value,
+              remarks:remarks.value,
+              quantity: Number(borrowingQuantity.value)
+          };
+      
+          try {
+              if (TicketValid) {
+                const itemUpdateData = { status: newStatus };
+                itemUpdateData.product_quantity = itemSnapshot.data().product_quantity;
+                const reservationSnapshot = await reservationListRef.get();
+                const reservationData = reservationSnapshot.data();
+                const reservationArchiveRef = firebase.firestore().collection('reservation archive').doc(searchInput.value);
+                const oldBorrow = reservationData.quantity;
+                  if (oldBorrow !== borrowedItemData.quantity) {
+                     const difference = oldBorrow - borrowedItemData.quantity;
+                     itemUpdateData.product_quantity = itemSnapshot.data().product_quantity + difference;
+                     
+                  }
+                    itemUpdateData.reserved_quantity=itemSnapshot.data().reserved_quantity-oldBorrow;  
+                      newQuantity=itemUpdateData.product_quantity;
+                      newReserved= itemUpdateData.reserved_quantity;
+                      await itemRef.update(itemUpdateData);
+                      await reservationArchiveRef.set(reservationData);
+                      await reservationListRef.delete();
+                
+                    
+              }
+            
+
+
             
             await borrowedItemsRef.get().then((docSnapshot) => {
                 if (docSnapshot.exists) {
@@ -306,7 +335,7 @@ let CatNum=null;
             });
     
             await borrowTicketsRef.set(borrowedItemData);
-            await itemRef.update({ status: newStatus, product_quantity: newQuantity });
+            await itemRef.update({ status: newStatus, product_quantity: newQuantity ,reserved_quantity:newReserved});
             await borrowCounterRef.update({ 'borrow counter': borrowCounter + 1 });
             alert('המוצר הושאל בהצלחה');
         } catch (error) {
@@ -336,10 +365,6 @@ let CatNum=null;
   </script>
   </div>
     
-    <footer>
-      <p class="copyright">
-          &copy; 2023 LevChedva. All rights reserved.
-        </p>
-  </footer>
+
 </body>
 </html>

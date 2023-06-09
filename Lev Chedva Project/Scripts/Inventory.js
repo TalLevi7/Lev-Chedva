@@ -119,10 +119,21 @@ function displayProducts(ProductData) {
   const row = document.createElement('tr');
   
   const nameCell = document.createElement('td');
-  nameCell.textContent = ProductData.product_name;
+  nameCell.textContent = ProductData.categorial_number;
   nameCell.style.textAlign = "right";
+
+  const CountCell = document.createElement('td');
+  CountCell.textContent = ProductData.product_quantity;
+  CountCell.style.textAlign = "right";
+
+
+  const KeywordCell = document.createElement('td');
+  KeywordCell.textContent = ProductData.keywords;
+  KeywordCell.style.textAlign = "right";
   
   row.appendChild(nameCell);
+  row.appendChild(CountCell);
+  row.appendChild(KeywordCell);
   ProductsTable.appendChild(row);
 
   row.addEventListener('click', () => {
@@ -135,11 +146,8 @@ function displayProducts(ProductData) {
       const detailsCell = document.createElement('td');
       detailsCell.colSpan = 8;
       const detailsList = document.createElement('ul');
-      const CatNumItem = document.createElement('li');
-
-      CatNumItem.textContent = " מס סידורי: " + ProductData.categorial_number;
       const ProductNameItem = document.createElement('li');
-      ProductNameItem.textContent = "שם: " + ProductData.product_name;
+      ProductNameItem.textContent = "שם: " + ProductData.categorial_number;
       const DescriptionItem = document.createElement('li');
       DescriptionItem.textContent = "תיאור: " + ProductData.product_description;
       const KeywordItem = document.createElement('li');
@@ -160,7 +168,7 @@ function displayProducts(ProductData) {
   
     
       detailsList.appendChild(ProductNameItem);
-      detailsList.appendChild(CatNumItem);
+
       detailsList.appendChild(DescriptionItem);
       detailsList.appendChild(QuantityItem);
       detailsList.appendChild(ReservedQuantityItem);
@@ -267,9 +275,7 @@ function displayProducts(ProductData) {
           }
         };
       
-        makeEditable(ProductNameItem, "product_name");
-        
-
+        makeEditable(ProductNameItem, "categorial_number");
         makeEditable(DescriptionItem, "product_description");
         makeEditable(KeywordItem, "keywords");
         makeEditable(RemarksItem, "remarks");
@@ -291,8 +297,7 @@ function displayProducts(ProductData) {
         }
       
         saveChangesBtn.addEventListener('click', () => {
-          ProductNameItem.textContent = "שם: " + ProductData.product_name;
-          
+          ProductNameItem.textContent = "שם: " + ProductData.categorial_number;
           DescriptionItem.textContent = " תיאור: " + ProductData.product_description;
           QuantityItem.textContent="כמות: " +ProductData.product_quantity;
           KeywordItem.textContent="מילות מפתח "+ProductData.keywords;
@@ -300,15 +305,19 @@ function displayProducts(ProductData) {
           AccessoriesItem.textContent=" מוצרים נלווים: "+ProductData.companion_accessories;
           StatusItem.textContent="סטאטוס: "+translateStatus(ProductData.status);
           LocationItem.textContent = "מיקום: " + ProductData.location;
-
+          
           // update other category fields as needed
       
-          nameCell.textContent = ProductData.product_name;
-          CatNum.textContent = ProductData.categorial_number;
+          nameCell.textContent = ProductData.categorial_number;
+          CountCell.textContent = ProductData.product_quantity;
+          KeywordCell.textContent = ProductData.keywords;
           // update other table cells as needed
           detailsList.removeChild(saveChangesBtn);
+         
           ValidSaveBtn=false;
-        });
+
+        }); 
+        
       });
       
       
@@ -320,18 +329,19 @@ detailsList.appendChild(deleteProductBtn);
 // Step 2: Add an event listener to the "delete" button
 deleteProductBtn.addEventListener('click', async () => {
   // Step 3: Prompt the user to confirm the deletion
-  if (confirm("Are you sure you want to delete this product?")) {
+  if (confirm("האם אתה בטוח שתרצה למחוק מוצר זה?")) {
     // Step 4: Prompt the user to enter the categorical number
-    const enteredCatNum = prompt("Enter the categorial number of the product to confirm:");
+    const enteredCatNum = prompt("הכנס את שם המוצר לאישור:");
     if (enteredCatNum === ProductData.categorial_number) {
-      // Step 5: Delete the product from the Firestore database
+       await deleteProductFromFirestore(ProductData.categorial_number);
+       alert("מוצר נמחק בהצלחה");
+      location.reload(); 
     } else {
-      alert("Incorrect categorial number. Deletion cancelled.");
+      alert("מוצר לא קיים- מחיקה בוטלה");
     }
   }
 });
 
-// ... (previous code)
 
     }
   });
@@ -342,6 +352,16 @@ deleteProductBtn.addEventListener('click', async () => {
 
   
 }
+
+async function deleteProductFromFirestore(CatNum) {
+  try {
+    await ProductsRef.doc(CatNum).delete();
+  } catch (error) {
+    console.error("Error deleting document:", error);
+    throw error;
+  }
+}
+
 
 const translateStatus = (status) => {
   switch (status) {

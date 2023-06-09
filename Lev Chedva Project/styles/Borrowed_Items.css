@@ -10,14 +10,11 @@ h1 {
     font-size: 38px;
     margin-bottom: 20px;
 }
-.search-bar {
-    text-align: center;
-}
+
 #searchContainer {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
-    align-items: center;
 }
 
 #dateInput {
@@ -37,7 +34,7 @@ table {
 th, td {
     border: 1.5px solid rgb(99, 98, 98);
     padding: 10px;
-    text-align: right;
+    text-align: center;
 }
 
 tr:nth-child(even) {
@@ -63,61 +60,31 @@ button {
     cursor: pointer;
     border-radius: 5px;
     transition-duration: 0.4s;
+    border: 1.5px solid rgb(99, 98, 98);
 }
 
 button:hover {
-    background-color: white;
-    color: #c61f1f;
+    background-color: #c61f1f;
+    border: 1.5px solid rgb(99, 98, 98);
 }
-
-  .edit-button,
-.cancel-button {
-    background-color: #d25757;
-    border: none;
-    color: white;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
-    margin: 4px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.edit-button:hover,
-.cancel-button:hover {
-    background-color: white;
-    color: #d25757;
-    border: 1px solid #d25757;
-}
-
-/* Remove the square at the bottom of the expandable row */
-.expandable-row {
-    border-bottom: none;
-  }
-  
-  /* Adjust the style of the actions container */
-  .expandable-row .button-container {
-    border-top: none;
-    border-bottom: none;
-    border-right: none;
-    border-left: none;
-    padding-top: 8px;
-    display: flex;
-    justify-content: flex-start;
-  }
-  
- 
-  
-  
-  .logo-container {
+.logo-container {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
   }
   
   .logo-container img {
-    max-width: 150px;
+    max-width: 150px; 
+  }
+  ul {
+    list-style: none;
   }
   
+  #searchInput{
+    margin-top: 0.2rem;
+   height: 2.5em;
+  }
+ td{
+    max-width:20px;
+    height: auto;
+ }

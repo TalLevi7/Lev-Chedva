@@ -2549,11 +2549,13 @@ input, select, textarea {
 			margin: 0;
 		}
 
+
+		
 /* Header */
 
 	#header {
 		text-align: center;
-		padding: 3em 0 0 0;
+		padding: 2.5em 0 0 0;
 		background-color: #fff;
 		background-image: url("images/bg02.png"), url("images/bg02.png"), url("images/bg01.png"); 
 		background-position: top left,					top left,					top left;
@@ -2574,9 +2576,9 @@ input, select, textarea {
 
 			#logo img {
 				max-width: 100%; /* Adjust the desired width */
-				height: 9rem;
+				height: 7rem;
 				float: right;
-				margin-top: -60px; /* Adjust the desired negative margin */
+				margin-top: -3%; /* Adjust the desired negative margin */
 
 			  }
 			  
