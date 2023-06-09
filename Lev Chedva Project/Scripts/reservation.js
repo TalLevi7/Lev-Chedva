@@ -19,7 +19,7 @@ let foundItemCategorialNumber = null;
 let ProductName=null;
 let CatNum=null;
 async function searchItemByProductName(productName) {
-    const inventoryItemRef = firebase.firestore().collection('inventory').where('product_name', '==', productName);
+    const inventoryItemRef = firebase.firestore().collection('inventory').where('categorialNumber', '==', productName);
     const inventoryItemSnapshot = await inventoryItemRef.get();
 
     if (inventoryItemSnapshot.empty) {
@@ -68,7 +68,7 @@ function displayItemData(itemSnapshot) {
 }
 
 searchCatNumberBtn.addEventListener('click', () => {
-    searchItemByProductName(catNumberInput.value);
+    searchItemByCategorialNumber(catNumberInput.value);
 });
 
 
@@ -127,9 +127,8 @@ reserveBtn.addEventListener('click', async () => {
     try {
         await  getBorrowCounter();
         
-        // Get borrow counter
-     
-         
+        
+    
         const reservationListRef = firebase.firestore().collection('reservation list').doc(reservationCounter.toString());
         const inventoryItemRef = firebase.firestore().collection('inventory').doc(foundItemCategorialNumber);
     

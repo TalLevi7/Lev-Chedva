@@ -25,6 +25,7 @@
                     <th>מס' כרטיס השאלה</th> 
                     <th>שם המוצר</th>
                     <th>לתאריך</th>
+                    <th>הערות</th>
                 </thead>
                 <tbody id="reservationTableBodyContent">
                     <!-- Table body content will be generated dynamically -->
@@ -84,6 +85,8 @@
     });
 
     function displayReservations(reservations) {
+        reservations.sort((a, b) => a.id.localeCompare(b.id));
+        reservations.reverse();
         reservations.forEach((doc) => {
             // Create a new table row
             let row = document.createElement('tr');
@@ -112,6 +115,11 @@
 
             row.appendChild(reservationDate);
 
+            let remarksCell = document.createElement('td');
+            if(doc.data().remarks)
+            remarksCell.textContent="יש הערות";
+            row.appendChild(remarksCell);
+
             // Create action buttons
             let actions = document.createElement('td');
             actions.className = 'button-container'; // Add the button-container class to the container element
@@ -139,7 +147,7 @@
             let expandableRow = document.createElement('tr');
             expandableRow.className = 'expandable-row';
             let expandableCell = document.createElement('td');
-            expandableCell.colSpan = 3; // Now colspan is 3
+            expandableCell.colSpan = 4; // Now colspan is 3
 
             let detailsList = document.createElement('ul');
 
@@ -261,7 +269,7 @@
                         });
                     }
                     actions.removeChild(saveButton);
-                    alert('Document successfully updated!');
+                    alert('עודכן בהצלחה');
                 };
 
                 // Append save button to the actions

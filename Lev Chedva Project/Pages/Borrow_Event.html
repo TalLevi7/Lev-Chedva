@@ -147,9 +147,9 @@ switch (key) {
       } else {
         borrowCounter = doc.data()['borrow counter'];
       }
-      
-      getBorrowCounter();
     }
+      getBorrowCounter();
+    
       searchBtn.addEventListener('click', async () => {
     const itemName = searchInput.value;
 
@@ -186,7 +186,7 @@ switch (key) {
 
     }
     
-    getBorrowCounter();
+    
   });
   
 
@@ -216,7 +216,7 @@ let CatNum=null;
         detailsList.style.display = 'block'; // Make the item data list visible
 
       for (let [key, value] of Object.entries(item)) {
-  let label = hebrewLabels[key] ? hebrewLabels[key] : key;
+  let label =getHebrewLabel(key);
 
   if (key === 'status') {
       value = statusTranslations[value] ? statusTranslations[value] : value;
@@ -236,6 +236,9 @@ let CatNum=null;
         alert('הזמנה לא נמצאה');
       }
     });
+
+
+    
 
       saveBtn.addEventListener('click', async () => {
           let itemName = searchInput.value;
@@ -289,7 +292,7 @@ let CatNum=null;
               quantity: Number(borrowingQuantity.value)
           };
       
-       
+          try {
               if (TicketValid) {
                 const itemUpdateData = { status: newStatus };
                 itemUpdateData.product_quantity = itemSnapshot.data().product_quantity;
@@ -300,10 +303,11 @@ let CatNum=null;
                   if (oldBorrow !== borrowedItemData.quantity) {
                      const difference = oldBorrow - borrowedItemData.quantity;
                      itemUpdateData.product_quantity = itemSnapshot.data().product_quantity + difference;
-                    
+                     
                   }
-                      itemUpdateData.reserved_quantity=0; 
+                    itemUpdateData.reserved_quantity=itemSnapshot.data().reserved_quantity-oldBorrow;  
                       newQuantity=itemUpdateData.product_quantity;
+                      newReserved= itemUpdateData.reserved_quantity;
                       await itemRef.update(itemUpdateData);
                       await reservationArchiveRef.set(reservationData);
                       await reservationListRef.delete();
@@ -311,7 +315,34 @@ let CatNum=null;
                     
               }
             
+
+
             
+            await borrowedItemsRef.get().then((docSnapshot) => {
+                if (docSnapshot.exists) {
+                    borrowedItemsRef.update({
+                        borrowTickets: firebase.firestore.FieldValue.arrayUnion(borrowCounter),
+                        ID: contactId.value,
+                        Name: contactName.value
+                    });
+                } else {
+                    borrowedItemsRef.set({
+                        borrowTickets: [borrowCounter],
+                        ID: contactId.value,
+                        Name: contactName.value
+                    });
+                }
+            });
+    
+            await borrowTicketsRef.set(borrowedItemData);
+            await itemRef.update({ status: newStatus, product_quantity: newQuantity ,reserved_quantity:newReserved});
+            await borrowCounterRef.update({ 'borrow counter': borrowCounter + 1 });
+            alert('המוצר הושאל בהצלחה');
+        } catch (error) {
+            console.error('Error saving the borrowed item:', error);
+            alert('שגיאה בהשאלת המוצר');
+        }
+
 
         let answer = window.confirm('האם תרצה להשאיל מוצר נוסף');
         if (answer) {
@@ -329,7 +360,6 @@ let CatNum=null;
             // Refresh the page
             location.reload();
         }
-      
     });
 
   </script>
