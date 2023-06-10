@@ -54,16 +54,18 @@ h1 {
 
 /* Product table */
 table {
-  width: 100%;
+  width: 90%;
+  overflow: hidden;
+  margin: 0 auto;
+  border-radius: 8px;
   border-collapse: collapse;
-
 }
 
 th, td {
  
   border: 1.5px solid rgb(99, 98, 98);
   padding: 10px;
-  text-align: center;
+  text-align: right;
 }
 
 

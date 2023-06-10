@@ -146,44 +146,106 @@ function displayVolunteers(volunteerData) {
           const authCell = document.createElement('td');
           authCell.colSpan = 8;
           const authForm = document.createElement('form');
-          const authCheckboxes = [
-            { name: 'מנהל', value: '000' },
-            { name: 'כללי', value: '01' },
-            { name: 'אירוע חדש', value: '10' },
-            { name: 'אירועים פתוחים כללי', value: '11' },
-            { name: 'אירועים פתוחים מתנדב', value: '12' },
-            { name: 'אירועים של המתנדב', value: '13' },
-            { name: 'אירועים סגורים', value: '14' },
-            { name: 'סטטיסטיקה למתנדב', value: '15' },
-            { name: 'הוספת מוצר', value: '20' },
-            { name: 'החזרת מוצר', value: '21' },
-            { name: ' השאלת מוצר', value: '22' },
-            { name: ' צפייה במלאי', value: '23' },
-            { name: 'מוצרים מושאלים', value: '24' },
-            { name: 'ארכיב השאלות', value: '25' },
-            { name: 'צור הזמנה עתידית', value: '26' },
-            { name: 'הזמנות עתידיות', value: '27' },
-            { name: 'צפה בבקשות השאלה', value: '28' },
-            { name: 'צפה בבקשות תרומה', value: '29' },
-            { name: 'פאנל טלפניות', value: '30' },
-            { name: 'הודעות כללי', value: '40' },
-            { name: 'הודעות טלפניות', value: '41' },
-            { name: 'הודעות שינוע', value: '42' },
-            { name: 'הודעות מנהלים', value: '43' },
-        ];
-          authCheckboxes.forEach(cb => {
-            const cbLabel = document.createElement('label');
-            const cbInput = document.createElement('input');
-            cbInput.type = 'checkbox';
-            cbInput.name = cb.value;
-            cbInput.value = cb.value;
-            if (volunteerData.Authorizations.includes(cb.value)) {
-              cbInput.checked = true;
+          authForm.classList.add('categories-form');
+          const categories = [
+            {
+              name: 'ניהול וכללי',
+              options: [
+                { name: 'מנהל', value: '000' },
+                { name: 'כללי', value: '01' },
+                { name: 'פאנל טלפניות', value: '30' },
+              ]
+            },
+            {
+              name: 'אירועים',
+              options: [
+                { name: 'אירוע חדש', value: '10' },
+                { name: 'אירועים פתוחים כללי', value: '11' },
+                { name: 'אירועים פתוחים מתנדב', value: '12' },
+                { name: 'אירועים של המתנדב', value: '13' },
+                { name: 'אירועים סגורים', value: '14' },
+              ]
+            },
+            {
+              name: 'מלאי',
+              options: [
+                { name: 'הוספת מוצר', value: '20' },
+                { name: 'החזרת מוצר', value: '21' },
+                { name: 'השאלת מוצר', value: '22' },
+                { name: 'צפייה במלאי', value: '23' },
+              ]
+            },
+            {
+              name: 'מידע ורשימות',
+              options: [
+                { name: 'סטטיסטיקה למתנדב', value: '15' },
+                { name: 'מוצרים מושאלים', value: '24' },
+                { name: 'ארכיב השאלות', value: '25' },
+                { name: 'הזמנות עתידיות', value: '27' },
+              ]
+            },
+            {
+              name: 'בקשות',
+              options: [
+                { name: 'צפה בבקשות השאלה', value: '28' },
+                { name: 'צפה בבקשות תרומה', value: '29' },
+                { name: 'צור הזמנה עתידית', value: '26' },
+              ]
+            },
+            {
+              name: 'הודעות',
+              options: [
+                { name: 'הודעות כללי', value: '40' },
+                { name: 'הודעות טלפניות', value: '41' },
+                { name: 'הודעות שינוע', value: '42' },
+                { name: 'הודעות מנהלים', value: '43' },
+              ]
             }
-            cbLabel.appendChild(cbInput);
-            cbLabel.append(cb.name);
-            authForm.appendChild(cbLabel);
+          ];
+          
+        
+          categories.forEach(category => {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('category');
+          
+            const categoryLabel = document.createElement('div');
+            categoryLabel.classList.add('category-title');
+            categoryLabel.textContent = category.name;
+            categoryDiv.appendChild(categoryLabel);
+          
+            const optionsDiv = document.createElement('div');
+            optionsDiv.classList.add('options');
+          
+            const checkboxesContainer = document.createElement('div');
+            checkboxesContainer.classList.add('checkboxes-container');
+          
+            category.options.forEach(option => {
+              const checkboxContainer = document.createElement('div');
+              checkboxContainer.classList.add('checkbox-container');
+          
+              const checkbox = document.createElement('input');
+              checkbox.type = 'checkbox';
+              checkbox.id = option.value;
+              checkbox.name = option.name;
+              checkbox.value = option.value;
+              checkbox.classList.add('checkbox');
+          
+              const label = document.createElement('label');
+              label.htmlFor = option.value;
+              label.appendChild(document.createTextNode(option.name));
+              label.classList.add('checkbox-label');
+          
+              checkboxContainer.appendChild(checkbox);
+              checkboxContainer.appendChild(label);
+          
+              checkboxesContainer.appendChild(checkboxContainer);
+            });
+          
+            optionsDiv.appendChild(checkboxesContainer);
+            categoryDiv.appendChild(optionsDiv);
+            authForm.appendChild(categoryDiv);
           });
+          
           const submitButton = document.createElement('button');
           submitButton.textContent = 'שמור';
           authForm.appendChild(submitButton);
@@ -296,12 +358,6 @@ deleteUserBtn.addEventListener('click', async () => {
     }
   }
 });
-
-//...
-
-
-
-
     }
   });
 }

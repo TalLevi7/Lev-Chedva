@@ -9,8 +9,8 @@ body {
 }
 h1{
   position: relative;
-  right: 20%;
-  top:5%
+  top:5%;
+  font-size: 40px !important;
 }
 #container {
   display: flex;

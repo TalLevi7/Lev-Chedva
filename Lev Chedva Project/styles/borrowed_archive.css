@@ -1,5 +1,5 @@
 body{
-
+    font-family: 'Assistent', sans-serif;
     direction:rtl
 }
 
@@ -13,11 +13,7 @@ table {
     overflow: hidden;
     direction: rtl;
 }
-h1{
 
-    position: relative;
-    right: 45%;
-}
 th, td {
     border: 1px solid #888;
     padding: 10px;
@@ -48,9 +44,11 @@ tr.details-row ul {
 
 input[type='text'] {
     padding: 5px;
-    margin: 10px 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
     position: relative;
-    right:5%;
+    
 }
 
   #search-btn {

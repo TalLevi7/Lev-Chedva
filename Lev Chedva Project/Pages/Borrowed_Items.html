@@ -189,26 +189,30 @@ const hebrewLabels = {
     };
 
 
-function translateToHebrew(data) {
-    const translatedData = {};
+    function translateToHebrew(data) {
+  const translatedData = {};
 
-  
+  for (let [key, value] of Object.entries(data)) {
+    if (key === 'borrowingFrom') {
+      const date = new Date(value);
 
-    for (let [key, value] of Object.entries(data)) {
-        if (key === 'borrowingFrom') {
-            const date = new Date(value);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear().toString();
+      if (isNaN(date)) {
+        translatedData[hebrewLabels[key]] = 'לא הוזן תאריך';
+      } else {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
 
-            translatedData[hebrewLabels[key]] = `${day}/${month}/${year}`;
-        } else {
-            translatedData[hebrewLabels[key]] = value;
-        }
+        translatedData[hebrewLabels[key]] = `${day}/${month}/${year}`;
+      }
+    } else {
+      translatedData[hebrewLabels[key]] = value;
     }
+  }
 
-    return translatedData;
+  return translatedData;
 }
+
 
 const reverseLabels = {};
 
