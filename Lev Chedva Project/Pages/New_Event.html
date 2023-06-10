@@ -23,35 +23,35 @@
       <select id="type" name="type">
         <option value="ריק">בחר סוג</option>
         <option value="בשינוע">בשינוע</option>
-        <option value="Visit">ביקור</option>
-        <option value="Other">אחר</option>
+        <option value="ביקור">ביקור</option>
+        <option value="אחר">אחר</option>
       </select><br><br>
       
       <label for="urgency">:דחיפות</label>
       <select id="urgency" name="urgency">
         <option value="ריק"></option>
-        <option value="Urgent">דחוף</option>
-        <option value="Specific Time">זמן מסויים</option>
-        <option value="Whoever Can">מי שיכול</option>
-        <option value="Future Reservation">בעתיד</option>
+        <option value="דחוף">דחוף</option>
+        <option value="זמן מסויים">זמן מסויים</option>
+        <option value="מי שיכול">מי שיכול</option>
+        <option value="בעתיד">בעתיד</option>
       </select><br><br>
       
       <label for="size">:גודל המוצר</label>
       <select id="size" name="size">
         <option value="ריק"></option>
-        <option value="Huge">ענק</option>
-        <option value="Big">גדול</option>
-        <option value="Medium">בינוני</option>
-        <option value="Small">קטן</option>
+        <option value="ענק">ענק</option>
+        <option value="גדול">גדול</option>
+        <option value="בינוני">בינוני</option>
+        <option value="קטן">קטן</option>
       </select><br><br>
       
       <label for="weight">:משקל המוצר</label>
       <select id="weight" name="weight">
         <option value="ריק"></option>
-        <option value="Very Heavy">כבד מאד</option>
-        <option value="Heavy">כבד</option>
-        <option value="Medium">לא מאד כבד</option>
-        <option value="Light">קל</option>
+        <option value="כבד מאוד">כבד מאד</option>
+        <option value="כבד">כבד</option>
+        <option value="לא מאוד כבד">לא מאד כבד</option>
+        <option value="קל">קל</option>
       </select><br><br>
       
       <label for="jeep">יחידת הג'יפים</label>
@@ -142,7 +142,7 @@
               const urgency = urgencySelect.value;
               const size = sizeSelect.value;
               const weight = weightSelect.value;
-              const jeepUnit = jeepCheckbox.checked;
+              const jeepUnit = jeepCheckbox.checked ? "כן" : "לא";
               const contactName = contactNameInput.value.trim();
               const contactPhone = contactPhoneInput.value.trim();
               const Source_Address = Source_addressInput.value.trim();

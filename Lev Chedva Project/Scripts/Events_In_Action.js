@@ -53,7 +53,7 @@ function DisplayData(eventData) {
   eventTable.appendChild(row);
   switch (eventData.status) {
     case "פתוח":
-      if (eventData.urgency === "Very Urgent" || eventData.urgency === "Urgent") {
+      if (eventData.urgency === "דחוף") {
         row.style.backgroundColor = "#FFCDD2"; // Soft red
       }
       break;
