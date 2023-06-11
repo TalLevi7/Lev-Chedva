@@ -1977,10 +1977,10 @@ input, select, textarea {
 	}
 
 	header p {
-		color: #999;
+		color: rgb(50, 49, 49);
 		font-size: 1.25em;
 		position: relative;
-		margin-top: 10em;
+		margin-top: 3em;
 		margin-bottom: 2.25em;
 	}
 
@@ -2213,10 +2213,10 @@ input, select, textarea {
 
 /* Links */
 
-	ul.links {
+	/* ul.links {
 		list-style: none;
 		padding-left: 0;
-	}
+	} */
 
 		/* ul.links li {
 			line-height: 2.5em;
@@ -2462,6 +2462,7 @@ input, select, textarea {
 		.button:hover {
 			background-color: #50c8fc;
 			color: #fff !important;
+			text-decoration: none !important;
 		}
 
 		input[type="submit"]:active,
@@ -2471,6 +2472,7 @@ input, select, textarea {
 		.button:active {
 			background-color: #1eb8fb;
 			color: #fff;
+			 text-decoration: none !important;
 		}
 
 		input[type="submit"].alt,
@@ -2578,12 +2580,13 @@ input, select, textarea {
 			}
 
 			#logo img {
-				max-width: 100%; /* Adjust the desired width */
 				height: 7rem;
+				max-width: 100%;
 				float: right;
 				margin-top: -3%; /* Adjust the desired negative margin */
-
 			  }
+			  
+			  
 			  
 			  html {
 				scroll-behavior: smooth;
@@ -2715,8 +2718,8 @@ input, select, textarea {
 		background-image: url("../../Pictures/WhatsApp\ Image\ 2023-05-30\ at\ 13.19.35.jpeg");
 		background-position: center center;
 		background-size: cover;
-		height: 28em;
-		text-align: center;
+		height: 28rem;
+		/* text-align: center; */
 		position: relative;
 	}
 
@@ -3107,6 +3110,7 @@ input, select, textarea {
 				height: 44px;
 				line-height: 44px;
 				box-shadow: 0 4px 0 0 #37c0fb;
+				text-decoration: none !important;
 			}
 
 				#titleBar .title {
