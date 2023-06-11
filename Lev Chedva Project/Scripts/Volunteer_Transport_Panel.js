@@ -38,7 +38,7 @@ function DisplayData(eventData) {
   
 
   if(eventData.motorcycleUnit==true)
-  nameCell.textContent =eventData.ProductName + " מכתובת: "+eventData.Source_Address +" לכתובת:" + eventData.Destination_Addresss+ "  -שינוע דו גלגלי"
+  nameCell.textContent =eventData.ProductName + " מכתובת: "+eventData.Source_Address +" לכתובת:" + eventData.Destination_Address+ "  -שינוע דו גלגלי"
   row.appendChild(nameCell);
   eventTable.appendChild(row);
   switch (eventData.status) {
