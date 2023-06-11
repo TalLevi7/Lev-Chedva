@@ -358,6 +358,7 @@ deleteUserBtn.addEventListener('click', async () => {
     }
   }
 });
+
     }
   });
 }

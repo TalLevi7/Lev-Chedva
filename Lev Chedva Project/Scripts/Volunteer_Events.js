@@ -15,9 +15,11 @@ firebase.auth().onAuthStateChanged(function(user) {
               const eventData=doc.data();
               const row = document.createElement('tr');
               const nameCell = document.createElement('td');
-              nameCell.textContent = eventData.eventCounter + " " + eventData.ProductName + " "+ eventData.address;
-              const emailCell = document.createElement('td');
-              emailCell.textContent = eventData.email;
+              nameCell.textContent =  eventData.ProductName + " מכתובת: "+eventData.Source_Address +" לכתובת:" + eventData.Destination_Address;
+  if(eventData.jeepUnit==true)
+  nameCell.textContent =eventData.ProductName + " מכתובת: "+eventData.Source_Address +" לכתובת:" + eventData.Destination_Address+ "  -שינוע ג'יפ";
+  if(eventData.motorcycleUnit==true)
+  nameCell.textContent =eventData.ProductName + " מכתובת: "+eventData.Source_Address +" לכתובת:" + eventData.Destination_Addresss+ "  -שינוע דו גלגלי"
               row.appendChild(nameCell);
               eventTable.appendChild(row);
               // Add a click event listener to each row to show more details
@@ -36,45 +38,209 @@ firebase.auth().onAuthStateChanged(function(user) {
                   const detailsList = document.createElement('ul');
                   const ProductNameItem = document.createElement('li');
                   ProductNameItem.textContent = "שם המוצר: " + eventData.ProductName;
-                  const AdressItem = document.createElement('li');
-                  AdressItem.textContent = "כתובת: " + eventData.address;
                   const ContactNameItem = document.createElement('li');
-                  ContactNameItem.textContent = "שם איש קשר: " + eventData.contactName;
+                  ContactNameItem.textContent = "איש קשר באיסוף: " + eventData.contactName;
+                  const phoneNumber = eventData.contactPhone;
+                  const formattedPhoneNumber = phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
                   const ContactPhoneItem = document.createElement('li');
-                  ContactPhoneItem.textContent = "טלפון איש קשר: " + eventData.contactPhone;
+                  const ContactPhoneLabel = document.createElement('span');
+                  ContactPhoneLabel.textContent = 'טלפון באיסוף: ';
+                  ContactPhoneItem.appendChild(ContactPhoneLabel);
+                  const phoneLink = document.createElement('a');
+                  phoneLink.href = 'tel:' + phoneNumber; // Specify the phone number as the href
+                  phoneLink.textContent = formattedPhoneNumber;
+                  ContactPhoneItem.appendChild(phoneLink);
+                  
+          
+
+                  const AdressItem = document.createElement('li');
+const sourceAddress = eventData.Source_Address;
+
+// Create an anchor element for the Waze navigation
+const wazeLink = document.createElement('a');
+wazeLink.href = "https://www.waze.com/ul?ll=" + encodeURI(sourceAddress); // Encode the address for the URL
+wazeLink.target = "_blank"; // Open link in a new tab
+
+// Create an image element for the Waze icon
+const wazeIcon = document.createElement('img');
+wazeIcon.src = "../Pictures/waze.png"; // Replace with the actual path to the Waze icon image
+wazeIcon.alt = "Waze";
+wazeIcon.width = 40; // Adjust the width as needed
+
+// Append the Waze icon to the anchor element
+wazeLink.appendChild(wazeIcon);
+
+// Create an anchor element for the Google Maps navigation
+const googleMapsLink = document.createElement('a');
+googleMapsLink.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURI(sourceAddress); // Encode the address for the URL
+googleMapsLink.target = "_blank"; // Open link in a new tab
+
+// Create an image element for the Google Maps icon
+const googleMapsIcon = document.createElement('img');
+googleMapsIcon.src = "../Pictures/map.png"; // Replace with the actual path to the Google Maps icon image
+googleMapsIcon.alt = "Google Maps";
+googleMapsIcon.width = 40; // Adjust the width as needed
+
+// Append the Google Maps icon to the anchor element
+googleMapsLink.appendChild(googleMapsIcon);
+
+// Append the source address and both navigation links to the item
+AdressItem.textContent = "כתובת איסוף: " + sourceAddress;
+AdressItem.appendChild(wazeLink.cloneNode(true)); // Clone the elements to avoid overwriting
+AdressItem.appendChild(googleMapsLink.cloneNode(true)); // Clone the elements to avoid overwriting
+
+const AdressItem2 = document.createElement('li');
+const destinationAddress = eventData.Destination_Address;
+
+// Create an anchor element for the Waze navigation (destination)
+const wazeLink2 = document.createElement('a');
+wazeLink2.href = "https://www.waze.com/ul?ll=" + encodeURI(destinationAddress); // Encode the address for the URL
+wazeLink2.target = "_blank"; // Open link in a new tab
+
+// Create an image element for the Waze icon (destination)
+const wazeIcon2 = document.createElement('img');
+wazeIcon2.src = "../Pictures/waze.png"; // Replace with the actual path to the Waze icon image
+wazeIcon2.alt = "Waze";
+wazeIcon2.width = 40; // Adjust the width as needed
+
+// Append the Waze icon to the anchor element (destination)
+wazeLink2.appendChild(wazeIcon2);
+
+// Create an anchor element for the Google Maps navigation (destination)
+const googleMapsLink2 = document.createElement('a');
+googleMapsLink2.href = "https://www.google.com/maps/search/?api=1&query=" + encodeURI(destinationAddress); // Encode the address for the URL
+googleMapsLink2.target = "_blank"; // Open link in a new tab
+
+// Create an image element for the Google Maps icon (destination)
+const googleMapsIcon2 = document.createElement('img');
+googleMapsIcon2.src = "../Pictures/map.png"; // Replace with the actual path to the Google Maps icon image
+googleMapsIcon2.alt = "Google Maps";
+googleMapsIcon2.width = 40; // Adjust the width as needed
+
+// Append the Google Maps icon to the anchor element (destination)
+googleMapsLink2.appendChild(googleMapsIcon2);
+
+// Append the destination address and both navigation links to the item
+AdressItem2.textContent = "כתובת יעד: " + destinationAddress;
+AdressItem2.appendChild(wazeLink2.cloneNode(true)); // Clone the elements to avoid overwriting
+AdressItem2.appendChild(googleMapsLink2.cloneNode(true)); // Clone the elements to avoid overwriting
+
+                 
+                  const ContactNameItem2 = document.createElement('li');
+                  ContactNameItem2.textContent = "איש קשר ביעד: " + eventData.contactNameDestination;
+                  
+            
+                   const phoneNumber2 = eventData.contactPhoneDestination;
+                  const formattedPhoneNumber2 = phoneNumber2 ? phoneNumber2.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3') : '';
+            
+                  const ContactPhoneItem2 = document.createElement('li');
+                  const ContactPhoneLabel2 = document.createElement('span');
+                  ContactPhoneLabel2.textContent = 'טלפון ביעד: ';
+                  ContactPhoneItem2.appendChild(ContactPhoneLabel2);
+            
+                  const phoneLink2 = document.createElement('a');
+                  phoneLink2.href = phoneNumber2 ? 'tel:' + phoneNumber2 : '#'; // Specify the phone number as the href if available, otherwise use '#' as a placeholder
+                  phoneLink2.textContent = formattedPhoneNumber2 ? formattedPhoneNumber2 : 'N/A'; // Display 'N/A' if phone number is not available
+                  phoneLink2.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                  });
+                  ContactPhoneItem2.appendChild(phoneLink2);
+            
+                  
+                  // Add an event listener to prevent the click event from propagating to the parent elements
+                  phoneLink2.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                  });
+                  
+                  ContactPhoneItem2.appendChild(phoneLink2);
+                  
+                  
+            
+            
                   const RemarksItem = document.createElement('li');
                   RemarksItem.textContent = "הערות: " + eventData.remarks;
-                  const timestamp = eventData.timestamp.seconds * 1000; // convert seconds to milliseconds
+                  const timestamp = eventData.timestamp.seconds * 1000;
                   const date = new Date(eventData.timestamp.seconds * 1000);
                   const now = new Date();
                   const PostTimeItem = document.createElement('li');
                   PostTimeItem.textContent = "תאריך פרסום: " + date.toLocaleString('he-IL');
-                 const ElapsedTimeItem = document.createElement('li');
-                  let timeElapsed = Math.round((now - timestamp) / (1000 * 60)); // in minutes
-                  if(timeElapsed>60)
-                  {
-                  timeElapsed=timeElapsed/60;
-                  timeElapsed=Math.floor(timeElapsed);
-                  ElapsedTimeItem.textContent = "זמן שחלף: " + timeElapsed + " שעות";
-                  }else  
-                  ElapsedTimeItem.textContent = "זמן שחלף: " + timeElapsed + " דקות";
+                  const ElapsedTimeItem = document.createElement('li');
+                  let timeElapsed = Math.round((now - timestamp) / (1000 * 60));
+                  if (timeElapsed > 60) {
+                    timeElapsed = timeElapsed / 60;
+                    timeElapsed = Math.floor(timeElapsed);
+                    ElapsedTimeItem.textContent = "זמן שחלף: " + timeElapsed + " שעות";
+                  } else
+                    ElapsedTimeItem.textContent = "זמן שחלף: " + timeElapsed + " דקות";
                   const StatusItem = document.createElement('li');
                   StatusItem.textContent = "סטטוס: " + eventData.status;
                   const TypeItem = document.createElement('li');
                   TypeItem.textContent = "סוג: " + eventData.type;
                   const SizeItem = document.createElement('li');
                   SizeItem.textContent = "גודל: " + eventData.size;
+                  let urgencyTranslation = '';
+                  switch (eventData.urgency) {
+                    case 'Urgent':
+                      urgencyTranslation ='דחוף';
+                      break;
+                    default:
+                      urgencyTranslation = 'מי שעל הציר';
+                      break;
+                  }
                   const UrgencyItem = document.createElement('li');
-                  UrgencyItem.textContent = "דחיפות: " + eventData.urgency;
+                  UrgencyItem.textContent = "דחיפות: " + urgencyTranslation;
                   const WeightItem = document.createElement('li');
-                  WeightItem.textContent = "משקל: " + eventData.weight;
-                  const JeepItem = document.createElement('li');
-                  JeepItem.textContent = "יחידת ג'יפ: " + eventData.jeepUnit;
+                  WeightItem.textContent = "משקל: " + eventData.weight
             
+            
+                  let JeepTranslation = '';
+                  switch (eventData.jeepUnit) {
+                    case false:
+                      JeepTranslation ='לא';
+                      break;
+                    case true:
+                      JeepTranslation = 'כן';
+                      break;
+                  }
+            
+                  const JeepItem = document.createElement('li');
+                  JeepItem.textContent = "יחידת ג'יפים: " + JeepTranslation;
+            
+            
+                    let MotorcycleTranslation = '';
+                    switch (eventData.motorcycleUnit) {
+                      case false:
+                        MotorcycleTranslation ='לא';
+                        break;
+                      case true:
+                        MotorcycleTranslation = 'כן';
+                        break;
+                    }
+                  const MotorcycleItem = document.createElement('li');
+                  MotorcycleItem.textContent = "יחידת האופנועים: " + MotorcycleTranslation;
+            
+                  const TakenByItem = document.createElement('li');
+                  if(eventData.takenBy)
+                  {
+                  firebase.firestore().collection("Volunteers").doc(eventData.takenBy).get()
+                  .then((doc) => {
+                    if (doc.exists) {
+                      const volunteerData = doc.data();
+                      const firstName = volunteerData.firstName;
+                      const lastName = volunteerData.lastName;
+                      const phoneNumber = volunteerData.phone;
+                      TakenByItem.textContent = "נלקח על ידי: " + firstName+lastName+" טלפון: "+phoneNumber; 
+                    }
+                  });
+                 
+                }
                   detailsList.appendChild(ProductNameItem);
                   detailsList.appendChild(AdressItem);
                   detailsList.appendChild(ContactNameItem);
                   detailsList.appendChild(ContactPhoneItem);
+                  detailsList.appendChild(ContactNameItem2);
+                  detailsList.appendChild(ContactPhoneItem2);
+                  detailsList.appendChild(AdressItem2);
                   detailsList.appendChild(RemarksItem);
                   detailsList.appendChild(PostTimeItem);
                   detailsList.appendChild(ElapsedTimeItem);
@@ -84,6 +250,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                   detailsList.appendChild(UrgencyItem);
                   detailsList.appendChild(WeightItem);
                   detailsList.appendChild(JeepItem);
+                  detailsList.appendChild(MotorcycleItem);
                   detailsCell.appendChild(detailsList);
                   detailsRow.appendChild(detailsCell);
                   row.after(detailsRow);
@@ -113,16 +280,20 @@ firebase.auth().onAuthStateChanged(function(user) {
                 PickupBtn.addEventListener('click', () => {
                   if (eventData && eventData.eventCounter) {
                     const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-                    StatusString="בשינוע";
+                    const StatusString = "בשינוע";
+                    const pickupTime = firebase.firestore.Timestamp.now();
+                
                     docRef.update({
-                      status: StatusString
+                      status: StatusString,
+                      pickupTime: pickupTime // add pickupTime field with current time
                     }).then(() => {
                       // After successful update, get the updated document
                       docRef.get().then((updatedDoc) => {
                         if (updatedDoc.exists) {
                           const updatedData = updatedDoc.data();
-                          // Update the status item in the table row
+                          // Update the status item and pickup time in the table row
                           StatusItem.textContent = "סטטוס: " + updatedData.status;
+                          PickupTimeItem.textContent = "זמן איסוף: " + updatedData.pickupTime.toDate().toLocaleString('he-IL');
                         } else {
                           console.error("No document exists with the given ID");
                         }
@@ -135,32 +306,68 @@ firebase.auth().onAuthStateChanged(function(user) {
                   } else {
                     console.error("Error: eventData or eventData.eventCounter is undefined");
                   }
+                  alert("תודה רבה! שינוע נעים!");
                 });
                 
+                
                 Delivered.addEventListener('click', () => {
-                    if (eventData && eventData.eventCounter) {
-                        const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
-                        StatusString="נמסר";
-                        docRef.update({
-                          status: StatusString
-                        }).then(() => {
-                          row.remove();
-                          detailsRow.remove();
-                        }).catch((error) => {
-                          console.error("שגיאה בעדכון המסמך: ", error);
-                        });
-                      } else {
-                        console.error("Error: eventData or eventData.eventCounter is undefined");
-                      }
-                      const updatedTakenEvents = TakenEvents.filter((e) => e !== event);
-                        firebase.firestore().collection("Volunteers").doc(userEmail).update({ 
-                        TakenEvents: updatedTakenEvents 
-                        }).then(() => {
-                            console.log("TakenEvents array updated successfully!");
-                          }).catch((error) => {
-                            console.log("Error updating TakenEvents array:", error);
-                          });
-                  });    
+                  if (eventData.status !== "בשינוע") {
+                    alert("יש לאסוף את תחילה את המוצר");
+                    return;
+                  }
+                
+                  if (eventData && eventData.eventCounter) {
+                    const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
+                    const StatusString = "נמסר";
+                    const deliveredTime = firebase.firestore.Timestamp.now();
+                    
+                    docRef.update({
+                      status: StatusString,
+                      deliveredTime: deliveredTime // add deliveredTime field with current time
+                    }).then(() => {
+                      row.remove();
+                      detailsRow.remove();
+                
+                      // Update Volunteer document
+                      const volunteerDocRef = firebase.firestore().collection("Volunteers").doc(userEmail);
+                
+                      volunteerDocRef.update({
+                        "total events": firebase.firestore.FieldValue.increment(1), // increment total events by 1
+                        "monthly events": firebase.firestore.FieldValue.increment(1), // increment monthly events by 1
+                        latestEvent: deliveredTime // update latestEvent field with deliveredTime
+                      }).catch((error) => {
+                        console.error("שגיאה בעדכון מסמך המתנדב: ", error);
+                      });
+                
+                      // Update Tools collection
+                      const toolsDocRef = firebase.firestore().collection("Tools").doc("Statistics");
+                
+                      toolsDocRef.update({
+                        "Total Events": firebase.firestore.FieldValue.increment(1), // increment Total events by 1
+                        "Monthly Events": firebase.firestore.FieldValue.increment(1), // increment Monthly Events by 1
+                        "Yearly Events":firebase.firestore.FieldValue.increment(1)
+                      }).catch((error) => {
+                        console.error("שגיאה בעדכון מסמך הכלים: ", error);
+                      });
+                    }).catch((error) => {
+                      console.error("שגיאה בעדכון המסמך: ", error);
+                    });
+                  } else {
+                    console.error("Error: eventData or eventData.eventCounter is undefined");
+                  }
+                
+                  const updatedTakenEvents = TakenEvents.filter((e) => e !== event);
+                  firebase.firestore().collection("Volunteers").doc(userEmail).update({ 
+                    TakenEvents: updatedTakenEvents 
+                  }).then(() => {
+                    console.log("TakenEvents array updated successfully!");
+                  }).catch((error) => {
+                    console.log("Error updating TakenEvents array:", error);
+                  });
+                
+                  alert("מוצר נמסר בהצלחה! תודה רבה!");
+                });
+                
                 CancelEvent.addEventListener('click', () => {
                     if (eventData && eventData.eventCounter) {
                         {

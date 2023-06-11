@@ -185,17 +185,15 @@ a.button:focus {
   #section3 {
 	text-align: center;
 	flex: 1;
-	background-color: rgb(255, 255, 255);
+	background-color: rgba(255,0,0,0.1);
 	height: 27em;
-	background: #f7f7f7 url("images/bg01.png");
   }
   
   #section4 {
 	text-align: center;
 	flex: 1;
 	height: 27em;
-	background-color: rgb(255, 255, 255);
-	background: #f7f7f7 url("images/bg01.png");
+	background-color: rgba(255,0,0,0.1);
 	
   }
 		
@@ -217,6 +215,7 @@ a.button:focus {
 <!-- Highlights -->
 <section class="wrapper style1" id="section5">
     <div class="container">
+		<h2>תרומות</h2>
         <div class="flex-container">
             <section class="flex-item">
                 <div class="box highlight" id="box1">
@@ -259,13 +258,16 @@ a.button:focus {
 	.flex-container {
         display: flex;
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: space-between;;
     }
 
     .flex-item {
         flex: 1 0 21%; /* flex-grow | flex-shrink | flex-basis */
         margin: 1%;
         box-sizing: border-box;
+		padding: 1%;
+		border:solid rgba(255,0,0,0.1);
+		border-radius: 25px;
     }
 
     @media (max-width: 600px) {
