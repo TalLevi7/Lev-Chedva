@@ -297,7 +297,6 @@ deleteUserBtn.addEventListener('click', async () => {
   }
 });
 
-//...
 
 
 

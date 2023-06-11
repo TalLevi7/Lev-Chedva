@@ -37,17 +37,20 @@
         </div>
       </header>
       <main>
-          <!-- ADD SEARCH BAR!!!! -->
-          <div class="container">
-            <label for="authorization-filter">סנן:</label>
-            <select id="authorization-filter">
-              <option value="הכל">הכל</option>
-              <option value="פתוח">פתוח</option>
-              <option value="נלקח">נלקח</option>
-              <option value="בשינוע">בשינוע</option>
-            </select>
-          </div>
-          
+        
+
+        <div class="container" id="searchbar">
+          <label for="authorization-filter" id="authorization-filter-label">סנן:</label>
+          <select id="authorization-filter">
+            <option value="הכל">הכל</option>
+            <option value="פתוח">פתוח</option>
+            <option value="נלקח">נלקח</option>
+            <option value="בשינוע">בשינוע</option>
+            <option value="Urgent">דחוף</option>
+          </select>
+          <input type="text" id="searchInput" placeholder="חפש..">
+        </div>
+        
         <table>
           <thead>
             <tr>
@@ -64,6 +67,7 @@
       <script src="../firebase.js"></script>
       <script src="../Scripts/Events_In_Action.js"></script>
       <script src="../Scripts/auth.js"></script>
+
     </div>
     <footer>
       <p class="copyright">
