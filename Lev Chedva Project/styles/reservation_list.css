@@ -6,9 +6,11 @@ body {
 }
 
 h1 {
-    text-align: center;
-    font-size: 38px;
-    margin-bottom: 20px;
+    font-size: 40px;
+  text-align: center;
+  font-family: 'Assistent', sans-serif;
+  -webkit-text-stroke: 0.5px black;
+  -webkit-text-fill-color: #d25757;
 }
 .search-bar {
     text-align: center;

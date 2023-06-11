@@ -39,18 +39,17 @@ const db = firebase.firestore();
 const borrowTableBody = document.getElementById('borrowTableBody');
 const searchInput = document.getElementById('searchInput');
 const hebrewLabels = {
-        borrowingUntil: 'עד תאריך',
+        product_name:'שם המוצר',
+        patientName: 'שם המטופל',
         contactName: 'שם איש קשר',
-        quantity: 'כמות',
+        contactId: 'ת.ז. איש קשר',
         contactPhone: 'טלפון איש קשר',
         contactPhone2: 'טלפון איש קשר נוסף',
-        contactId: 'ת.ז. איש קשר',
         address: 'כתובת',
         borrowingFrom: 'הושאל בתאריך',
-        categorialNumber: 'מספר סידורי',
-        patientName: 'שם המטופל',
+        borrowingUntil: 'עד תאריך',
         loaning_volunteer: 'שם המתנדב',
-        product_name:'שם המוצר',
+        quantity: 'כמות',
         returnedDate: 'תאריך החזרה',
         remarks:'הערות',
         companion_accessories: 'אביזרים נלווים'

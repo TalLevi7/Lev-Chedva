@@ -22,3 +22,11 @@
   .logo-container img {
     max-width: 150px; 
   }
+
+  h1{
+    font-size: 34px;
+    text-align: center;
+    font-family: 'Assistent', sans-serif;
+    -webkit-text-stroke: 0.5px black;
+    -webkit-text-fill-color: #d25757;
+  }

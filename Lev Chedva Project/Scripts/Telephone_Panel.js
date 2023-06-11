@@ -60,7 +60,7 @@ async function fetchAndDisplayBorrowedItems() {
             const contactCell = document.createElement('td');
             if (data.lastTalk) {
                 // If 'lastTalk' field exists, display its value
-                contactCell.textContent =  "נוצר קשר בתאריך:"+data.lastTalk;
+                contactCell.textContent = data.lastTalk;
             }
             row.appendChild(contactCell);
         
@@ -78,17 +78,19 @@ async function fetchAndDisplayBorrowedItems() {
             // Add row to the table body
             tableBody.appendChild(row);
         
-            // Create a details row and cell for each doc
+           // Create a details row and cell for each doc
             const detailsRow = document.createElement('tr');
             const detailsCell = document.createElement('td');
             detailsCell.colSpan = 3;
-        
+
             // Create a nested table for the details
             const detailsTable = document.createElement('table');
+            detailsTable.classList.add('details-table'); // Add the 'details-table' class
+
             detailsCell.appendChild(detailsTable);
             detailsRow.appendChild(detailsCell);
             tableBody.appendChild(detailsRow);
-        
+
             // Hide details by default
             detailsRow.style.display = 'none';
         
@@ -112,8 +114,6 @@ async function fetchAndDisplayBorrowedItems() {
     }
 }
 
-
-
 async function displayTicketRow(detailsTable, ticketData, itemId) {
     const row = document.createElement('tr');
   
@@ -128,13 +128,19 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
         const productData = inventorySnapshot.data();
         productNameCell.textContent = productData.product_name;
     } else {
-        productNameCell.textContent = 'Product Not Found';
+        productNameCell.textContent = 'לא נמצא מוצר';
     }
   
     row.appendChild(productNameCell);
   
     const untilDateCell = document.createElement('td');
-    untilDateCell.textContent = ticketData.borrowingUntil;
+    const borrowingUntilDate = new Date(ticketData.borrowingUntil);
+    const formattedDate = borrowingUntilDate.toLocaleDateString('he-IL');
+    if (isNaN(borrowingUntilDate)) {
+        untilDateCell.textContent = 'לא הוזן תאריך';
+    } else {
+        untilDateCell.textContent = formattedDate;
+    }
     row.appendChild(untilDateCell);
   
     // Append row to the details table
@@ -148,23 +154,42 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
     // Create a list for the details
     const detailsList = document.createElement('ul');
     const hebrewLabels = {
-        borrowingUntil: 'עד תאריך',
+        patientName: 'שם המטופל',
         contactName: 'שם איש קשר',
-        quantity: 'כמות',
-        contactPhone: 'טלפון איש קשר',
-        contactPhone2: 'טלפון איש קשר נוסף',
         contactId: 'ת.ז. איש קשר',
         address: 'כתובת',
+        contactPhone: 'טלפון איש קשר',
+        contactPhone2: 'טלפון איש קשר נוסף',
+        quantity: 'כמות',
         borrowingFrom: 'הושאל בתאריך',
-        categorialNumber: 'מספר סידורי',
-        patientName: 'שם המטופל',
+        borrowingUntil: 'עד תאריך',
         loaning_volunteer: 'שם המתנדב'
         // Add more labels as necessary
     };
     const reverseLabels = {}; // Reverse mapping object for translating back to original keys
     Object.entries(hebrewLabels).forEach(([key, value]) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${value}: ${ticketData[key]}`;
+        if (key === 'borrowingUntil') {
+            const borrowingUntilLabel = value;
+            const borrowingUntilDate = new Date(ticketData[key]);
+            const formattedDate = borrowingUntilDate.toLocaleDateString('he-IL');
+            if (isNaN(borrowingUntilDate)) {
+                listItem.textContent = `${borrowingUntilLabel}: לא הוזן תאריך`;
+            } else {
+                listItem.textContent = `${borrowingUntilLabel}: ${formattedDate}`;
+            }
+        } else if (key === 'borrowingFrom') {
+            const borrowingFromLabel = value;
+            const borrowingFromDate = new Date(ticketData[key]);
+            const formattedDate = borrowingFromDate.toLocaleDateString('he-IL');
+            if (isNaN(borrowingFromDate)) {
+                listItem.textContent = `${borrowingFromLabel}: לא הוזן תאריך`;
+            } else {
+                listItem.textContent = `${borrowingFromLabel}: ${formattedDate}`;
+            }
+        }else{
+            listItem.textContent = `${value}: ${ticketData[key]}`;
+        }
         detailsList.appendChild(listItem);
         reverseLabels[value] = key;
     });
@@ -227,13 +252,7 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
         }
     });
   
-}
-
-
-    
+} 
 
 fetchAndDisplayBorrowedItems();
 dateInput.addEventListener('change', fetchAndDisplayBorrowedItems);
-
-
-

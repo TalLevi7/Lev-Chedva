@@ -7,7 +7,13 @@ body {
   background-color: #f9f9f9;
   text-align: right;
 }
-
+h1{
+  font-size: 40px;
+  text-align: center;
+  font-family: 'Assistent', sans-serif;
+  -webkit-text-stroke: 0.5px black;
+  -webkit-text-fill-color: #d25757;
+}
 #container {
   display: flex;
   flex-direction: column;

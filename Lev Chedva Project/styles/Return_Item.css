@@ -16,16 +16,6 @@ body {
     margin-top: 100px;
   }
   
-  .logo-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-  }
-  
-  .logo-container img {
-    max-width: 150px;
-  }
-  
   label {
     font-size: 18px;
     text-align: right;

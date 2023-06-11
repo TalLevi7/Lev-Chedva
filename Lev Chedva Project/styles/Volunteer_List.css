@@ -13,7 +13,9 @@ header {
 }
 
 h1 {
-  font-size: 2em;
+  -webkit-text-fill-color: white !important;
+  -webkit-text-stroke: 0px !important;
+
 }
 
 main {
@@ -114,4 +116,62 @@ button {
 .checkbox-wrapper input[type="checkbox"]:checked {
   background-color: #63d496;
   border-color: #d25757;
+}
+
+
+.categories-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.categories-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+    padding: 10px;
+    height: 200px; /* Adjust the height to your preference */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.category {
+  margin-right: 10px;
+  border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.category label {
+  display: flex;
+  align-items: center;
+}
+
+.category input[type="checkbox"] {
+  margin-right: 5px;
+}
+.category-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.checkboxes-container {
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 10px;
+  display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.checkbox {
+  margin-right: 5px;
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-label {
+  font-size: 14px;
 }
