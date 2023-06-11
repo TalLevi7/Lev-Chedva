@@ -113,3 +113,18 @@ button:hover {
   font-size: 14px;
   margin-right: 6px;
 }
+#searchbar{
+  position: relative;
+  right:24%;
+}
+
+#authorization-filter{
+position: relative;
+right:15%;
+top:1.5rem;
+}
+#authorization-filter-label{
+position: relative;
+right:12%;
+top:3.5rem;
+}

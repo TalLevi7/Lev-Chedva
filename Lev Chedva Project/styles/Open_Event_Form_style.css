@@ -23,7 +23,7 @@ label {
   font-weight: bold;
   margin-top: 1em;
 }
-
+input[type="tel"],
 input[type="text"],
 select,
 textarea {
