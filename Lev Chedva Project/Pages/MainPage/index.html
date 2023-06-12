@@ -8,8 +8,7 @@
 	<head>
 		<title>לב חדוה</title>
 		<meta charset="utf-8" />
-		<meta name="viewport"/>  
-		<!-- content="width=device-width, initial-scale=1, user-scalable=no" /> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="icon" href="./Pictures/favicon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
@@ -39,33 +38,30 @@
 
 				</div>
 				<style>
-					/* Existing CSS for the navbar */
+					/* navbar */
 				
 					#languages {
-
 						display: flex;
 						align-items: flex-start;
-						margin-right: 0.5em; /* Adjust margin as needed */
-						margin-left: 0.5em; /* Adjust margin as needed */
+						margin-right: 0.5em;
+						margin-left: 0.5em; 
 						position: absolute;
 						top: 0;
 						left: 0;
 					}
 				
 					.language-button {
-						margin-right: 0.5em; /* Adjust margin as needed */
-						padding: 0.2em 0.4em; /* Adjust padding as needed */
-						font-size: 0.8em; /* Adjust font size as needed */
-						line-height: 1; /* Adjust line height as needed */
+						margin-right: 0.5em;
+						padding: 0.2em 0.4em; 
+						font-size: 0.8em; 
+						line-height: 1; 
 						color: #d25757;
-						/* background-color: #d25757; Adjust background color as needed */
 						text-decoration: none;
-						border-radius: 5px; /* Adjust border radius as needed */
+						border-radius: 5px;
 					}
 					.language-button:hover {
 						color: black;
 					}
-
 				</style>
 				
 				<section id="banner">
@@ -75,6 +71,7 @@
 	<section  id="section0">
 		<div class="container">
 			<header class="major">
+
 
 				<h2 style="color: #4f4e4ec6;">קצת עלינו</h2>
 				<p id="aboutUs" dir="rtl">
@@ -99,12 +96,10 @@
 
 	</section>
 			<!-- Highlights -->
-
 		</section>
 		<!-- Highlights -->
 		<section class="wrapper style1" id="section1">
 			<div class="container">
-
 				<div class="flex-container">
 					<section class="flex-item">
 						<div class="box highlight" id="box1">
@@ -146,19 +141,39 @@
 				<h2>הפעילות שלנו</h2>
 				<!-- your content here -->
 			</section>
+			
 		</div>
 		<script>
 			let slideIndex = 2;
 			const maxImages = 10; // Assuming you have 10 images, adjust accordingly
-			setInterval(() => {
-				document.getElementById('mySlides').src = `./Pictures/Gallery/${slideIndex}.jpeg`;
-				slideIndex = slideIndex % maxImages + 1;
-			}, 5000);
-		</script>
+			let slideshowInterval;
+			
+			function startSlideshow() {
+				slideshowInterval = setInterval(() => {
+					document.getElementById('mySlides').src = `./Pictures/Gallery/${slideIndex}.jpeg`;
+					slideIndex = slideIndex % maxImages + 1;
+				}, 5000);
+			}
 	
+			function pauseSlideshow() {
+				clearInterval(slideshowInterval);
+			}
+	
+			document.getElementById('mySlides').addEventListener('mouseover', function() {
+				this.style.zIndex = '2'; // Set a higher z-index value
+				pauseSlideshow();
+			});
+	
+			document.getElementById('mySlides').addEventListener('mouseout', function() {
+				this.style.zIndex = '1'; // Reset the z-index value
+				startSlideshow();
+			});
+			
+			startSlideshow();
+		</script>	
+		
 
 	<style>
-
 		#aboutUs{
 			font-size: 24px;
 		}
@@ -166,15 +181,11 @@
         padding: 1em;
         background: #f7f7f7 url("images/bg01.png");
     }
-
 a.button {
     display: inline-block;
     padding: 5px 5px;
     background-color: #ffffff;
-	box-sizing: border-box;
-		padding: 1%;
-		border:solid rgba(255,0,0,0.1);
-		border-radius: 25px;
+    border: none;
     text-decoration: none;
 	background: #f7f7f7 url("images/bg01.png");
 }
@@ -195,42 +206,35 @@ a.button:focus {
 	background-color: white;
 	background: #f7f7f7 url("images/bg01.png");
 }		
-		.flex-container {
-	display:inline-block;
-
-	justify-content: space-between;
-	width: 100%;
-	
-  }
-  
-  #section3 {
-
+		
+  #section4 {
         text-align: center;
         flex: 1;
-        background-color: rgba(201, 96, 96, 0.053);
         height: 27em;
-        margin-right: 5px;
+        background-color: rgba(201, 96, 96, 0.053);
         margin-left: 5px;
+        margin-right: 5px;
     }
-
-    #section4 {
+	#section3 {
         text-align: center;
         flex: 1;
-        height: 27em;
         background-color: rgba(201, 96, 96, 0.053);
-        margin-left: 5px;
+        height: 27em;
         margin-right: 5px;
+        margin-left: 5px;
+        position: relative;
     }
 
     #mySlides {
         max-width: 15em;
         max-height: 20em;
-
         transition: transform .2s;
+        position: relative;
     }
 
     #mySlides:hover {
-        transform: scale(2.5);
+        transform: scale(2);
+        z-index: 2; 
     }
 
 	</style>
@@ -239,9 +243,7 @@ a.button:focus {
 <!-- Highlights -->
 <section class="wrapper style1" id="section5">
     <div class="container">
-
-		<h2>לתרומה</h2>
-
+        <h2>תרומות</h2>
         <div class="flex-container">
             <section class="flex-item">
                 <div class="box highlight" id="box1">
@@ -280,118 +282,115 @@ a.button:focus {
 </section>
 
 <style>
-
     #section5 {
-        background: #f7f7f7;
-        padding: 50px 0;
-    }
+    background: #f7f7f7;
+}
 
-	#donation{
-		background-color: transparent;
-	}
+#donation {
+    background-color: transparent;
+}
 
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
 
-    h2 {
-        text-align: center;
-        margin-bottom: 40px;
-    }
+h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
 
-    .flex-container {
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-    }
+.flex-item {
+    flex: 1;
+    margin-bottom: 40px;
+    box-sizing: border-box;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    position: relative;
+    border: solid rgba(210, 87, 87, 0.844);
+    border-radius: 25px;
+    margin-right: 20px; 
+}
 
+.flex-item:last-child {
+    margin-right: 0; 
+}
 
+.flex-item:hover {
+    transform: translateY(-5px);
+}
+
+.box.highlight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.box.highlight img {
+    max-width: 150px;
+    margin-bottom: 20px;
+}
+
+/* Increase the size of the ביט/פייבוקס image */
+#bit-paybox-donation img {
+    max-width: 200px;
+}
+
+h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+}
+
+p {
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+@media (max-width: 992px) {
     .flex-item {
-        flex: 1 0 21%;
-		margin-left: 5%;
-        margin-bottom: 40px;
-        box-sizing: border-box;
-        padding: 30px;
-		text-align: center;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s;
-        position: relative;
-		border:solid rgba(210, 87, 87, 0.844);
-		border-radius: 25px;
+        flex: 0 0 calc(33.33% - 20px);
     }
+}
 
-    .flex-item:hover {
-        transform: translateY(-5px);
+@media (max-width: 768px) {
+    .flex-item {
+        flex: 0 0 calc(50% - 20px);
     }
+}
 
-
-    .box.highlight {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
+@media (max-width: 480px) {
+    .flex-item {
+        flex: 0 0 100%;
     }
+}
 
-    .box.highlight img {
-        max-width: 150px;
-        margin-bottom: 20px;
-    }
-
-    /* Increase the size of the ביט/פייבוקס image */
-    #bit-paybox-donation img {
-        max-width: 200px;
-    }
-
-    h3 {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 10px;
-        position: absolute;
-        bottom: 30px;
-        left: 0;
-        right: 0;
-    }
-
-    p {
-        font-size: 14px;
-        margin-top: 10px;
-		margin-bottom: 50px;
-    }
-
-    @media (max-width: 992px) {
-        .flex-item {
-            flex: 0 0 calc(33.33% - 20px);
-        }
-    }
-
-    @media (max-width: 768px) {
-        .flex-item {
-            flex: 0 0 calc(50% - 20px);
-        }
-    }
-
-    @media (max-width: 480px) {
-        .flex-item {
-            flex: 0 0 100%;
-        }
-    }
 </style>
 <!-- Footer -->
 <div id="footer">
-
     <div class="col-6 col-12-narrower" id="contact">
         <p id="footerParagraph">
 			<h4>צרו קשר</h4>
 			054-5420068-אליהו<br>
 		משה יוסטמן 2, גילה, ירושלים<br>
 			מוקד ''לב חדוה'' 24/6</p>
-    </div> -->
-    <!-- Icons -->
-   
+    </div>  
 </div>
 
 <style>
@@ -405,15 +404,12 @@ a.button:focus {
     #footer {
         background-color: #d25757;
         color: white;
-
         align-items: center;
-        justify-content: center; /* Change justify-content to flex-start */
-
+        justify-content: center; 
 		overflow: hidden;
     }
     #contact {
         text-align: center;
-        /* margin-bottom: 0.5em; Add margin-bottom to adjust spacing */
     }
     #Facebook .fa-facebook-f {
         color: white;
