@@ -104,16 +104,7 @@ function createButtons(autorizations) {
 
 
 
-function saveUserToken(email, token) {
-  const userRef = firebase.firestore().collection('Volunteers').doc(email);
-  userRef.update({ fcmToken: token })
-    .then(() => {
-      console.log('FCM token saved for the user.');
-    })
-    .catch((error) => {
-      console.error("Error saving FCM token: ", error);
-    });
-}
+
 
 
 
@@ -139,7 +130,7 @@ function loadMessages(authorizations) {
           message.innerHTML = `
             <h2>${data.header}</h2>
             <p class="message-date">${new Date(data.timestamp.toDate()).toLocaleDateString()}</p>
-            <div class="message-preview">${data.message.substr(0, 100)}</div>
+            
             <div class="message-full">${data.message}</div>
           `;
           message.addEventListener('click', function() {
