@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,10 +27,11 @@
     <div id="keywords-dropdown" class="dropdown" style="display: none;"></div>
     <br><br>
 
-
     <label for="companion-accessories">מוצרים נלווים:</label>
     <div id="accessories-container">
-      <input type="text" class="accessory" name="companion-accessories[]" >
+      <label>
+        <input type="text" class="accessory" name="companion-accessories[]" >
+      </label>
     </div>
     <br>
     <button type="button" id="add-accessory" onclick="addAccessory()">הוסף מוצר נלווה</button>
@@ -139,13 +140,13 @@
 
 
     // Function to add a new companion accessory input box
-    function addCompanionAccessory() {
-      const container = document.getElementById('companion-accessories-container');
-      const input = document.createElement('input');
-      input.type = 'text';
-      input.name = 'companion-accessories[]';
-      container.appendChild(input);
-    }
+    // function addCompanionAccessory() {
+    //   const container = document.getElementById('companion-accessories-container');
+    //   const input = document.createElement('input');
+    //   input.type = 'text';
+    //   input.name = 'companion-accessories[]';
+    //   container.appendChild(input);
+    // }
 
     // Add an event listener to the form submission
     const form = document.getElementById('product-form');

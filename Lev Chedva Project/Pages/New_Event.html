@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,9 +18,10 @@
       <h1>טופס יצירת אירוע חדש</h1>
       <form id="open-events-form">
         <div class="autocomplete">
+          <label for="name">:שם מוצר</label>
           <input id="name" type="text">
           <div id="autocomplete-results" class="autocomplete-results" style="display: none;"></div>
-        </div>
+        </div><br><br>
     
 
       <label for="type">:סוג</label>
@@ -35,10 +36,10 @@
 
         <option value="Urgent">דחוף</option>
         <option value="Whoever Can">רגיל</option>
-        
+
 
       </select><br><br>
-      
+
       <label for="size">:גודל המוצר</label>
       <select id="size" name="size">
         <option value="ענק">ענק</option>
@@ -64,20 +65,20 @@
       <label for="jeep">יחידת אופנועים</label>
       <input type="checkbox" id="motorcycle" name="motorcycle"><br><br>
       
-      <label for="contact-name">איש קשר באיסוף: </label>
-      <input type="text" id="contact-name" name="contact-name"><br><br>
+      <label for="contact-name">:איש קשר באיסוף</label>
+      <input type="text" id="contact-name" pattern="[a-z,\u05D0-\u05EA]*" name="contact-name"><br><br>
       
-      <label for="contact-phone"> טלפון איש קשר באיסוף</label>
-      <input type="tel" id="contact-phone" name="contact-phone"><br><br>
+      <label for="contact-phone">:טלפון איש קשר באיסוף</label>
+      <input type="tel" id="contact-phone" pattern="[0-9]*" name="contact-phone"><br><br>
     
       <label for="Source_Address">:כתובת איסוף</label>
       <input type="text" id="Source_Address" name="Source_Address"><br><br>
   
-      <label for="contact-name-destination">איש קשר ביעד:</label>
-      <input type="text" id="contact-name-destination" name="contact-name-destination"><br><br>
+      <label for="contact-name-destination">:איש קשר ביעד</label>
+      <input type="text" id="contact-name-destination" pattern="[a-z,\u05D0-\u05EA]*" name="contact-name-destination"><br><br>
       
       <label for="contact-phone-destination">:טלפון איש קשר ביעד</label>
-      <input type="tel" id="contact-phone-destination" name="contact-phone-destination"><br><br> 
+      <input type="tel" id="contact-phone-destination" pattern="[0-9]*" name="contact-phone-destination"><br><br>
 
       <label for="Destination_Address">:כתובת יעד</label>
       <input type="text" id="Destination_Address" name="Destination_Address"><br><br>
@@ -85,7 +86,7 @@
       <label for="remarks">:הערות</label>
       <textarea id="remarks" name="remarks"></textarea><br><br>
       
-      <input type="submit" value="צור אירוע">
+      <input type="submit"  value="צור אירוע">
     </form>
     <!-- <script>
       if ('serviceWorker' in navigator) {
@@ -111,6 +112,17 @@
       <script src="../firebase.js"></script>
       <script src="../Scripts/auth.js"></script>
       <script>
+        function checkNumericInput() {
+          var input = document.getElementById("contact-phone").value;
+          var numericPattern = /^[0-9]+$/;
+
+          if (numericPattern.test(input)) {
+            alert("Input contains numbers only");
+          } else {
+            alert("Input contains invalid characters");
+          }
+        }
+
         // Get form elements
         const form = document.querySelector('#open-events-form');
         const nameInput = form.querySelector('#name');
@@ -129,10 +141,10 @@
         const remarksInput = form.querySelector('#remarks');
       
         // Firestore collection reference
-        const openEventsRef = firebase.firestore().collection('Open Events');
-      
-        const messaging = firebase.messaging();
-        const functions = firebase.functions();
+        // const openEventsRef = firebase.firestore().collection('Open Events');
+        //
+        // const messaging = firebase.messaging();
+        // const functions = firebase.functions();
   
       const autocompleteResults = document.querySelector('#autocomplete-results');
 
@@ -154,7 +166,7 @@
         const userInput = e.target.value;
        autocompleteResults.style.display="block";
         // Clear current results:
-        if(userInput=="")
+        if(userInput==="")
         autocompleteResults.style.display="none";
         autocompleteResults.innerHTML = '';
 
@@ -209,7 +221,6 @@
               // Create new document in Firestore
               firebase.firestore().collection('Open Events').doc(eventCounter.toString()).set({
                 eventCounter,
-                eventCounter,
                 ProductName,
                 type,
                 urgency,
@@ -241,5 +252,6 @@
         &copy; 2023 LevChedva. All rights reserved.
       </p>
 </footer>
+  </div>
 </body>
 </html>
