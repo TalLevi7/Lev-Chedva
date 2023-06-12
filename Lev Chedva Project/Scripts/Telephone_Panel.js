@@ -218,7 +218,7 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
     // Add functionality to the update button
     updateButton.addEventListener('click', async () => {
         
-        if (updateButton.textContent === 'Update') {
+        if (updateButton.textContent === 'ערוך') {
             // Replace list items with input fields
             detailsList.childNodes.forEach(listItem => {
                 const inputField = document.createElement('input');
@@ -228,8 +228,8 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
                 listItem.textContent = `${label}: `;
                 listItem.appendChild(inputField);
             });
-            updateButton.textContent = 'Save';
-        } else if (updateButton.textContent === 'Save') {
+            updateButton.textContent = 'שמור';
+        } else if (updateButton.textContent === 'שמור') {
             // Replace input fields with new values and update data
             let updatedData = {};
             detailsList.childNodes.forEach(listItem => {
@@ -239,13 +239,13 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
                 updatedData[key] = value;
                 listItem.textContent = `${label}: ${value}`;
             });
-            updateButton.textContent = 'Update';
+            updateButton.textContent = 'ערוך';
   
             // Update data in Firestore
             const itemRef = db.collection('Borrow Tickets').doc(itemId);
             try {
                 await itemRef.update(updatedData);
-                alert('Document successfully updated!');
+                alert('עודכן בהצלחה');
             } catch (err) {
                 console.error('Error updating document: ', err);
             }

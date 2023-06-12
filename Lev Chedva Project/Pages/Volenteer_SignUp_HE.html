@@ -140,10 +140,11 @@
           volunteerTypes: getCheckedVolunteerTypes(),
           vehicles: getVehicles(),
           EmergencyContactName,
-          EmergencyContactPhone
+          EmergencyContactPhone,
+          createdAt: firebase.firestore.Timestamp.now()
       })
   .then(() => {
-      alert("Volunteer created successfully!");
+      alert("הרשמה הצליחה, ברוכים הבאים!");
       window.location.href = `Volunteer_Dashboard.html`;
       volunteerForm.reset();
       vehicleInputs.innerHTML = "";
