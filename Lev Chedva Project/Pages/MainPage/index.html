@@ -6,6 +6,14 @@
 -->
 <html>
 	<head>
+		<script type="text/javascript">
+			// Redirect mobile devices to mobile_home.html
+			if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+				window.location.href = "./";
+				window.location.href = "mobile_home.html"
+			}
+		</script>
+		
 		<title>לב חדוה</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
