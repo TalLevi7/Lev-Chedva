@@ -34,15 +34,38 @@ searchInput.addEventListener("input", function() {
 
 async function searchAcrossCollection(searchTerm) {
   volunteersTable.innerHTML = "";
-  const filteredVolunteers = volunteersArray.filter((volunteerData) => {
-    const fullName = `${volunteerData.firstName} ${volunteerData.lastName}`.toLowerCase();
-    const email = volunteerData.email.toLowerCase();
-    const id =volunteerData.ID;
-    const phone=volunteerData.phone;
-    return fullName.includes(searchTerm.toLowerCase()) || email.includes(searchTerm.toLowerCase())||id.includes(searchTerm.toLowerCase())||phone.includes(searchTerm.toLowerCase());
+  const VolunteerSet = [];
+  const VolunteerIds = new Set(); // For storing unique IDs
+  const snapshot = await db.collection("Volunteers").get();
+
+  // If the searchTerm is empty, display all volunteers
+  if (!searchTerm.trim()) {
+    snapshot.forEach((doc) => {
+      VolunteerSet.push(doc.data());
+    });
+    preDisplayVolunteers("all", VolunteerSet);
+    return;
+  }
+
+  snapshot.forEach((doc) => {
+    if (doc.exists) {
+        const data = doc.data();
+        
+        for (let key in data) {
+            if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+              if (!VolunteerIds.has(doc.id)) { // check if the ID is unique
+                VolunteerIds.add(doc.id); // store the ID
+                VolunteerSet.push(data);
+              }
+            }
+        }
+    } else {
+        console.log("No such document!");
+    }
   });
-  preDisplayVolunteers("all", filteredVolunteers);
+  preDisplayVolunteers("all", VolunteerSet);
 }
+
 
 function preDisplayVolunteers(filter, volunteers = volunteersArray) {
   volunteersTable.innerHTML = "";
@@ -112,6 +135,11 @@ function displayVolunteers(volunteerData) {
         vehicleItem.textContent = vehicle;
         vehiclesList.appendChild(vehicleItem);
       });
+      const createdAt = volunteerData.createdAt ? volunteerData.createdAt.toDate() : new Date("0000-00-00");
+      const JoinedItem = document.createElement('li');
+      JoinedItem.textContent = "הצטרף בתאריך: " + createdAt.toLocaleDateString('he-IL');
+      
+      
       vehiclesItem.appendChild(vehiclesList);
     
       detailsList.appendChild(firstNameItem);
@@ -122,6 +150,8 @@ function displayVolunteers(volunteerData) {
       detailsList.appendChild(phoneItem);
       detailsList.appendChild(addressItem);
       detailsList.appendChild(authItem);
+      detailsList.appendChild(JoinedItem);
+
       detailsList.appendChild(volunteerTypesItem);
       detailsList.appendChild(vehiclesItem);
       detailsCell.appendChild(detailsList);
@@ -258,7 +288,7 @@ function displayVolunteers(volunteerData) {
             docRef.update({
               Authorizations: selectedAuths
             }).then(() => {
-              authItem.textContent = "Authorizations: " + selectedAuths;
+              authItem.textContent = "הרשאות: " + selectedAuths;
               authRow.parentElement.removeChild(authRow);
             }).catch((error) => {
               console.error("Error updating document: ", error);
@@ -277,8 +307,9 @@ function displayVolunteers(volunteerData) {
       const editUserBtn = document.createElement('button');
       editUserBtn.textContent = 'ערוך פרטי משתמש';
       detailsList.appendChild(editUserBtn);
-    
+      let isEditClicked = false;
       editUserBtn.addEventListener('click', () => {
+        if(isEditClicked) return;
         const makeEditable = (item, field) => {
           const [label, value] = item.textContent.split(": ");
           const editableValue = document.createElement("span");
@@ -315,6 +346,8 @@ function displayVolunteers(volunteerData) {
         makeEditable(phoneItem, "phone");
         makeEditable(addressItem, "address");
         makeEditable(BirthdayItem, "BirthDate");
+        makeEditable(JoinedItem, "createdAt");
+
     
         const saveChangesBtn = document.createElement('button');
         saveChangesBtn.textContent = 'שמור שינויים';
@@ -327,13 +360,13 @@ function displayVolunteers(volunteerData) {
           phoneItem.textContent = "טלפון: " + volunteerData.phone;
           addressItem.textContent = "כתובת: " + volunteerData.address;
           BirthdayItem.textContent = "תאריך לידה: " + volunteerData.BirthDate;
-    
-    
+          JoinedItem.textContent = "הצטרף בתאריך" + volunteerData.createdAt;
           nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
-          emailCell.textContent = volunteerData.email;
-    
-          detailsList.removeChild(saveChangesBtn);
+     
+         detailsList.removeChild(saveChangesBtn); // Remove the button itself
         });
+        isEditClicked = true;
+
       });
       //...
 
