@@ -38,27 +38,26 @@
 
 				</div>
 				<style>
-					/* Existing CSS for the navbar */
+					/* navbar */
 				
 					#languages {
 						display: flex;
 						align-items: flex-start;
-						margin-right: 0.5em; /* Adjust margin as needed */
-						margin-left: 0.5em; /* Adjust margin as needed */
+						margin-right: 0.5em;
+						margin-left: 0.5em; 
 						position: absolute;
 						top: 0;
 						left: 0;
 					}
 				
 					.language-button {
-						margin-right: 0.5em; /* Adjust margin as needed */
-						padding: 0.2em 0.4em; /* Adjust padding as needed */
-						font-size: 0.8em; /* Adjust font size as needed */
-						line-height: 1; /* Adjust line height as needed */
+						margin-right: 0.5em;
+						padding: 0.2em 0.4em; 
+						font-size: 0.8em; 
+						line-height: 1; 
 						color: #d25757;
-						/* background-color: #d25757; Adjust background color as needed */
 						text-decoration: none;
-						border-radius: 5px; /* Adjust border radius as needed */
+						border-radius: 5px;
 					}
 					.language-button:hover {
 						color: black;
@@ -129,16 +128,37 @@
 				<h2>הפעילות שלנו</h2>
 				<!-- your content here -->
 			</section>
+			
 		</div>
 		<script>
 			let slideIndex = 2;
 			const maxImages = 10; // Assuming you have 10 images, adjust accordingly
-			setInterval(() => {
-				document.getElementById('mySlides').src = `./Pictures/Gallery/${slideIndex}.jpeg`;
-				slideIndex = slideIndex % maxImages + 1;
-			}, 5000);
-		</script>
+			let slideshowInterval;
+			
+			function startSlideshow() {
+				slideshowInterval = setInterval(() => {
+					document.getElementById('mySlides').src = `./Pictures/Gallery/${slideIndex}.jpeg`;
+					slideIndex = slideIndex % maxImages + 1;
+				}, 5000);
+			}
 	
+			function pauseSlideshow() {
+				clearInterval(slideshowInterval);
+			}
+	
+			document.getElementById('mySlides').addEventListener('mouseover', function() {
+				this.style.zIndex = '2'; // Set a higher z-index value
+				pauseSlideshow();
+			});
+	
+			document.getElementById('mySlides').addEventListener('mouseout', function() {
+				this.style.zIndex = '1'; // Reset the z-index value
+				startSlideshow();
+			});
+			
+			startSlideshow();
+		</script>	
+		
 
 	<style>
 		#aboutUs{
@@ -173,39 +193,35 @@ a.button:focus {
 	background-color: white;
 	background: #f7f7f7 url("images/bg01.png");
 }		
-		.flex-container {
-	display:inline-block;
-	justify-content: space-between;
-	width: 100%;
-	
-  }
-  
-  #section3 {
+		
+  #section4 {
         text-align: center;
         flex: 1;
-        background-color: rgba(201, 96, 96, 0.053);
         height: 27em;
-        margin-right: 5px;
+        background-color: rgba(201, 96, 96, 0.053);
         margin-left: 5px;
+        margin-right: 5px;
     }
-
-    #section4 {
+	#section3 {
         text-align: center;
         flex: 1;
-        height: 27em;
         background-color: rgba(201, 96, 96, 0.053);
-        margin-left: 5px;
+        height: 27em;
         margin-right: 5px;
+        margin-left: 5px;
+        position: relative;
     }
 
     #mySlides {
         max-width: 15em;
         max-height: 20em;
         transition: transform .2s;
+        position: relative;
     }
 
     #mySlides:hover {
-        transform: scale(2.5);
+        transform: scale(2);
+        z-index: 2; 
     }
 
 	</style>
@@ -255,7 +271,6 @@ a.button:focus {
 <style>
     #section5 {
     background: #f7f7f7;
-    padding: 50px 0;
 }
 
 #donation {
@@ -275,7 +290,7 @@ h2 {
 
 .flex-container {
     display: flex;
-    flex-wrap: wrap; /* Updated */
+    flex-wrap: wrap;
     justify-content: center;
 }
 
@@ -290,11 +305,11 @@ h2 {
     position: relative;
     border: solid rgba(210, 87, 87, 0.844);
     border-radius: 25px;
-    margin-right: 20px; /* Added */
+    margin-right: 20px; 
 }
 
 .flex-item:last-child {
-    margin-right: 0; /* Added */
+    margin-right: 0; 
 }
 
 .flex-item:hover {
@@ -362,9 +377,7 @@ p {
 			054-5420068-אליהו<br>
 		משה יוסטמן 2, גילה, ירושלים<br>
 			מוקד ''לב חדוה'' 24/6</p>
-    </div>
-    <!-- Icons -->
-   
+    </div>  
 </div>
 
 <style>
@@ -379,12 +392,11 @@ p {
         background-color: #d25757;
         color: white;
         align-items: center;
-        justify-content: center; /* Change justify-content to flex-start */
+        justify-content: center; 
 		overflow: hidden;
     }
     #contact {
         text-align: center;
-        /* margin-bottom: 0.5em; Add margin-bottom to adjust spacing */
     }
     #Facebook .fa-facebook-f {
         color: white;
