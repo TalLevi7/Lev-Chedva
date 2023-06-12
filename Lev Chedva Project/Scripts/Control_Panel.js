@@ -530,40 +530,41 @@ async function loadWaitingVolunteers()
                             authForm.style.display = 'none';
                         });
                         
-                        authorizeBtn.addEventListener('click', function() {
-                            // First get the updated document
-                            db.collection("Volunteers Waiting").doc(doc.id).get()
-                            .then(doc => {
-                                if (doc.exists) {
-                                    // Then move the updated document to the "Volunteers" collection
-                                    db.collection("Volunteers").doc(doc.id).set(doc.data())
-                                    .then(() => {
-                                        // Then delete from the "Volunteers Waiting" collection
-                                        db.collection("Volunteers Waiting").doc(doc.id).delete()
-                                        .then(() => {
-                                            row.remove(); // To remove the entire row after form submission
-                                            loadWaitingVolunteers();
-                                        });
-                                    });
-                                } else {
-                                    console.log("No such document!");
-                                }
-                            }).catch(error => {
-                                console.log("Error getting document:", error);
-                            });
-                        });
-
-    
-                    doNotAuthorizeBtn.addEventListener('click', function() {
-                        // Delete the doc from the current collection
-                        if (confirm('Are you sure you want to delete this volunteer?')) {
-                            db.collection("Volunteers Waiting").doc(doc.id).delete();
-                        }
-                    });
-    
-                    authCell.appendChild(authForm);
-                    detailsRow.insertAdjacentElement('afterend', authRow);
+                        authCell.appendChild(authForm);
+            detailsRow.insertAdjacentElement('afterend', authRow);
                 }); 
+                authorizeBtn.addEventListener('click', function() {
+                    // First get the updated document
+                    db.collection("Volunteers Waiting").doc(doc.id).get()
+                    .then(doc => {
+                        if (doc.exists) {
+                            // Then move the updated document to the "Volunteers" collection
+                            db.collection("Volunteers").doc(doc.id).set(doc.data())
+                            .then(() => {
+                                // Then delete from the "Volunteers Waiting" collection
+                                db.collection("Volunteers Waiting").doc(doc.id).delete()
+                                .then(() => {
+                                    row.remove(); // To remove the entire row after form submission
+                                    loadWaitingVolunteers();
+                                });
+                            });
+                        } else {
+                            console.log("No such document!");
+                        }
+                    }).catch(error => {
+                        console.log("Error getting document:", error);
+                    });
+                });
+
+
+            doNotAuthorizeBtn.addEventListener('click', function() {
+                // Delete the doc from the current collection
+                if (confirm('האם תרצה למנוע גישה למשתמש זה?')) {
+                    db.collection("Volunteers Waiting").doc(doc.id).delete();
+                }
+            });
+
+           
             });
         });
     });

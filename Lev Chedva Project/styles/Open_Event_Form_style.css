@@ -82,3 +82,33 @@ input[type="submit"]:hover {
   background-color: #c61f1f;
 }
 
+.autocomplete {
+  position: relative;
+  width: 100%;
+}
+
+#name {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.autocomplete-results {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  border: 1px solid #aaa;
+  z-index: 1000;
+}
+
+.autocomplete-results div {
+  padding: 10px;
+  cursor: pointer;
+  background: #fff;
+  border-bottom: 1px solid #aaa;
+}
+
+.autocomplete-results div:hover {
+  background: #f0f0f0;
+}
