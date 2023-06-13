@@ -71,7 +71,7 @@ function createButtons(autorizations) {
     // Add more mappings here...
   };
 
-  const mobileButtons = ["12", "13"]; // Example: Display buttons with authorization "10" and "11"
+  const mobileButtons = ["12", "13"];
 
   if (window.matchMedia('(max-width: 767px)').matches) {
     // Mobile devices: Display only mobile buttons
@@ -158,8 +158,8 @@ document.getElementById("updateSettings").addEventListener("click", function() {
 document.getElementById("logout").addEventListener("click", function() {
   firebase.auth().signOut().then(function() {
       // Sign-out successful, redirect to login page.
-      window.location.href = "MainPage_HE.html";
-  }).catch(function(error) {
+      window.location.href = "../Pages/MainPage/index.html";
+    }).catch(function(error) {
       // An error happened during sign out.
       console.error("Sign out error: ", error);
   });

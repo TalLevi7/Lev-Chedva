@@ -25,15 +25,13 @@
           <li><a href="login_HE.html">כניסת מתנדבים</a></li>
         </ul>
       </div>
-      
 
-w
-
+      <section id="banner"></section>
 
     <section id="section1">
         <div class="sec1">
             <h2 style="color:#4f4e4ec6;">מי אנחנו</h2>
-            <p dir="rtl">
+            <p dir="rtl" style="font-size: 12px;">
             בשנת 2020 התפרצה מגפת הקורונה ברחבי העולם בכלל, ובמדינת ישראל בפרט. 
 
 				משפחות רבות שחלו בנגיף החדש קרסו נפשית וכתוצאה מכך פנו לקבל סיוע בשלל תחומים, בהם: בריאות, בירוקרטיה, ועוד. 
@@ -151,14 +149,15 @@ w
             </div>
           
           
-            <div class="item">
+            <div class="item" style="max-width: 500px;">
               <h4>העברה בנקאית</h4>
-              <img src="./MainPage/Pictures/bank_HE.jpg" alt="Icon" class="mobile-image"></a>
-              <p style="font-size: 12px;">
+              <img src="./MainPage/Pictures/bank_HE.jpg" alt="Icon" class="mobile-image">
+              <p style="font-size: 14px;">
                 בנק: מזרחי טפחות<br>
                 סניף: 479<br>
                 מספר חשבון: 166555<br>
-                עבור: לב חדוה</p> 
+                עבור: לב חדוה
+              </p> 
             </div>
         </div>
     </section>
@@ -187,6 +186,15 @@ w
 
       
 <style>
+  
+ #banner {
+    background-image: url("MainPage/Pictures/WhatsApp\ Image\ 2023-05-30\ at\ 13.19.35.jpeg");
+    background-position: center center;
+    background-size: cover;
+    height: 10vh;
+    text-align: center;
+    position: relative;
+}
     .mobile-image.bigger-image {
   max-width: 30%;
   margin: 0;
@@ -208,19 +216,7 @@ w
     justify-content: center;
   }
 }
-   @media screen and (max-width: 600px) {
-    
-    #mySlides {
-        max-width: 15em;
-        max-height: 20em;
-        transition: transform .2s;
-        position: relative;
-    }
-
-    #mySlides:hover {
-        transform: scale(2);
-        z-index: 2; 
-    }
+   @media screen and (max-width: 720px) {
             /* Styles for smaller screens */
             body {
                 margin: 0;
@@ -250,6 +246,7 @@ w
     object-fit: contain;
   }
 .item {
+  align-items: center;
   text-align: center;
   padding: 20px;
   border: 2px solid rgba(210, 87, 87, 0.844);

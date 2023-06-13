@@ -105,6 +105,9 @@ pre {
 .form-group label {
   margin-bottom: 5px;
 }
+.autocomplete {
+  margin-bottom: 40px; 
+}
 
 .autocomplete-results {
   position: relative;
