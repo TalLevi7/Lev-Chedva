@@ -147,14 +147,15 @@
             </div>
           
           
-            <div class="item">
+            <div class="item" style="max-width: 500px;">
               <h4>העברה בנקאית</h4>
-              <img src="./MainPage/Pictures/bank_HE.jpg" alt="Icon" class="mobile-image"></a>
-              <p style="font-size: 12px;">
+              <img src="./MainPage/Pictures/bank_HE.jpg" alt="Icon" class="mobile-image">
+              <p style="font-size: 14px;">
                 בנק: מזרחי טפחות<br>
                 סניף: 479<br>
                 מספר חשבון: 166555<br>
-                עבור: לב חדוה</p> 
+                עבור: לב חדוה
+              </p> 
             </div>
         </div>
     </section>
@@ -204,19 +205,7 @@
     justify-content: center;
   }
 }
-   @media screen and (max-width: 600px) {
-    
-    #mySlides {
-        max-width: 15em;
-        max-height: 20em;
-        transition: transform .2s;
-        position: relative;
-    }
-
-    #mySlides:hover {
-        transform: scale(2);
-        z-index: 2; 
-    }
+   @media screen and (max-width: 720px) {
             /* Styles for smaller screens */
             body {
                 margin: 0;
@@ -246,6 +235,7 @@
     object-fit: contain;
   }
 .item {
+  align-items: center;
   text-align: center;
   padding: 20px;
   border: 2px solid rgba(210, 87, 87, 0.844);
