@@ -405,4 +405,61 @@ deleteUserBtn.addEventListener('click', async () => {
   });
 }
    
-    
+
+
+
+
+document.getElementById('exportButton').addEventListener('click', async () => {
+  const snapshot = await firebase.firestore().collection('Volunteers').get();
+
+  const fields = {
+      "firstName": "שם פרטי",
+      "lastName": "שם משפחה",
+      "phone": "טלפון",
+      "ID": "תעודת זהות",
+      "BirthDate": "תאריך לידה",
+      "createdAt": "תאריך הצטרפות",
+      "email": "אימייל",
+      "address": "כתובת"
+  };
+
+  let textContent = '';
+
+  snapshot.forEach(doc => {
+      const data = doc.data();
+
+      for (let field in fields) {
+          if (data[field]) {
+              if (data[field].seconds !== undefined) {
+                  let createdAt = new Date(data[field].seconds * 1000);
+                  let createdAtString = createdAt.getDate() + '/' + (createdAt.getMonth() + 1) + '/' + createdAt.getFullYear();
+                  textContent += `${fields[field]}: ${createdAtString}\n`;
+              } else if (typeof data[field] === "string") {
+                  let createdAt = new Date(data[field]);
+                  if (!isNaN(createdAt)) {
+                      let createdAtString = createdAt.getDate() + '/' + (createdAt.getMonth() + 1) + '/' + createdAt.getFullYear();
+                      textContent += `${fields[field]}: ${createdAtString}\n`;
+                  } else {
+                      textContent += `${fields[field]}: ${data[field]}\n`;
+                  }
+              } else {
+                  textContent += `${fields[field]}: ${data[field]}\n`;
+              }
+          } else {
+              textContent += `${fields[field]}: 1.06.23\n`;
+          }
+      }
+
+      textContent += '\n'; // Add a blank line after each document
+  });
+
+  const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'Volunteers.txt');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+});
+
