@@ -158,8 +158,8 @@ document.getElementById("updateSettings").addEventListener("click", function() {
 document.getElementById("logout").addEventListener("click", function() {
   firebase.auth().signOut().then(function() {
       // Sign-out successful, redirect to login page.
-      window.location.href = "MainPage_HE.html";
-  }).catch(function(error) {
+      window.location.href = "../Pages/MainPage/index.html";
+    }).catch(function(error) {
       // An error happened during sign out.
       console.error("Sign out error: ", error);
   });
