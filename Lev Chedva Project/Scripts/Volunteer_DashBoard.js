@@ -71,7 +71,7 @@ function createButtons(autorizations) {
     // Add more mappings here...
   };
 
-  const mobileButtons = ["12", "13"]; // Example: Display buttons with authorization "10" and "11"
+  const mobileButtons = ["12", "13"];
 
   if (window.matchMedia('(max-width: 767px)').matches) {
     // Mobile devices: Display only mobile buttons

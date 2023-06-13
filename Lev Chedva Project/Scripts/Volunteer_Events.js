@@ -409,4 +409,19 @@ AdressItem2.appendChild(googleMapsLink2.cloneNode(true)); // Clone the elements 
       console.log("משתמש לא מחובר");
     }
   });
+
+function handleMobileButtonClick() {
+  window.location.href = 'Volunteer_Transport_Panel.html';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const mobileButton = document.getElementById('mobileButton');
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) {
+    mobileButton.style.display = 'block';
+  } else {
+    mobileButton.style.display = 'none';
+  }
+});
+
   
