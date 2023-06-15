@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <title>סטטסטיקות העמותה</title>
     <link rel="stylesheet" href="../styles/Statistics.css">
@@ -7,51 +7,51 @@
 <body>
     <h1 id="monthYear"></h1>
 
-    <select id="monthSelector">
-        <option value="January">ינואר</option>
-        <option value="February">פברואר</option>
-        <option value="March">מרץ</option>
-        <option value="April">אפריל</option>
-        <option value="May">מאי</option>
-        <option value="June">יוני</option>
-        <option value="July">יולי</option>
-        <option value="August">אוגוסט</option>
-        <option value="September">ספטמבר</option>
-        <option value="October">אוקטובר</option>
-        <option value="November">נובמבר</option>
-        <option value="December">דצמבר</option>
-    </select>
+    <div id="graphsContainer">
+        <div id="statistics" style="width: 400px; height:400px;display: none;">
+            <h2>נתוני העמותה:</h2>
+            <ul id="statsList"></ul>
+            <canvas id="keywordsChartMonthly"></canvas>
+        </div>
     
-    <select id="yearSelector">
-    </select>
+        <div id="yearly" style="width: 400px; height:400px; display: none;">
+            <div id="yearlyReport"></div>
+            <canvas id="keywordsChartYearly"></canvas>
+        </div>
+    
+            <div id="Total Graph" style="width: 400px; height: 400px; display: none;">
+                <h2>גרף השאלות לפי סוגי מוצרים:</h2>
+                <canvas id="keywordsChart"></canvas>
+                <div id="listContainer"></div>
+        
+            </div>
+    </div>
+    
 
-    <button id="fetchStats">בחר</button>
-
-   
-    <div id="statistics" style="width: 400px; height:400px;display: none;">
-        <ul id="statsList"></ul>
-        <canvas id="keywordsChartMonthly"></canvas>
+    <div id="controlsContainer">
+        <select id="monthSelector">
+            <option value="January">ינואר</option>
+            <option value="February">פברואר</option>
+            <option value="March">מרץ</option>
+            <option value="April">אפריל</option>
+            <option value="May">מאי</option>
+            <option value="June">יוני</option>
+            <option value="July">יולי</option>
+            <option value="August">אוגוסט</option>
+            <option value="September">ספטמבר</option>
+            <option value="October">אוקטובר</option>
+            <option value="November">נובמבר</option>
+            <option value="December">דצמבר</option>
+        </select>
+        <select id="yearSelector">
+        </select>
+        <button id="fetchStats">בחר</button>
+        <button id="yearlyReportBtn">דו"ח שנתי</button>
+        <select id="yearSelectorReport"></select>
+        <button id="generateChartButton">גרף השאלות לפי סוגי מוצרים</button>
+        <button id="transportBtn">שינועים לפי מתנדבים</button>
     </div>
 
-
-
-    <button id="yearlyReportBtn">דו"ח שנתי</button>
-    <select id="yearSelectorReport"></select>
-
-
-    <div id="yearly" style="width: 400px; height:400px; display: none;">
-    <div id="yearlyReport"></div>
-    <canvas id="keywordsChartYearly"></canvas>
-    </div>
-    <button id="generateChartButton">גרף השאלות לפי סוגי מוצרים</button>
-    
-    <div id="Total Graph" style="width: 400px; height: 600px; display: none;">
-        <canvas id="keywordsChart"></canvas>
-        <div id="listContainer"></div>
-
-      </div>
-
-      <button id="transportBtn">שינועים לפי מתנדבים</button>
       <table id="volunteerTable" style="display: none;">
           <thead>
               <tr>
