@@ -69,6 +69,8 @@ setInterval(() => {
 
 
 document.getElementById('fetchStats').addEventListener('click', () => {
+    let statistics = document.getElementById('statistics');
+    statistics.style.display="block";
     let selectedMonth = document.getElementById('monthSelector').value;
     let selectedYear = document.getElementById('yearSelector').value;
     let docId = selectedMonth + ' ' + selectedYear;
@@ -91,12 +93,13 @@ document.getElementById('fetchStats').addEventListener('click', () => {
 
                     let data = doc.data();
                     statsList.innerHTML += `<li>השאלות: ${data.borrows || 'N/A'}</li>`;
-                    statsList.innerHTML += `<li>מוצרים: ${numOfProducts}</li>`;
+                    statsList.innerHTML += `<li>מוצרים במלאי: ${numOfProducts}</li>`;
                     statsList.innerHTML += `<li>מוצרים חדשים: ${data.newProducts || 'N/A'}</li>`;
                     statsList.innerHTML += `<li>משפחחות: ${data.families || 'N/A'}</li>`;
                     statsList.innerHTML += `<li>מתנדבים: ${numOfVolunteers}</li>`;
                     statsList.innerHTML += `<li>מתנדבים חדשים: ${data.newVolunteers || 'N/A'}</li>`;
                     statsList.innerHTML += `<li>שינועים: ${data.transports || 'N/A'}</li>`;
+                    CreateGraph(doc,'keywordsChartMonthly');
                 }).catch((error) => {
                     console.log("Error getting volunteers:", error);
                 });
@@ -104,7 +107,7 @@ document.getElementById('fetchStats').addEventListener('click', () => {
                 console.log("Error getting inventory:", error);
             });
         } else {
-            alert("No such document!");
+            alert("אין מסמך לחודש זה!");
         }
     }).catch((error) => {
         console.log("Error getting document:", error);
@@ -173,15 +176,17 @@ document.getElementById('yearlyReportBtn').addEventListener('click', async () =>
 
     let report = {
         borrows: 0,
+        products: numOfProducts,
         newProducts: 0,
         families: 0,
         volunteers: volunteers,
         newVolunteers: 0,
-        transports: 0
+        transports: 0,
+        keywords: {}  // initialize keywords object
     };
 
     // Get all documents in the collection
-    statisticsRef.get().then((querySnapshot) => {
+    statisticsRef.get().then(async (querySnapshot) => {
         querySnapshot.forEach((doc) => {
             // Check if the document is for the selected year
             if (doc.id.endsWith(selectedYear)) {
@@ -193,19 +198,64 @@ document.getElementById('yearlyReportBtn').addEventListener('click', async () =>
                 report.families += data.families || 0;
                 report.newVolunteers += data.newVolunteers || 0;
                 report.transports += data.transports || 0;
+
+                // Sum up the keywords
+                if (data.keywords) {
+                    for (let keyword in data.keywords) {
+                        if (report.keywords.hasOwnProperty(keyword)) {
+                            report.keywords[keyword] += data.keywords[keyword];
+                        } else {
+                            report.keywords[keyword] = data.keywords[keyword];
+                        }
+                    }
+                }
             }
         });
 
-        // Display the report
+    const borrows=report.borrows;
+    const newProducts=report.newProducts;
+    const families=report.families;
+    const newVolunteers=report.newVolunteers;
+    const transports=report.transports;
+    const keywords=report.keywords;
+    const Products=numOfProducts;
+    const Volunteers=volunteers;
+
+
+        // Create or update the yearly statistics document
+        firebase.firestore().collection("Yearly Statistics").doc(selectedYear).set({
+        borrows,
+        newProducts,
+        families,
+        newVolunteers,
+        transports,
+        keywords,
+        Products,
+        Volunteers
+        })
+        .then(() => {
+            console.log("Yearly statistics successfully updated!");
+        })
+        .catch((error) => {
+            console.error("Error updating yearly statistics: ", error);
+        });
+
         let reportDiv = document.getElementById('yearlyReport');
-        reportDiv.innerHTML = `<h2>דו"ח שנתי לשנת: ${selectedYear}:</h2>
+        reportDiv.innerHTML = `<h2> דוח שנתי לשנת: ${selectedYear}:</h2>
                                <p>השאלות: ${report.borrows}</p>
-                               <p>מוצרים חדשים ${report.newProducts}</p>
-                               <p>מוצרים ${numOfProducts}</p>
+                               <p>מוצרים חדשים: ${report.newProducts}</p>
+                               <p>מוצרים מלאי: ${report.products}</p>
                                <p>משפחות: ${report.families}</p>
                                <p>מתנדבים: ${volunteers}</p>
                                <p>מתנדבים חדשים: ${report.newVolunteers}</p>
                                <p>שינועים: ${report.transports}</p>`;
+
+         const toolsDoc = await firebase.firestore().collection("Yearly Statistics").doc(selectedYear).get();  
+         const yearly=document.getElementById("yearly");
+         yearly.style.display="block";
+         
+
+        CreateGraph(toolsDoc,'keywordsChartYearly');                       
     }).catch((error) => {
         console.log("Error getting documents: ", error);
     });
@@ -213,64 +263,82 @@ document.getElementById('yearlyReportBtn').addEventListener('click', async () =>
 
 
 
+
 const generateChartButton = document.getElementById('generateChartButton');
 generateChartButton.addEventListener('click', async () => {
-    const toolsDocRef = firebase.firestore().collection("Tools").doc("Statistics");
-    try {
-        const doc = await toolsDocRef.get();
-        if (doc.exists) {
-            const keywordsData = doc.data().keywords;
 
-            const labels = Object.keys(keywordsData);
-            const data = Object.values(keywordsData);
+    let TotalGraph = document.getElementById('Total Graph');
+    TotalGraph.style.display = "block";
+    const toolsDoc = await firebase.firestore().collection("Tools").doc("Statistics").get();
+    CreateGraph(toolsDoc,'keywordsChart');
 
-            const ctx = document.getElementById('keywordsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: generateRandomColors(data.length) // function to generate colors
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'top',
-                    },
-                    animation: {
-                        animateScale: true,
-                        animateRotate: true
-                    }
-                }
-            });
-            createKeywordsList(keywordsData);
-        } else {
-            console.log('No such document!');
-        }
-    } catch (error) {
-        console.error("Error fetching keywords: ", error);
-    }
-    createKeywordsList(keywordsData);
 });
-
-function generateRandomColors(n) {
-    let colors = [];
-    for (let i = 0; i < n; i++) {
-        colors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
+     
+     
+    async function CreateGraph(docId,chartId) {
+        console.log(chartId);
+        try {
+            const doc = docId;
+            console.log(docId);
+            if (doc) {
+                const keywordsData = doc.data().keywords;
+    
+                const labels = Object.keys(keywordsData);
+                const data = Object.values(keywordsData);
+    
+                const ctx = document.getElementById(chartId).getContext('2d');
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: generateRandomColors(data.length) // function to generate colors
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            position: 'top',
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+    
+                // Call createKeywordsList() here
+                createKeywordsList(keywordsData);
+            } else {
+                console.log('No such document!');
+            }
+        } catch (error) {
+            console.error("Error fetching keywords: ", error);
+        }
+        // You were previously calling createKeywordsList() here, where keywordsData is not defined
     }
-    return colors;
-}
-
-function createKeywordsList(keywordsData) {
-    const listContainer = document.getElementById('listContainer');  // Assuming you have a container with id 'listContainer'
-    // Clear existing list items
-    listContainer.innerHTML = '';
-
-    for (const keyword in keywordsData) {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${keyword}: ${keywordsData[keyword]}`;
-        listContainer.appendChild(listItem);
+    
+    function generateRandomColors(n) {
+        let colors = [];
+        for (let i = 0; i < n; i++) {
+            colors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
+        }
+        return colors;
     }
-}
+    
+    function createKeywordsList(keywordsData) {
+        const listContainer = document.getElementById('listContainer');  // Assuming you have a container with id 'listContainer'
+        // Clear existing list items
+        listContainer.innerHTML = '';
+    
+        for (const keyword in keywordsData) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${keyword}: ${keywordsData[keyword]}`;
+            listContainer.appendChild(listItem);
+        }
+    }
+    
+
+
+
