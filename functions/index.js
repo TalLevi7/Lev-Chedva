@@ -436,3 +436,26 @@ exports.sendEmailsOnStatusChange = functions.firestore
 
 
 
+  exports.onVolunteerDelete = functions.firestore
+  .document('Volunteers/{volunteerEmail}')
+  .onDelete(async (snap, context) => {
+      const volunteerData = snap.data();
+      const volunteerEmail = context.params.volunteerEmail;
+
+      try {
+          // Copy to Volunteers Archive before deleting
+          const archiveRef = admin.firestore().collection("Volunteers Archive").doc(volunteerEmail);
+          await archiveRef.set(volunteerData);
+
+          // Delete user from Firebase Auth
+          const user = await admin.auth().getUserByEmail(volunteerEmail);
+          if (user) {
+              await admin.auth().deleteUser(user.uid);
+          }
+
+          console.log(`Deleted volunteer ${volunteerEmail} and archived the data.`);
+      } catch (error) {
+          console.error(`Error handling deletion of volunteer ${volunteerEmail}:`, error);
+          throw new functions.https.HttpsError('unknown', `Error handling deletion of volunteer ${volunteerEmail}: ${error}`);
+      }
+  });
