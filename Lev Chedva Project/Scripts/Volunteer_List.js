@@ -389,17 +389,26 @@ deleteUserBtn.addEventListener('click', async () => {
   if (confirm('אתה בטוח שאתה רוצה למחוק משתמש זה?')) {
     try {
       const docRef = db.collection("Volunteers").doc(volunteerData.email);
+
+      // Delete from Volunteers
       await docRef.delete();
+
+      // Remove rows from the table
+      const detailsRow = row.nextElementSibling;
       row.parentElement.removeChild(row);
-      if (row.nextElementSibling && row.nextElementSibling.classList.contains('volunteer-details-row')) {
-        row.parentElement.removeChild(row.nextElementSibling);
+      if (detailsRow && detailsRow.classList.contains('volunteer-details-row')) {
+        detailsRow.parentElement.removeChild(detailsRow);
       }
+
+      // Remove from volunteersArray
       volunteersArray = volunteersArray.filter(volunteer => volunteer.email !== volunteerData.email);
+      
     } catch (error) {
       console.error("Error removing document: ", error);
     }
   }
 });
+
 
     }
   });
