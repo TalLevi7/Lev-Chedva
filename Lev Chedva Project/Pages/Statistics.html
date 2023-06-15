@@ -27,37 +27,46 @@
 
     <button id="fetchStats">בחר</button>
 
-    <div id="statistics"></div>
-    <div id="statistics">
+   
+    <div id="statistics" style="width: 400px; height:400px;display: none;">
         <ul id="statsList"></ul>
-        <button id="transportBtn">שינועים לפי מתנדבים</button>
+        <canvas id="keywordsChartMonthly"></canvas>
     </div>
+
+
+
     <button id="yearlyReportBtn">דו"ח שנתי</button>
     <select id="yearSelectorReport"></select>
-    <button id="generateChartButton">גרף השאלות לפי סוגי מוצרים</button>
+
+
+    <div id="yearly" style="width: 400px; height:400px; display: none;">
     <div id="yearlyReport"></div>
-    <table id="volunteerTable" style="display: none;">
-        <thead>
-            <tr>
-                <th>שם פרטי</th>
-                <th>שם משפחה</th>
-                <th>שינועים החודש</th>
-                <th>סה"כ שינועים</th>
-                <th>שינוע אחרון</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Data rows will go here -->
-        </tbody>
-    </table>
+    <canvas id="keywordsChartYearly"></canvas>
+</div>
+    <button id="generateChartButton">גרף השאלות לפי סוגי מוצרים</button>
     
-    
-    <div style="width: 400px; height: 400px;">
+    <div id="Total Graph" style="width: 400px; height: 600px; display: none;">
         <canvas id="keywordsChart"></canvas>
         <div id="listContainer"></div>
 
       </div>
-      
+
+      <button id="transportBtn">שינועים לפי מתנדבים</button>
+      <table id="volunteerTable" style="display: none;">
+          <thead>
+              <tr>
+                  <th>שם פרטי</th>
+                  <th>שם משפחה</th>
+                  <th>שינועים החודש</th>
+                  <th>שינוע אחרון</th>
+              </tr>
+          </thead>
+          <tbody>
+              <!-- Data rows will go here -->
+          </tbody>
+      </table>
+
+
     
 
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>

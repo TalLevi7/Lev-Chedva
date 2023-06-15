@@ -41,9 +41,16 @@ function preDisplayData(filter) {
       DisplayData(eventData);
     } else {
       var StatusString = eventData.status;
-      if (StatusString.toLowerCase().includes(filter.toLowerCase())||eventData.urgency=="Urgent")
+      console.log(StatusString,filter);
+      if (StatusString.toLowerCase().includes(filter.toLowerCase()))
+        DisplayData(eventData);
+
+        if (eventData.urgency=='Urgent' && filter=='Urgent')
         DisplayData(eventData);
     }
+
+
+    
   });
 }
 
@@ -64,7 +71,7 @@ function DisplayData(eventData) {
   eventTable.appendChild(row);
   switch (eventData.status) {
     case "פתוח":
-      if (eventData.urgency === "דחוף") {
+      if (eventData.urgency === "Urgent") {
         row.style.backgroundColor = "#FFCDD2"; // Soft red
       }
       break;
@@ -555,19 +562,20 @@ searchInput.addEventListener('input', function () {
 });
 
 async function searchAcrossCollection(searchTerm) {
-  reservationTableBody.innerHTML = "";
+  eventTable.innerHTML = "";
   const snapshot = await db
-    .collection("Closed Events")
+    .collection("Open Events")
     .orderBy(firebase.firestore.FieldPath.documentId(), "asc")
     .get();
 
+  
   const docs = snapshot.docs.reverse(); // Reverse the order of the documents
 
   docs.forEach((doc) => {
     const data = doc.data();
     for (let key in data) {
       if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
-        DisplayData(doc);
+        DisplayData(doc.data());
         break;
       }
     }

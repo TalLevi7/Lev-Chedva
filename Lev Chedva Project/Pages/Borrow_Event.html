@@ -476,12 +476,24 @@ let newReserved=0;
 
 
 
+
+
 async function incrementKeywords(itemName) {
     const itemRef = firebase.firestore().collection('inventory').doc(itemName);
     const itemSnapshot = await itemRef.get();
+
     if (itemSnapshot.exists) {
         const keywords = itemSnapshot.data().keywords.split(','); // assuming keywords is a comma-separated string
+
+        const now = new Date();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const docNameForThisMonth = `${monthNames[now.getMonth()]} ${now.getFullYear()}`;
+
+        console.log("Updating document: ", docNameForThisMonth);
+
         const toolsDocRef = firebase.firestore().collection("Tools").doc("Statistics");
+        const monthlyStatsDocRef = firebase.firestore().collection("Monthly Statistics").doc(docNameForThisMonth);
+        
         let updates = {};
         keywords.forEach(keyword => {
             keyword = keyword.trim(); // remove potential leading or trailing spaces
@@ -489,7 +501,12 @@ async function incrementKeywords(itemName) {
         });
 
         try {
+            // Update the "Statistics" document in the "Tools" collection
             await toolsDocRef.update(updates);
+            await monthlyStatsDocRef.update(updates);
+            // Set the doc for this month in "Monthly Statistics" collection, also adding the keywords array
+          
+
             console.log("Keywords updated successfully!");
         } catch (error) {
             console.error("Error updating keywords: ", error);

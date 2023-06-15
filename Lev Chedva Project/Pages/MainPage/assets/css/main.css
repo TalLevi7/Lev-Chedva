@@ -2581,6 +2581,7 @@ input, select, textarea {
 			}
 
 			#logo img {
+				position: relative;
 				max-width: 150px; /* Adjust the desired width */
 				height: 7rem;
 				float: right;
