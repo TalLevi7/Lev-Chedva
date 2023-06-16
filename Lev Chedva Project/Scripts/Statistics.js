@@ -71,6 +71,7 @@ setInterval(() => {
 document.getElementById('fetchStats').addEventListener('click', () => {
     let statistics = document.getElementById('statistics');
     statistics.style.display="block";
+    statistics.querySelector('h2').style.display = 'block';
     let selectedMonth = document.getElementById('monthSelector').value;
     let selectedYear = document.getElementById('yearSelector').value;
     let docId = selectedMonth + ' ' + selectedYear;
@@ -95,7 +96,7 @@ document.getElementById('fetchStats').addEventListener('click', () => {
                     statsList.innerHTML += `<li>השאלות: ${data.borrows || 'N/A'}</li>`;
                     statsList.innerHTML += `<li>מוצרים במלאי: ${numOfProducts}</li>`;
                     statsList.innerHTML += `<li>מוצרים חדשים: ${data.newProducts || 'N/A'}</li>`;
-                    statsList.innerHTML += `<li>משפחחות: ${data.families || 'N/A'}</li>`;
+                    statsList.innerHTML += `<li>משפחות: ${data.families || 'N/A'}</li>`;
                     statsList.innerHTML += `<li>מתנדבים: ${numOfVolunteers}</li>`;
                     statsList.innerHTML += `<li>מתנדבים חדשים: ${data.newVolunteers || 'N/A'}</li>`;
                     statsList.innerHTML += `<li>שינועים: ${data.transports || 'N/A'}</li>`;
@@ -241,7 +242,7 @@ document.getElementById('yearlyReportBtn').addEventListener('click', async () =>
         });
 
         let reportDiv = document.getElementById('yearlyReport');
-        reportDiv.innerHTML = `<h2> דוח שנתי לשנת: ${selectedYear}:</h2>
+        reportDiv.innerHTML = `<h2> דוח שנתי לשנת ${selectedYear}:</h2>
                                <p>השאלות: ${report.borrows}</p>
                                <p>מוצרים חדשים: ${report.newProducts}</p>
                                <p>מוצרים מלאי: ${report.products}</p>
@@ -269,6 +270,7 @@ generateChartButton.addEventListener('click', async () => {
 
     let TotalGraph = document.getElementById('Total Graph');
     TotalGraph.style.display = "block";
+    TotalGraph.querySelector('h2').style.display = 'block';
     const toolsDoc = await firebase.firestore().collection("Tools").doc("Statistics").get();
     CreateGraph(toolsDoc,'keywordsChart');
 
