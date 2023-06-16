@@ -34,21 +34,61 @@ h2{
 .header:hover {
 	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
-.button-container {
-	width: 80%;
-	padding: 10px;
-	background-color: #fff;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-	justify-content: center;
-	align-items: center;
-	margin: 20px auto;
-	border-radius: 5px;
+
+
+#icon {
+    position: relative;
+    top:10%; 
+    left: 9em; 
+	margin-right:-0.2rem;
+	z-index: 1;
+	margin-left: -1.3rem;
+	bottom: 0.3rem;
 }
+
+
+#icon_borrow {
+    position: relative;
+    top:10%; 
+    left: 10em; 
+	margin-right:-0.2rem;
+	z-index: 1;
+	margin-left: -1.2rem;
+	bottom: 0.3rem;
+}
+
+
+#icon_donation {
+    position: relative;
+    top:10%; 
+    left: 9.7em; 
+	margin-right:-0.2rem;
+	z-index: 1;
+	margin-left: -1.2rem;
+	bottom: 0.3rem;
+}
+
+
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    margin: 20px auto;
+    border-radius: 5px;
+}
+
+
 .square-button {
 	display: inline-block;
 	border: none;
 	padding: 10px 20px;
-	margin: 10px 0;
+	margin: 10px 5px;
 	text-decoration: none;
 	background-color: #d25757;
 	color: white;
@@ -57,9 +97,11 @@ h2{
 	border-radius: 5px;
 	transition: background-color 0.3s ease-in-out;
 }
+
 .square-button:hover {
 	background-color: #c61f1f;
 }
+
 .square-button a {
 	color: white;
 	text-decoration: none;

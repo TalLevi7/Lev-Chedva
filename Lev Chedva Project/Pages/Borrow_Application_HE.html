@@ -22,15 +22,18 @@
       
       <label class = "form_labels" for="contact-number">:מספר טלפון ליצירת קשר</label>
       <input class = "form_fill_boxes" type="tel" id="contact-number" name="contact-number" required><br><br>
-      
+
+      <label class = "form_labels" for="contact-number">:מספר טלפון נוסף ליצירת קשר</label>
+      <input class = "form_fill_boxes" type="tel" id="contact-number2" name="contact-number2" required><br><br>
+
       <label class = "form_labels" for="patient-name">:שם המטופל</label>
-      <input class = "form_fill_boxes" type="text" id="patient-name" name="patient-name" required><br><br>
+      <input class = "form_fill_boxes" type="text" id="patient-name" name="patient-name"><br><br>
       
       <label class = "form_labels" for="patient-number">:מספר הטלפון של המטופל</label>
-      <input class = "form_fill_boxes" type="tel" id="patient-number" name="patient-number" required><br><br>
+      <input class = "form_fill_boxes" type="tel" id="patient-number" name="patient-number"><br><br>
       
       <label class = "form_labels" for="address">:כתובת</label>
-      <textarea class = "form_fill_boxes" id="address" name="address" required></textarea><br><br>
+      <textarea class = "form_fill_boxes" id="address" name="address" ></textarea><br><br>
                 
       <input type="button" value="שלח" onclick="submitData()">
     </form>
@@ -49,6 +52,7 @@
   // Get form elements
   const contactNameInput = document.getElementById("contact-name");
   const contactNumberInput = document.getElementById("contact-number");
+  const contactNumberInput2 = document.getElementById("contact-number2");
   const patientNameInput = document.getElementById("patient-name");
   const patientNumberInput = document.getElementById("patient-number");
   const addressInput = document.getElementById("address");
@@ -58,6 +62,7 @@
     // Get the values from the form
     const contactName = contactNameInput.value;
     const contactNumber = contactNumberInput.value;
+    const contactNumber2 = contactNumberInput2.value;
     const patientName = patientNameInput.value;
     const patientNumber = patientNumberInput.value;
     const address = addressInput.value;
@@ -75,13 +80,9 @@
       date: firebase.firestore.Timestamp.fromDate(new Date()), // Current date and time
   })
   .then(() => {
-  console.log("Form data saved successfully!");
-  // Clear the form inputs after submission
-  contactNameInput.value = "";
-  contactNumberInput.value = "";
-  patientNameInput.value = "";
-  patientNumberInput.value = "";
-  addressInput.value = "";
+  alert("!בקשתך נשלחה בהצלחה");
+  window.location.href = "../Pages/MainPage/index.html";
+
   })
   .catch((error) => {
   console.error("Error saving form data: ", error);

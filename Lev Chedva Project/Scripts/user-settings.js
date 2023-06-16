@@ -3,13 +3,9 @@ const auth = firebase.auth();
 const hebrewLabels = {
     EmergencyContactName: 'איש קשר לשעת חירום ',
     EmergencyContactPhone: 'טלפון איש קשר לשעת חירום',
-    ID: 'ת.ז.',
     address:'כתובת',
-    firstName: 'שם פרטי',
-    lastName: 'שם משפחה',
     phone: 'מספר טלפון',
-    vehicals: 'רכבים',
-    volunteerTypes: 'סוגי התנדבות' 
+    vehicles: 'רכבים',
 };
 
 // Check for logged in user
@@ -24,48 +20,102 @@ auth.onAuthStateChanged(user => {
 
         const editFields = () => {
             Object.entries(hebrewLabels).forEach(([key, value]) => {
-                let listItem = document.getElementById(key);
-                if (listItem) {
+              let listItem = document.getElementById(key);
+              
+              if (listItem) {
+                if (Array.isArray(volunteerData[key])) {  // Check if the field is an array
+                  listItem.innerHTML = `${value}: `;  // Clear the listItem and add the label
+          
+                  volunteerData[key].forEach((vehicle, index) => {
                     let inputField = document.createElement('input');
                     inputField.type = 'text';
-                    inputField.id = `input-${key}`;
-                    inputField.value = listItem.textContent.split(": ")[1]; // Assign the existing value
-                    listItem.innerHTML = `${value}: `;
+                    inputField.id = `input-${key}-${index}`;  // Create a unique ID for each input field
+                    inputField.value = vehicle;  // Prefill the input field with the current value
+          
+                    let deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'מחק';
+                    deleteButton.className = 'delete-btn'; 
+                    deleteButton.addEventListener('click', () => {
+                      inputField.value = '';  // Instead of removing the input field, clear its value
+                      inputField.style.display = 'none';  // Hide the input field
+                      deleteButton.style.display = 'none';  // Hide the delete button itself
+                    });
+          
                     listItem.appendChild(inputField);
+                    listItem.appendChild(deleteButton);
+                  });
+          
+                  // Create a button to add more fields
+                  let addButton = document.createElement('button');
+                  addButton.textContent = 'הוסף רכב';
+                  addButton.addEventListener('click', () => {
+                    let inputField = document.createElement('input');
+                    inputField.type = 'text';
+                    inputField.id = `input-${key}-${volunteerData[key].length}`;  // The id for the new field will be the next index in the array
+                    listItem.appendChild(inputField);
+                  });
+                  listItem.appendChild(addButton);
+                } else {
+                  let inputField = document.createElement('input');
+                  inputField.type = 'text';
+                  inputField.id = `input-${key}`;
+                  inputField.value = listItem.textContent.split(": ")[1];  // Assign the existing value
+                  listItem.innerHTML = `${value}: `;
+                  listItem.appendChild(inputField);
                 }
+              }
             });
+          
             editButton.textContent = "שמור";
             editButton.removeEventListener('click', editFields);
             editButton.addEventListener('click', saveFields);
-        };
+          };
+          
 
-        const saveFields = () => {
+          const saveFields = () => {
             let updatedData = {};
+          
             Object.entries(hebrewLabels).forEach(([key, value]) => {
+              if (Array.isArray(volunteerData[key])) {  // Check if the field is an array
+                updatedData[key] = [];
+          
+                // Get each input field value and add it to updatedData
+                let i = 0;
+                while (true) {
+                  let inputField = document.getElementById(`input-${key}-${i}`);
+                  if (!inputField) break;
+                  if (inputField.style.display !== 'none') {  // Only add to updatedData if the input field has not been deleted
+                    updatedData[key].push(inputField.value);
+                  }
+                  i++;
+                }
+              } else {
                 let inputField = document.getElementById(`input-${key}`);
                 if (inputField) {
-                    updatedData[key] = inputField.value;
+                  updatedData[key] = inputField.value;
                 }
+              }
             });
-
             db.collection('Volunteers').doc(email).update(updatedData)
-                .then(() => {
-                    console.log("Document successfully updated!");
-                    personalDetailsButton.click();  // re-fetch the data
-                })
-                .catch((error) => {
-                    console.error("Error updating document: ", error);
-                });
-        };
-
+              .then(() => {
+                console.log("Document successfully updated!");
+                personalDetailsButton.click();  // re-fetch the data
+              })
+              .catch((error) => {
+                console.error("Error updating document: ", error);
+              });
+          };
+          
+        let volunteerData;
         personalDetailsButton.addEventListener('click', () => {
             const detailsDiv = document.getElementById('personalDetailsDiv');
             detailsDiv.style.display = 'block';
             detailsDiv.innerHTML = '';
-
+        
             db.collection('Volunteers').doc(email).get()
                 .then((doc) => {
                     if (doc.exists) {
+                        volunteerData = doc.data();
                         let detailsTable = document.createElement('table');
                         let row = detailsTable.insertRow();
                         let cell = row.insertCell();
@@ -73,16 +123,22 @@ auth.onAuthStateChanged(user => {
                         Object.entries(hebrewLabels).forEach(([key, value]) => {
                             let li = document.createElement('li');
                             li.id = key;
-                            li.innerHTML = `${value}: ${doc.data()[key]}`;
+        
+                            // Create a div to wrap the label and input
+                            let inputContainer = document.createElement('div');
+                            inputContainer.className = 'input-container';
+                            inputContainer.innerHTML = `${value}: ${doc.data()[key]}`;
+        
+                            li.appendChild(inputContainer);
                             ul.appendChild(li);
                         });
-
+        
                         cell.appendChild(ul);
                         detailsDiv.appendChild(detailsTable);
                         editButton = document.createElement('button');
                         editButton.textContent = "ערוך";
                         editButton.addEventListener('click', editFields);
-
+        
                         detailsDiv.appendChild(editButton);
                     } else {
                         console.log("No such document!");
@@ -92,6 +148,7 @@ auth.onAuthStateChanged(user => {
                     console.log("Error getting document:", error);
                 });
         });
+        
 
         credentialsButton.addEventListener('click', () => {
             const credentialsDiv = document.getElementById('credentialsDiv');

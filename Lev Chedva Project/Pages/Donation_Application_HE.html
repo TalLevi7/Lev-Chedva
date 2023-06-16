@@ -22,6 +22,10 @@
       <label for="Phone Number">:טלפון</label>
       <input type="tel" id="Phone Number" name="Phone Number"><br><br>
       
+      <label for="Phone Number2">:טלפון נוסף</label>
+      <input type="tel" id="Phone Number2" name="Phone Number2"><br><br>
+
+
       <label for="Product">:ציוד לתרומה</label>
       <input type="text" id="Product" name="Product"><br><br>
       
@@ -38,6 +42,7 @@
   // Get form elements
   const nameInput = document.getElementById("name");
   const Phone_NumInput = document.getElementById("Phone Number");
+  const Phone_NumInput2 = document.getElementById("Phone Number2");
   const ProductInput = document.getElementById("Product");
   
   // Function to submit form data to Firestore
@@ -45,25 +50,27 @@
     // Get the values from the form
     const name = nameInput.value;
     const Phone_Num = Phone_NumInput.value;
+    const Phone_Num2 = Phone_NumInput2.value;
     const Product = ProductInput.value;
   
     // Save the data to Firestore
     db.collection("Donation_List").add({
       name: name,
       Phone_Num: Phone_Num,
-      Product: Product
+      Phone_Num2: Phone_Num,
+      Product: Product,
+      date: firebase.firestore.Timestamp.fromDate(new Date()), // Current date and time
     })
     .then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
-      alert("Data saved successfully!");
+      
+      alert("!בקשתך נשלחה בהצלחה");
       // Clear form fields
-      nameInput.value = "";
-      Phone_NumInput.value = "";
-      ProductInput.value = "";
+      window.location.href = "../Pages/MainPage/index.html";
+
     })
     .catch((error) => {
       console.error("Error adding document: ", error);
-      alert("Failed to save data!");
+      alert("שגיאה");
     });
   }
       </script>

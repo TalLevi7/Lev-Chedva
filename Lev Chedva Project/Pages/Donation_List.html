@@ -41,7 +41,10 @@
         date: 'תאריך:',
         name: 'שם איש קשר: ',
         Phone_Num: 'טלפון איש קשר: ',
+        Phone_Num2:'טלפון איש קשר נוסף',
         Product: 'שם המוצר: ',
+        remarks:'הערות: '
+
        
     };
     
@@ -57,6 +60,7 @@
     
     // Function to display a document
     function displayDoc(doc) {
+        console.log(doc.data());
         let row = document.createElement('tr');
         let contactNameCell = document.createElement('td');
         let dateCell = document.createElement('td');
@@ -119,35 +123,98 @@
     
    
     function displayDetails(doc) {
-        const skipKeys = ['contact_name', 'date'];
-        let detailsRow = document.createElement('tr');
-        let detailsCell = document.createElement('td');
-        let detailsList = document.createElement('ul');
-        let archiveButton = document.createElement('button');
-    
-        archiveButton.textContent = 'טופל';
-        archiveButton.onclick = function(event) {
-            event.stopPropagation(); // Prevent the event from triggering on the parent row
-            archiveDoc(doc.id, doc.data());
-        };
-    
-        detailsCell.colSpan = 3;
-    
-        Object.entries(doc.data()).forEach(([key, value]) => {
-            if (skipKeys.includes(key)) return;
-            let listItem = document.createElement('li');
-            listItem.textContent = hebrewLabels[key] + ": " + value;
-            detailsList.appendChild(listItem);
-        });
-    
-        detailsCell.appendChild(detailsList);
-        detailsCell.appendChild(archiveButton); // Add the Archive button to the details cell
-        detailsRow.appendChild(detailsCell);
-        detailsRow.id = 'details-' + doc.id;
-    
-        let mainRow = document.getElementById(doc.id);
-        mainRow.parentNode.insertBefore(detailsRow, mainRow.nextSibling);
+    const skipKeys = ['contact_name', 'date'];
+    let detailsRow = document.getElementById('details-' + doc.id);
+
+    if (detailsRow) {
+        detailsRow.remove();
     }
+
+    detailsRow = document.createElement('tr');
+    detailsRow.id = 'details-' + doc.id;
+
+    let detailsCell = document.createElement('td');
+    let detailsList = document.createElement('ul');
+    let archiveButton = document.createElement('button');
+    let remarksButton = document.createElement('button');
+    let remarksTextBox = document.createElement('textarea');
+remarksTextBox.rows = 5;
+remarksTextBox.cols = 40;
+
+    let saveButton = document.createElement('button');
+
+    remarksTextBox.style.display = 'none';
+    archiveButton.textContent = 'העבר לארכיב';
+    archiveButton.onclick = function(event) {
+        event.stopPropagation();
+        archiveDoc(doc.id, doc.data());
+    };
+
+    remarksButton.textContent = 'הוסף הערות';
+    remarksButton.onclick = function(event) {
+        event.stopPropagation();
+        remarksTextBox.style.display = 'block';
+        saveButton.style.display = 'block';
+    };
+
+    saveButton.textContent = 'שמור';
+    saveButton.style.display = 'none';
+
+    saveButton.onclick = function(event) {
+        event.stopPropagation();
+        const remarks = remarksTextBox.value;
+
+        const DonationListRef = firebase.firestore().collection('Donation_List');
+        DonationListRef
+            .doc(doc.id)
+            .update({ remarks: remarks })
+            .then(() => {
+                console.log("Remarks saved successfully!");
+                // Update the value in the details list
+                const existingRemarksItem = detailsList.querySelector('.remarks-item');
+                if (existingRemarksItem) {
+                    existingRemarksItem.textContent = hebrewLabels['remarks'] + ": " + remarks;
+                } else {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('remarks-item');
+                    listItem.textContent = hebrewLabels['remarks'] + ": " + remarks;
+                    detailsList.appendChild(listItem);
+                }
+            })
+            .catch(error => {
+                console.error("Error saving remarks:", error);
+            });
+
+        remarksTextBox.style.display = 'none';
+        saveButton.style.display = 'none';
+    };
+
+    detailsCell.colSpan = 3;
+
+    Object.entries(doc.data()).forEach(([key, value]) => {
+    if (skipKeys.includes(key)) return;
+    let listItem = document.createElement('li');
+
+    if (key === 'remarks') { // Check if the key is 'remarks'
+        listItem.classList.add('remarks-item'); // Add 'remarks-item' class for later reference
+    }
+
+    listItem.textContent = hebrewLabels[key] + ": " + value;
+    detailsList.appendChild(listItem);
+});
+
+
+    detailsCell.appendChild(detailsList);
+    detailsCell.appendChild(archiveButton);
+    detailsCell.appendChild(remarksButton);
+    detailsCell.appendChild(remarksTextBox);
+    detailsCell.appendChild(saveButton);
+    detailsRow.appendChild(detailsCell);
+
+    let mainRow = document.getElementById(doc.id);
+    mainRow.parentNode.insertBefore(detailsRow, mainRow.nextSibling);
+}
+
     
     // Get the Donation list on initial page load
     getDonationList();
