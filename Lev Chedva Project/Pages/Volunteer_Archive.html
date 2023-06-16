@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ארכיון פניות לתרומה</title>
+    <title>ארכיון מתנדבים</title>
     <link rel="stylesheet" href="../styles/reservation_archive.css">
     <link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
+
 </head>
 <body>
     <div class="content-wrapper">
@@ -14,16 +15,17 @@
               <img src="../Pictures/logoLevChedva.png" alt="Logo" />
             </a>
           </div>
-        <h1>ארכיון פניות לתרומה</h1>
+        <h1>ארכיון מתנדבים</h1>
         <input type="text" id="searchInput" placeholder="חפש..">
-        <table id="DonationTable">
+        <table id="borrowTable">
             <thead>
                 <tr>
-                    <th>איש קשר</th>
-                    <th>תאריך</th>
+                    <th>שם המתנדב</th>
+                    <th>אימייל</th>
+                    <th>תאריך מחיקה</th>
                 </tr>
             </thead>
-            <tbody id="DonationTableBody">
+            <tbody id="borrowTableBody">
             </tbody>
         </table>
         <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -35,19 +37,33 @@
             // Assuming you've initialized Firebase and Firestore
     const db = firebase.firestore();
     
-    const DonationTableBody = document.getElementById('DonationTableBody');
+    const borrowTableBody = document.getElementById('borrowTableBody');
     const searchInput = document.getElementById('searchInput');
     const hebrewLabels = {
-        date: 'תאריך:',
-        name: 'שם איש קשר: ',
-        Phone_Num: 'טלפון איש קשר: ',
-        Product: 'שם המוצר: ',
-       
+        Authorizations: 'הרשאות:',
+        BirthDate: 'תאריך לידה: ',
+        EmergencyContactName: 'איש קשר לשעת בחירום',
+        EmergencyContactPhone: 'טלפון איש קשר בחירום: ',
+        ID: 'ת.ז.',
+        address: 'כתובת',
+        createdAt: 'תאריך הצטרפות:',
+        deletedAt: ':תאריך מחיקה',
+        firstName: ':שם פרטי',
+        lastName: 'שם משפחה: ',
+        phone: 'טלפון',
+        vehicles: 'רכבים',
+        email:'אימייל',
+        remark: 'הערות',
+        monthlyEvents: 'אירועים חודשיים',
+        volunteerTypes:'סוגי התנדבות'
+
+
+
     };
     
-    // Function to get all documents from "Donation App Archive"
-    async function getDonationList() {
-        const snapshot = await db.collection("Donation App Archive").orderBy("date", "asc").get();
+    // Function to get all documents from "Borrow App Archive"
+    async function getBorrowList() {
+        const snapshot = await db.collection("Volunteers Archive").get();
         snapshot.forEach(displayDoc);
     }
     
@@ -56,12 +72,16 @@
         let row = document.createElement('tr');
         let contactNameCell = document.createElement('td');
         let dateCell = document.createElement('td');
-    
-        contactNameCell.textContent = doc.data().name;
-        let date = doc.data().date.toDate();
+        let emailCell = document.createElement('td');
+        contactNameCell.textContent = doc.data().firstName+" "+doc.data().lastName;
+        let date = doc.data().deletedAt.toDate();
         dateCell.textContent = date.toLocaleDateString("he-IL");
-    
+        emailCell.textContent=doc.data().email;
+
+
+
         row.appendChild(contactNameCell);
+        row.appendChild(emailCell);
         row.appendChild(dateCell);
     
         row.id = doc.id;
@@ -77,35 +97,46 @@
             }
         }
     
-        DonationTableBody.appendChild(row);
+        borrowTableBody.appendChild(row);
     }
     
     // Function to display details
     function displayDetails(doc) {
-        const skipKeys = ['contact_name', 'date'];
-        let detailsRow = document.createElement('tr');
-        let detailsCell = document.createElement('td');
-        let detailsList = document.createElement('ul');
+    const skipKeys = ['contact_name', 'date'];
+    let detailsRow = document.createElement('tr');
+    let detailsCell = document.createElement('td');
+    let detailsList = document.createElement('ul');
+
+    detailsCell.colSpan = 3;
+
+    Object.entries(doc.data()).forEach(([key, value]) => {
+        if (skipKeys.includes(key)) return;
+
+        let listItem = document.createElement('li');
+        
+        if (key === 'createdAt' || key === 'deletedAt') {
+            // Convert Firestore Timestamp to JavaScript Date
+            const date = value.toDate();
+
+            // Format as Israeli date
+            value = date.toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' });
+        }
+
+        listItem.textContent = hebrewLabels[key] + ": " + value;
+        detailsList.appendChild(listItem);
+    });
+
+    detailsCell.appendChild(detailsList);
+    detailsRow.appendChild(detailsCell);
+    detailsRow.id = 'details-' + doc.id;
+
+    let mainRow = document.getElementById(doc.id);
+    mainRow.parentNode.insertBefore(detailsRow, mainRow.nextSibling);
+}
+
     
-        detailsCell.colSpan = 3;
-    
-        Object.entries(doc.data()).forEach(([key, value]) => {
-            if (skipKeys.includes(key)) return;
-            let listItem = document.createElement('li');
-            listItem.textContent = hebrewLabels[key] + ": " + value;
-            detailsList.appendChild(listItem);
-        });
-    
-        detailsCell.appendChild(detailsList);
-        detailsRow.appendChild(detailsCell);
-        detailsRow.id = 'details-' + doc.id;
-    
-        let mainRow = document.getElementById(doc.id);
-        mainRow.parentNode.insertBefore(detailsRow, mainRow.nextSibling);
-    }
-    
-    // Get the Donation list on initial page load
-    getDonationList();
+    // Get the borrow list on initial page load
+    getBorrowList();
     
     // Filter function for the search bar
     searchInput.addEventListener('input', function() {
@@ -113,27 +144,27 @@
     });
     
     async function searchAcrossCollection(searchTerm) {
-        DonationTableBody.innerHTML = "";
-        const DonationListSet = new Set();
-        const snapshot = await db.collection("Donation App Archive").orderBy("date", "asc").get();
+        borrowTableBody.innerHTML = "";
+        const borrowListSet = new Set();
+        const snapshot = await db.collection("Volunteers Archive").get();
     
         snapshot.forEach((doc) => {
             if (doc.exists) {
                 const data = doc.data();
                 for (let key in data) {
                     if (data[key].toString().toLowerCase().includes(searchTerm.toLowerCase())) {
-                        DonationListSet.add(doc);
+                        borrowListSet.add(doc);
                     }
                 }
             } else {
                 console.log("No such document!");
             }
         });
-        displayDonationList([...DonationListSet]);
+        displayBorrowList([...borrowListSet]);
     }
     
-    function displayDonationList(docs) {
-        DonationTableBody.innerHTML = '';
+    function displayBorrowList(docs) {
+        borrowTableBody.innerHTML = '';
         docs.forEach(displayDoc);
     }
     </script>

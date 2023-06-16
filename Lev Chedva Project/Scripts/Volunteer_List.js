@@ -389,6 +389,20 @@ deleteUserBtn.addEventListener('click', async () => {
   if (confirm('אתה בטוח שאתה רוצה למחוק משתמש זה?')) {
     try {
       const docRef = db.collection("Volunteers").doc(volunteerData.email);
+      
+      // Get remark from user
+      const remark = prompt("מהי סיבת המחיקה?");
+
+      // Define the update object
+      let updateObject = { deletedAt: firebase.firestore.FieldValue.serverTimestamp() };
+
+      // Add the remark to the update object if it exists
+      if (remark) {
+        updateObject.remark = remark;
+      }
+
+      // Update the document with the remark and the deletion timestamp
+      await docRef.update(updateObject);
 
       // Delete from Volunteers
       await docRef.delete();
@@ -408,6 +422,7 @@ deleteUserBtn.addEventListener('click', async () => {
     }
   }
 });
+
 
 
     }
