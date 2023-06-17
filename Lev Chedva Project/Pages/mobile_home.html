@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="../styles/logo_footer.css">
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+      <script src="../firebase.js"></script>
     <title>Mobile Home</title>
 
   <script>
@@ -83,7 +88,7 @@ window.addEventListener('resize', function() {
       </section>
 
       <section id="section2">
-        <h2>הפעילות שלנו</h2>
+        <h2>כתבו עלינו</h2>
         <div class="container">
             <div class="item slideshow-container">
               <img id="mySlides" src="./MainPage/Pictures/Gallery/2.jpeg" alt="Slideshow Image" class="slideshow-image">
@@ -92,12 +97,53 @@ window.addEventListener('resize', function() {
     </section>
     
       <section>
-        <h2>כתבו עלינו</h2>
+        <h2>הפעילות שלנו</h2>
         <div class="container">
-          <div class="item">
-            <p>
-                להכניס סטטיסטיקה
-            </p>
+          <div class="item" dir="rtl">
+            <p><span id="totalFamilies"></span> משפחות קיבלו מאיתנו ציוד רפואי</p>
+            <p>יש לנו מעל ל- <span id="totalInventory"></span> פריטים</p>
+            <p>השאלנו <span id="totalBorrows"></span> מוצרים</p>
+            <p>הוצאנו <span id="totalEvents"></span> שינועים ברחבי הארץ</p>
+            <p>יש לנו מעל ל- <span id="totalVolunteers"></span> מתנדבים</p>
+				<script>
+					var db = firebase.firestore();
+					db.collection("Tools").doc("Statistics").get().then((doc) => {
+						if (doc.exists){
+							if(doc.data().TotalBorrows){
+								document.getElementById("totalBorrows").textContent = 448;
+							}else{
+								document.getElementById("totalBorrows").textContent = doc.data().TotalBorrows;
+							}
+							if(doc.data().TotalEvents){
+								document.getElementById("totalEvents").textContent = 187;
+							}else{
+								document.getElementById("totalEvents").textContent = doc.data().TotalEvents;
+							}
+							if(doc.data().TotalFamilies){
+								document.getElementById("totalFamilies").textContent = 450;
+							}else{
+								document.getElementById("totalFamilies").textContent = doc.data().TotalFamilies;
+							}
+							if(doc.data().TotalInventory){
+								document.getElementById("totalInventory").textContent = 270;
+							}else{
+								document.getElementById("totalInventory").textContent = doc.data().TotalInventory;
+							}
+							if(doc.data().TotalVolunteers){
+								document.getElementById("totalVolunteers").textContent = 103;
+							}else{
+								document.getElementById("totalVolunteers").textContent = doc.data().TotalVolunteers;
+							}
+      						
+      						
+						}else {
+      					console.log("Statistics document not found");
+    					}				
+					}).catch((error) => {
+    					console.log("Error getting document:", error);
+					});
+					
+				</script>
           </div>
         </div>
     </section>
