@@ -119,11 +119,15 @@
           const phone = document.getElementById("phone").value;
           const EmergencyContactName = document.getElementById("EmergencyContactName").value;
           const EmergencyContactPhone = document.getElementById("EmergencyContactPhone").value;
-          const BirthDate=document.getElementById("BirthDate").value;
-          
-          
-  
-  
+          const BirthDate = document.getElementById("BirthDate").value;  // This gives you a string in 'YYYY-MM-DD' format
+
+            // Converting 'YYYY-MM-DD' to a Date object
+            const [year, month, day] = BirthDate.split('-');
+            const birthdate = new Date(year, month - 1, day);
+
+            // Converting Date object to Israeli format 'DD/MM/YYYY'
+            const birthdateIsraeli = birthdate.toLocaleDateString('he-IL');
+                    
   
           const Authorizations="1";
           
@@ -134,7 +138,7 @@
           firstName,
           lastName,
           ID,
-          BirthDate,
+          BirthDate:birthdateIsraeli,
           email,
           address,
           phone,

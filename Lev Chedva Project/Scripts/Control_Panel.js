@@ -3,10 +3,132 @@ const db = firebase.firestore();
 const editLocationsBtn = document.getElementById('edit-locations');
 const writeMessagesBtn = document.getElementById('write-messages');
 const showMessagesBtn=document.getElementById('show-messages');
+const editKeyWordsBtn=document.getElementById('edit-keywords');
 const loadVolunteersBtn=document.getElementById("loadVolunteers")
 const locationManagementDiv = document.getElementById('location-management');
+const keywordManagementDiv = document.getElementById('keyword-management');
+
 const messageManagementDiv = document.getElementById('message-management');
 const VolunteersMagagmentDiv=document.getElementById('VolunteerTable');
+
+
+
+let iskeywordManagementVisible = false;
+
+editKeyWordsBtn.addEventListener('click', () => {
+    iskeywordManagementVisible = !iskeywordManagementVisible;
+    keywordManagementDiv.style.display = iskeywordManagementVisible ? 'block' : 'none';
+    locationManagementDiv.style.display = 'none';
+    messageManagementDiv.style.display = 'none';
+    messageListDiv.style.display = 'none';
+    VolunteersMagagmentDiv.style.display = 'none';
+    if (iskeywordManagementVisible) {
+        fetchKeywords();
+    }
+});
+
+async function fetchKeywords() {
+    const KeywordsRef = db.collection('Tools').doc('search-filters');
+    const KeywordsSnapshot = await KeywordsRef.get();
+    const Keywords = KeywordsSnapshot.data().filters;
+    populateKeywordsDropdown(Keywords);
+}
+
+function populateKeywordsDropdown(Keywords) {
+    const keywordDropdown = document.getElementById('keyword-dropdown');
+    keywordDropdown.innerHTML = '';
+    Keywords.forEach(Keyword => {
+        const option = document.createElement('option');
+        option.value = Keyword;
+        option.textContent = Keyword;
+        keywordDropdown.appendChild(option);
+    });
+}
+
+
+document.getElementById('edit-keyword').addEventListener('click', async () => {
+    const selectedkeyword = document.getElementById('keyword-dropdown').value;
+    const newKeywordName = prompt('הכנס מילת מפתח חדשה', selectedkeyword);
+
+    if (newKeywordName && newKeywordName !== selectedkeyword) {
+        const toolsRef = db.collection('Tools').doc('search-filters');
+        await toolsRef.update({
+            filters: firebase.firestore.FieldValue.arrayRemove(selectedkeyword)
+        });
+        await toolsRef.update({
+            filters: firebase.firestore.FieldValue.arrayUnion(newKeywordName)
+        });
+
+        const replaceInInventory = confirm("האם תרצה לשנות את מילת המפתח בכל המוצרים בהם היא מופיעה?");
+        if (replaceInInventory) {
+            const inventoryRef = db.collection('inventory');
+            const snapshot = await inventoryRef.get();
+            
+            snapshot.forEach(async doc => {
+                let keywords = doc.data().keywords.split(',').map(kw => kw.trim());
+                const keywordIndex = keywords.indexOf(selectedkeyword);
+
+                if (keywordIndex > -1) {
+                    keywords[keywordIndex] = newKeywordName;  // Replace selected keyword with the new one
+                    const itemRef = inventoryRef.doc(doc.id);
+                    await itemRef.update({
+                        'keywords': keywords.join(', ')
+                    });
+                }
+            });
+        }
+
+        fetchKeywords();
+    }
+});
+
+
+
+
+document.getElementById('delete-keyword').addEventListener('click', async () => {
+    const selectedkeyword = document.getElementById('keyword-dropdown').value;
+    if (confirm(`האם אתה בטוח שאתה רוצה למחוק? ${selectedkeyword}`)) {
+        const toolsRef = db.collection('Tools').doc('search-filters');
+        await toolsRef.update({
+            filters: firebase.firestore.FieldValue.arrayRemove(selectedkeyword)
+        });
+
+        const replaceInInventory = confirm("האם תרצה למחוק את מילת המפתח מכלל המוצרים?");
+        if (replaceInInventory) {
+            const inventoryRef = db.collection('inventory');
+            const snapshot = await inventoryRef.get();
+            
+            snapshot.forEach(async doc => {
+                let keywords = doc.data().keywords.split(',').map(kw => kw.trim());
+                const keywordIndex = keywords.indexOf(selectedkeyword);
+
+                if (keywordIndex > -1) {
+                    keywords.splice(keywordIndex, 1);  // Delete selected keyword
+                    const itemRef = inventoryRef.doc(doc.id);
+                    await itemRef.update({
+                        'keywords': keywords.join(', ')
+                    });
+                }
+            });
+        }
+
+        fetchKeywords();
+    }
+});
+
+
+
+document.getElementById('add-keyword').addEventListener('click', async () => {
+    const newkeyword = prompt('הכנס מחסן חדש');
+    if (newkeyword) {
+    const toolsRef = db.collection('Tools').doc('search-filters');
+    await toolsRef.update({
+    filters: firebase.firestore.FieldValue.arrayUnion(newkeyword)
+    });
+    fetchKeywords();
+    }
+    });
+
 
 
 
@@ -19,6 +141,7 @@ loadVolunteersBtn.addEventListener('click', ()=>
     locationManagementDiv.style.display = 'none';
     messageManagementDiv.style.display = 'none';
     messageListDiv.style.display = 'none';
+    keywordManagementDiv.style.display = 'none';
     loadWaitingVolunteers();
 
 
@@ -29,6 +152,7 @@ let isLocationManagementVisible = false;
 editLocationsBtn.addEventListener('click', () => {
     isLocationManagementVisible = !isLocationManagementVisible;
     locationManagementDiv.style.display = isLocationManagementVisible ? 'block' : 'none';
+    keywordManagementDiv.style.display = 'none';
     messageManagementDiv.style.display = 'none';
     messageListDiv.style.display = 'none';
     VolunteersMagagmentDiv.style.display = 'none';
@@ -45,6 +169,7 @@ writeMessagesBtn.addEventListener('click', () => {
     messageManagementDiv.style.display = isMessageManagementVisible ? 'block' : 'none';
     messageListDiv.style.display = 'none';
     VolunteersMagagmentDiv.style.display = 'none';
+    keywordManagementDiv.style.display = 'none';
 });
 
 let isMessageListVisible = false;
@@ -56,6 +181,7 @@ showMessagesBtn.addEventListener('click', () => {
     locationManagementDiv.style.display = 'none';
     messageManagementDiv.style.display = 'none';
     VolunteersMagagmentDiv.style.display = 'none';
+    keywordManagementDiv.style.display = 'none';
    
 if (isMessageListVisible) {
 fetchMessages();
@@ -74,30 +200,62 @@ fetchLocations();
 });
 
 document.getElementById('edit-location').addEventListener('click', async () => {
-const selectedLocation = document.getElementById('locations-dropdown').value;
-const newLocationName = prompt('הכנס שם מחסן חדש', selectedLocation);
-if (newLocationName && newLocationName !== selectedLocation) {
-const toolsRef = db.collection('Tools').doc('Locations');
-await toolsRef.update({
-Location: firebase.firestore.FieldValue.arrayRemove(selectedLocation)
+    const selectedLocation = document.getElementById('locations-dropdown').value;
+    const newLocationName = prompt('הכנס שם מחסן חדש', selectedLocation);
+
+    if (newLocationName && newLocationName !== selectedLocation) {
+        const toolsRef = db.collection('Tools').doc('Locations');
+        await toolsRef.update({
+            Location: firebase.firestore.FieldValue.arrayRemove(selectedLocation)
+        });
+        await toolsRef.update({
+            Location: firebase.firestore.FieldValue.arrayUnion(newLocationName)
+        });
+
+        const replaceInInventory = confirm("האם תרצה לשנות מיקום בכל המוצרים?");
+        if (replaceInInventory) {
+            const inventoryRef = db.collection('inventory');
+            const snapshot = await inventoryRef.where('location', '==', selectedLocation).get();
+            
+            snapshot.forEach(async doc => {
+                const itemRef = inventoryRef.doc(doc.id);
+                await itemRef.update({
+                    'location': newLocationName
+                });
+            });
+        }
+
+        fetchLocations();
+    }
 });
-await toolsRef.update({
-Location: firebase.firestore.FieldValue.arrayUnion(newLocationName)
-});
-fetchLocations();
-}
-});
+
 
 document.getElementById('delete-location').addEventListener('click', async () => {
     const selectedLocation = document.getElementById('locations-dropdown').value;
+
     if (confirm(`האם אתה בטוח שאתה רוצה למחוק? ${selectedLocation}`)) {
         const toolsRef = db.collection('Tools').doc('Locations');
         await toolsRef.update({
             Location: firebase.firestore.FieldValue.arrayRemove(selectedLocation)
         });
+
+        const deleteInInventory = confirm("האם תרצה למחוק את המיקום מכלל המוצרים?");
+        if (deleteInInventory) {
+            const inventoryRef = db.collection('ןnventory');
+            const snapshot = await inventoryRef.where('location', '==', selectedLocation).get();
+            
+            snapshot.forEach(async doc => {
+                const itemRef = inventoryRef.doc(doc.id);
+                await itemRef.update({
+                    'location': firebase.firestore.FieldValue.delete()
+                });
+            });
+        }
+
         fetchLocations();
     }
 });
+
 
 
 document.getElementById('save-message').addEventListener('click', async () => {
@@ -434,42 +592,67 @@ async function loadWaitingVolunteers()
                         authForm.classList.add('categories-form');
 
                         const categories = [
-                            {name: 'ניהול וכללי', options: [
+                            {
+                              name: 'ניהול וכללי',
+                              options: [
                                 { name: 'מנהל', value: '000' },
                                 { name: 'כללי', value: '01' },
                                 { name: 'פאנל טלפניות', value: '30' },
-                            ]},
-                            {name: 'אירועים', options: [
+                              ]
+                            },
+                            {
+                              name: 'אירועים',
+                              options: [
                                 { name: 'אירוע חדש', value: '10' },
                                 { name: 'אירועים פתוחים כללי', value: '11' },
                                 { name: 'אירועים פתוחים מתנדב', value: '12' },
                                 { name: 'אירועים של המתנדב', value: '13' },
-                                { name: 'אירועים סגורים', value: '14' },
-                            ]},
-                            {name: 'מלאי', options: [
+                              ]
+                            },
+                            {
+                              name: 'מלאי',
+                              options: [
                                 { name: 'הוספת מוצר', value: '20' },
                                 { name: 'החזרת מוצר', value: '21' },
-                                { name: ' השאלת מוצר', value: '22' },
-                                { name: ' צפייה במלאי', value: '23' },
-                            ]},
-                            {name: 'מידע ורשימות', options: [
-                                { name: 'סטטיסטיקה למתנדב', value: '15' },
+                                { name: 'השאלת מוצר', value: '22' },
+                                { name: 'צפייה במלאי', value: '23' },
+                                { name: 'צור הזמנה עתידית', value: '26' } ,
                                 { name: 'מוצרים מושאלים', value: '24' },
-                                { name: 'ארכיב השאלות', value: '25' },
                                 { name: 'הזמנות עתידיות', value: '27' },
-                            ]},
-                            {name: 'בקשות', options: [
+                
+                
+                               
+                              ]
+                            },
+                            {
+                              name: 'ארכיבים',
+                              options: [
+                                { name: 'ארכיב השאלות', value: '25' },
+                                { name: 'ארכיב הזמנות', value: '33' },
+                                { name: 'ארכיב בקשות השאלה', value: '32' },
+                                { name: 'ארכיב תרומה', value: '31' },
+                                { name: 'אירועים סגורים', value: '14' },
+                              ]
+                            },
+                            {
+                              name: 'בקשות',
+                              options: [
                                 { name: 'צפה בבקשות השאלה', value: '28' },
                                 { name: 'צפה בבקשות תרומה', value: '29' },
-                                { name: 'צור הזמנה עתידית', value: '26' },
-                            ]},
-                            {name: 'הודעות', options: [
+                                
+                              ]
+                            },
+                            {
+                              name: 'הודעות',
+                              options: [
                                 { name: 'הודעות כללי', value: '40' },
                                 { name: 'הודעות טלפניות', value: '41' },
                                 { name: 'הודעות שינוע', value: '42' },
                                 { name: 'הודעות מנהלים', value: '43' },
-                            ]}
-                        ];
+                                { name: 'הודעות מסדרי מחסן', value: '44' },
+                              ]
+                            }
+                          ];
             
             
                         categories.forEach(category => {

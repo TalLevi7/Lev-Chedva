@@ -251,7 +251,7 @@ function displayProducts(ProductData) {
           if (field === 'location') {
             createLocationDropdown(item);
           }
-
+        
           const [label, value] = item.textContent.split(": ");
           const editableValue = document.createElement("span");
           editableValue.contentEditable = true;
@@ -259,9 +259,16 @@ function displayProducts(ProductData) {
           item.innerHTML = `${label}: `;
           item.appendChild(editableValue);
           editableValue.addEventListener("blur", async () => {
-
             const newValue = editableValue.textContent.trim();
             try {
+              if (field === 'product_quantity') {
+                const previousValue = ProductData[field];
+                const confirmMessage = `הכמות הקודמת הייתה ${previousValue}. האם אתה בטוח שברצונך לעדכן ל-${newValue}?`;              
+                  if (!confirm(confirmMessage)) {
+                  editableValue.textContent = previousValue;
+                  return;
+                }
+              }
               await updateProductField(ProductData.categorial_number, field, newValue);
               if (field === "categorial_number" && newValue !== ProductData.categorial_number) {
                 await updateProductDocName(ProductData.categorial_number, newValue);
@@ -269,13 +276,14 @@ function displayProducts(ProductData) {
               } else {
                 ProductData[field] = newValue;
               }
-
+        
               item.innerHTML = `${label}: ${newValue}`;
             } catch (error) {
               console.error("Error updating document:", error);
             }
           });
         };
+        
       
 
   

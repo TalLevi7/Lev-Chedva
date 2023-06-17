@@ -369,7 +369,11 @@ AdressItem2.appendChild(googleMapsLink2.cloneNode(true)); // Clone the elements 
                         const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
                         StatusString="פתוח";
                         docRef.update({
-                          status: StatusString
+                          status: StatusString,
+                          takenBy:"",
+                          takenAt:"",
+                          deliveredTime:"",
+                          pickupTime:""
                         }).catch((error) => {
                           console.error("שגיאה בעדכון המסמך: ", error);
                         });
