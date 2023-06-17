@@ -71,13 +71,6 @@ function checkVolunteerStats(email) {
           let statsDiv = document.getElementById('Stats');
           statsDiv.style.display = 'block';
 
-          // Create an HTML string to display the data
-          let statsHtml = `
-              <p>שינוע אחרון: ${dateString}</p>
-              <p>שינועים החודש: ${doc.data().monthlyEvents}</p>
-              <p>אירועים בסה"כ: ${doc.data().totalEvents}</p>
-          `;
-
           // Set the innerHTML of the stats div to the HTML string
           statsDiv.innerHTML = statsHtml;
 
