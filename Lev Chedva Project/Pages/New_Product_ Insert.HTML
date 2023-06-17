@@ -82,8 +82,8 @@
 
     async function loadKeywords() {
       const keywordsDropdown = document.getElementById('keywords-dropdown');
-      const snapshot = await db.collection('Tools').doc('Keywords').get();
-      const keywords = snapshot.data().keywords;
+      const snapshot = await db.collection('Tools').doc('search-filters').get();
+      const keywords = snapshot.data().filters;
 
       keywords.forEach(keyword => {
         const div = document.createElement('div');
@@ -115,6 +115,8 @@
       const keywordsInput = document.getElementById('keywords');
       keywordsInput.value = keywordsInput.value ? keywordsInput.value + ', ' + keyword : keyword;
     }
+
+
     function addAccessory() {
   const accessoriesContainer = document.getElementById('accessories-container');
   const accessoryDiv = document.createElement('div');

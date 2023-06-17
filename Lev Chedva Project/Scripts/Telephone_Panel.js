@@ -131,7 +131,8 @@ async function fetchAndDisplayBorrowedItems() {
 
         
             // Add functionality to the contact button
-            contactButton.addEventListener('click', async () => {
+            contactButton.addEventListener('click', async (event) => {
+                event.stopPropagation();
                 const currentDate = new Date().toLocaleDateString(); // Get current date in local format
                 contactCell.textContent = currentDate;
         
