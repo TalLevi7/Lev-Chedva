@@ -24,9 +24,7 @@
     </form>
     <p></p>
     <form id="update-form" style="display:none;">
-      <label for="product-name">שם המוצר:</label>
-      <input type="text" id="product-name" name="product-name" readonly><br><br>
-  
+
       <label for="product-description">תיאור המוצר:</label>
       <input type="text" id="product-description" name="product-description" readonly><br><br>
   
@@ -76,7 +74,7 @@
         const quantityUpdate = form.elements['quantity-update'].value;
   
         // Check if the document with the same product name exists
-        const querySnapshot = await db.collection('inventory').where('product_name', '==', productName).get();
+        const querySnapshot = await db.collection('inventory').where('categorial_number', '==', productName).get();
   
         if (querySnapshot.empty) {
           alert('לא נמצא מוצר בשם זה');
