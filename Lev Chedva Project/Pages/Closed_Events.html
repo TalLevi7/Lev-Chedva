@@ -31,7 +31,6 @@
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    <!-- Rows will be added here dynamically -->
                 </tbody>
 
         </div>
@@ -113,7 +112,7 @@ async function displaydata(doc){
                     // Create a details row and a details cell for each event
                     const detailsRow = document.createElement('tr');
                     const detailsCell = document.createElement('td');
-                    detailsCell.colSpan = 4;  // Let the details cell span all columns
+                    detailsCell.colSpan = 6;  // Let the details cell span all columns
                     detailsRow.appendChild(detailsCell);
                     // Create a details row and a details cell for each even
                     let eventData = data.eventData;

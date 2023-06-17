@@ -277,37 +277,35 @@ function DisplayData(eventData) {
 
       const EditEvent = document.createElement('button');
       EditEvent.textContent = 'עריכת אירוע';
-      EditEvent.style.margin = '0 10px'; // Add margin around the button
+      EditEvent.style.margin = '10px'; // Add margin around the button
       buttonContainer.appendChild(EditEvent);
       
       const CloseEvent = document.createElement('button');
       CloseEvent.textContent = 'סגירת אירוע';
-      CloseEvent.style.margin = '0 10px'; // Add margin around the button
+      CloseEvent.style.margin = '10px'; // Add margin around the button
       
       const CancelEvent = document.createElement('button');
       CancelEvent.textContent = 'ביטול אירוע';
-      CancelEvent.style.margin = '0 10px'; // Add margin around the button
+      CancelEvent.style.margin = '10px'; // Add margin around the button
       
       buttonContainer.appendChild(CloseEvent);
       buttonContainer.appendChild(CancelEvent);
       
       const AssignBtn = document.createElement('button');
       AssignBtn.textContent = 'הקצה למתנדב';
-      AssignBtn.style.marginLeft = '10px';
-
-
+      AssignBtn.style.margin = '10px';
 
       const PickupBtn = document.createElement('button');
       PickupBtn.textContent = 'נאסף';
-      PickupBtn.style.marginLeft = '10px';
+      PickupBtn.style.margin = '10px';
 
       const Delivered = document.createElement('button');
       Delivered.textContent = 'נמסר';
-      Delivered.style.marginLeft = '10px';
+      Delivered.style.margin = '10px';
 
       const CancelByVolunteerEvent = document.createElement('button');
       CancelByVolunteerEvent.textContent = ' ביטול אירוע ע"י המתנדב';
-      Delivered.style.marginLeft = '10px';
+      CancelByVolunteerEvent.style.margin = '10px';
       buttonContainer.appendChild(AssignBtn);
       buttonContainer.appendChild(PickupBtn);
       buttonContainer.appendChild(Delivered);

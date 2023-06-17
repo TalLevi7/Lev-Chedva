@@ -58,7 +58,11 @@ input[type="radio"] {
 	margin-right: 10px;
 }
 
-input[type="button"] {
+.button-container {
+	text-align: center;
+  }
+  
+  input[type="button"] {
 	background-color: #d25757;
 	color: white;
 	padding: 10px 20px;
@@ -66,10 +70,9 @@ input[type="button"] {
 	border-radius: 5px;
 	font-size: 16px;
 	cursor: pointer;
-    margin-left: 200px;    
-}
-
-input[type="button"]:hover {
+	margin-top: 20px;
+  }
+  
+  input[type="button"]:hover {
 	background-color: #c61f1f;
-
-}
+  }

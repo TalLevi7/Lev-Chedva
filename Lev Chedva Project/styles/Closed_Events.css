@@ -17,7 +17,7 @@ table {
 th, td {
     border: 1.5px solid rgb(99, 98, 98);
     padding: 10px;
-    text-align: center; /* Align text to the right */
+    text-align: center; 
 }
 
 th {
@@ -43,13 +43,12 @@ li {
 }
 
   .details-row-expanded {
-    display: table-row !important;
+    display: table-row ;
   }
   
   .details-cell-expanded {
     display: table-cell !important;
-    width: 100%;
-    padding: 15px;
+    width: 100% !important;
     text-align: right;
     background-color: #f9f9f9;
   }
