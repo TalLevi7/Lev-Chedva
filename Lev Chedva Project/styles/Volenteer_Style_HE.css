@@ -33,7 +33,9 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="tel"],
+input[type="date"],
 select {
+  direction: rtl;
   display: block;
   width: 100%;
   padding: 10px;
