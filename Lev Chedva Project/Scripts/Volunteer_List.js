@@ -4,6 +4,101 @@ const db = firebase.firestore();
 const volunteersRef = db.collection("Volunteers");
 const filterBar = document.getElementById("authorization-filter");
 const searchInput = document.getElementById("search-input");
+const categories = [
+  {
+    name: 'ניהול וכללי',
+    options: [
+      { name: 'הכל', value: '0' },
+      { name: 'מנהל', value: '000' },
+      { name: 'כללי', value: '01' },
+      { name: 'פאנל טלפניות', value: '30' },
+      
+    ]
+  },
+  {
+    name: 'אירועים',
+    options: [
+      { name: 'אירוע חדש', value: '10' },
+      { name: 'אירועים פתוחים כללי', value: '11' },
+      { name: 'אירועים פתוחים מתנדב', value: '12' },
+      { name: 'אירועים של המתנדב', value: '13' },
+    ]
+  },
+  {
+    name: 'מלאי',
+    options: [
+      { name: 'הוספת מוצר', value: '20' },
+      { name: 'החזרת מוצר', value: '21' },
+      { name: 'השאלת מוצר', value: '22' },
+      { name: 'צפייה במלאי', value: '23' },
+      { name: 'צור הזמנה עתידית', value: '26' } ,
+      { name: 'מוצרים מושאלים', value: '24' },
+      { name: 'הזמנות עתידיות', value: '27' },
+
+
+     
+    ]
+  },
+  {
+    name: 'ארכיבים',
+    options: [
+      { name: 'ארכיב השאלות', value: '25' },
+      { name: 'ארכיב הזמנות', value: '33' },
+      { name: 'ארכיב בקשות השאלה', value: '32' },
+      { name: 'ארכיב תרומה', value: '31' },
+      { name: 'אירועים סגורים', value: '14' },
+    ]
+  },
+  {
+    name: 'בקשות',
+    options: [
+      { name: 'צפה בבקשות השאלה', value: '28' },
+      { name: 'צפה בבקשות תרומה', value: '29' },
+      
+    ]
+  },
+  {
+    name: 'הודעות',
+    options: [
+      { name: 'הודעות כללי', value: '40' },
+      { name: 'הודעות טלפניות', value: '41' },
+      { name: 'הודעות שינוע', value: '42' },
+      { name: 'הודעות מנהלים', value: '43' },
+      { name: 'הודעות מסדרי מחסן', value: '44' },
+    ]
+  }
+];
+
+
+function populateOptions(categories) {
+  let selectElement = document.getElementById('authorization-filter'); // replace 'your-select-id' with the actual id of your select element
+
+  // Loop over each category in the categories array
+  categories.forEach(category => {
+    // Create an optgroup element for the category
+    let optgroup = document.createElement('optgroup');
+    optgroup.label = category.name;
+    
+    // Loop over each option in the category's options array
+    category.options.forEach(option => {
+      // Create an option element for the option
+      let optionElement = document.createElement('option');
+      optionElement.value = option.value;
+      optionElement.textContent = option.name;
+      
+      // Append the option element to the optgroup
+      optgroup.appendChild(optionElement);
+    });
+
+    // Append the optgroup to the select element
+    selectElement.appendChild(optgroup);
+  });
+}
+
+// Call the function
+populateOptions(categories);
+
+
 
 async function readVolunteers() {
   try {
@@ -18,6 +113,7 @@ async function readVolunteers() {
   } catch (error) {
     console.log("Error getting documents:", error);
   }
+  volunteersArray.sort();
   preDisplayVolunteers("all");
 }
 
@@ -43,6 +139,7 @@ async function searchAcrossCollection(searchTerm) {
     snapshot.forEach((doc) => {
       VolunteerSet.push(doc.data());
     });
+    VolunteerSet.sort();
     preDisplayVolunteers("all", VolunteerSet);
     return;
   }
@@ -68,15 +165,17 @@ async function searchAcrossCollection(searchTerm) {
 
 
 function preDisplayVolunteers(filter, volunteers = volunteersArray) {
-  volunteersTable.innerHTML = "";
-  if (filter === "Manager") filter = '0';
+  volunteers.sort((a, b) => a.firstName.localeCompare(b.firstName, 'he'));
 
+  volunteersTable.innerHTML = "";
+  if (filter === "0") filter = 'all';
+ 
   volunteers.forEach((volunteerData) => {
     if (filter === "all") {
       displayVolunteers(volunteerData);
     } else {
-      let AuthString = volunteerData.Authorizations;
-      if (AuthString.toLowerCase().includes(filter.toLowerCase()))
+       
+      if (volunteerData.Authorizations.includes(filter))
         displayVolunteers(volunteerData);
     }
   });
@@ -109,6 +208,9 @@ function displayVolunteers(volunteerData) {
       IDItem.textContent = "ת.ז. : " + volunteerData.ID;
       const BirthdayItem = document.createElement('li');
       BirthdayItem.textContent = "תאריך לידה : " + volunteerData.BirthDate;
+      
+
+
       const emailItem = document.createElement('li');
       emailItem.textContent = "אימייל: " + volunteerData.email;
       const phoneItem = document.createElement('li');
@@ -196,7 +298,6 @@ function displayVolunteers(volunteerData) {
                 { name: 'אירועים פתוחים כללי', value: '11' },
                 { name: 'אירועים פתוחים מתנדב', value: '12' },
                 { name: 'אירועים של המתנדב', value: '13' },
-                { name: 'אירועים סגורים', value: '14' },
               ]
             },
             {
@@ -206,16 +307,22 @@ function displayVolunteers(volunteerData) {
                 { name: 'החזרת מוצר', value: '21' },
                 { name: 'השאלת מוצר', value: '22' },
                 { name: 'צפייה במלאי', value: '23' },
-                { name: 'צור הזמנה עתידית', value: '26' }
+                { name: 'צור הזמנה עתידית', value: '26' } ,
+                { name: 'מוצרים מושאלים', value: '24' },
+                { name: 'הזמנות עתידיות', value: '27' },
+
+
+               
               ]
             },
             {
-              name: 'מידע ורשימות',
+              name: 'ארכיבים',
               options: [
-                { name: 'סטטיסטיקה למתנדב', value: '15' },
-                { name: 'מוצרים מושאלים', value: '24' },
                 { name: 'ארכיב השאלות', value: '25' },
-                { name: 'הזמנות עתידיות', value: '27' },
+                { name: 'ארכיב הזמנות', value: '33' },
+                { name: 'ארכיב בקשות השאלה', value: '32' },
+                { name: 'ארכיב תרומה', value: '31' },
+                { name: 'אירועים סגורים', value: '14' },
               ]
             },
             {
@@ -233,6 +340,7 @@ function displayVolunteers(volunteerData) {
                 { name: 'הודעות טלפניות', value: '41' },
                 { name: 'הודעות שינוע', value: '42' },
                 { name: 'הודעות מנהלים', value: '43' },
+                { name: 'הודעות מסדרי מחסן', value: '44' },
               ]
             }
           ];
@@ -313,12 +421,21 @@ function displayVolunteers(volunteerData) {
         }
         validBtn = true;
       });
+
+
+
+
+      
       const editUserBtn = document.createElement('button');
       editUserBtn.textContent = 'ערוך פרטי משתמש';
       detailsList.appendChild(editUserBtn);
       let isEditClicked = false;
       editUserBtn.addEventListener('click', () => {
         if(isEditClicked) return;
+        isEditClicked=true;
+
+
+        
         const makeEditable = (item, field) => {
           const [label, value] = item.textContent.split(": ");
           const editableValue = document.createElement("span");
@@ -351,13 +468,10 @@ function displayVolunteers(volunteerData) {
     
         makeEditable(firstNameItem, "firstName");
         makeEditable(lastNameItem, "lastName");
-        makeEditable(emailItem, "email");
         makeEditable(phoneItem, "phone");
         makeEditable(addressItem, "address");
         makeEditable(BirthdayItem, "BirthDate");
-        makeEditable(JoinedItem, "createdAt");
-
-    
+        // makeEditable(vehiclesItem,"vehicles");
         const saveChangesBtn = document.createElement('button');
         saveChangesBtn.textContent = 'שמור שינויים';
         detailsList.appendChild(saveChangesBtn);
@@ -369,12 +483,12 @@ function displayVolunteers(volunteerData) {
           phoneItem.textContent = "טלפון: " + volunteerData.phone;
           addressItem.textContent = "כתובת: " + volunteerData.address;
           BirthdayItem.textContent = "תאריך לידה: " + volunteerData.BirthDate;
-          JoinedItem.textContent = "הצטרף בתאריך" + volunteerData.createdAt;
+    
           nameCell.textContent = volunteerData.firstName + " " + volunteerData.lastName;
      
          detailsList.removeChild(saveChangesBtn); // Remove the button itself
         });
-        isEditClicked = true;
+        isEditClicked = false;
 
       });
       //...
@@ -389,6 +503,20 @@ deleteUserBtn.addEventListener('click', async () => {
   if (confirm('אתה בטוח שאתה רוצה למחוק משתמש זה?')) {
     try {
       const docRef = db.collection("Volunteers").doc(volunteerData.email);
+      
+      // Get remark from user
+      const remark = prompt("מהי סיבת המחיקה?");
+
+      // Define the update object
+      let updateObject = { deletedAt: firebase.firestore.FieldValue.serverTimestamp() };
+
+      // Add the remark to the update object if it exists
+      if (remark) {
+        updateObject.remark = remark;
+      }
+
+      // Update the document with the remark and the deletion timestamp
+      await docRef.update(updateObject);
 
       // Delete from Volunteers
       await docRef.delete();
@@ -408,6 +536,7 @@ deleteUserBtn.addEventListener('click', async () => {
     }
   }
 });
+
 
 
     }

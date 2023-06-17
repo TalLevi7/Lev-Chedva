@@ -52,12 +52,13 @@ button:hover {
 
 
 input[type="text"], input[type="password"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0; /* This will add space above and below the input fields */
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  display: block;
+  width: 80%;
+  padding: 10px;
+  /* margin: 10px 0;  */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: right;  /* Aligns text to the right */
 }
 
 table {
@@ -75,4 +76,19 @@ td {
   
   font-family: 'Assistent', sans-serif;
   direction: rtl;
+}
+
+
+.input-container {
+  display: flex;
+  /* flex-direction: row-reverse; */
+  align-items: right;
+}
+
+.delete-btn {
+  font-size: 12px;
+  padding: 5px;
+  margin-left: 10px; 
+  height: 25px;
+  width: 70px;
 }

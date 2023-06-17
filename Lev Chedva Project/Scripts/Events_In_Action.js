@@ -53,7 +53,8 @@ function preDisplayData(filter) {
     
   });
 }
-
+// const spinner = document.getElementById('spinner');
+//   spinner.style.display = 'block';
 function DisplayData(eventData) {
   const row = document.createElement('tr');
   const nameCell = document.createElement('td');
@@ -290,7 +291,254 @@ function DisplayData(eventData) {
       buttonContainer.appendChild(CloseEvent);
       buttonContainer.appendChild(CancelEvent);
       
+      const AssignBtn = document.createElement('button');
+      AssignBtn.textContent = 'הקצה למתנדב';
+      AssignBtn.style.marginLeft = '10px';
+
+
+
+      const PickupBtn = document.createElement('button');
+      PickupBtn.textContent = 'נאסף';
+      PickupBtn.style.marginLeft = '10px';
+
+      const Delivered = document.createElement('button');
+      Delivered.textContent = 'נמסר';
+      Delivered.style.marginLeft = '10px';
+
+      const CancelByVolunteerEvent = document.createElement('button');
+      CancelByVolunteerEvent.textContent = ' ביטול אירוע ע"י המתנדב';
+      Delivered.style.marginLeft = '10px';
+      buttonContainer.appendChild(AssignBtn);
+      buttonContainer.appendChild(PickupBtn);
+      buttonContainer.appendChild(Delivered);
+      buttonContainer.appendChild(CancelByVolunteerEvent);  
       detailsList.appendChild(buttonContainer);
+  
+      PickupBtn.addEventListener('click', async () => {
+        if (eventData && eventData.eventCounter) {
+          const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
+          const StatusString = "בשינוע";
+          const pickupTime = firebase.firestore.Timestamp.now();
+      
+          docRef.update({
+            status: StatusString,
+            pickupTime: pickupTime // add pickupTime field with current time
+          }).then(() => {
+            // After successful update, get the updated document
+             docRef.get().then((updatedDoc) => {
+              if (updatedDoc.exists) {
+                const updatedData = updatedDoc.data();
+                // Update the status item and pickup time in the table row
+                StatusItem.textContent = "סטטוס: " + updatedData.status;
+                pickupTime.textContent = "זמן איסוף: " + updatedData.pickupTime.toDate().toLocaleString('he-IL');
+                location.reload();
+              } else {
+                console.error("No document exists with the given ID");
+              }
+            }).catch((error) => {
+              console.error("שגיאה בקבלת המסמך המעודכן: ", error);
+            });
+
+          }).catch((error) => {
+            console.error("שגיאה בעדכון המסמך: ", error);
+          });
+        } else {
+          console.error("Error: eventData or eventData.eventCounter is undefined");
+        }
+        alert("תודה רבה! שינוע נעים!");
+  
+      });
+      
+      
+      Delivered.addEventListener('click', async () => {
+        if (eventData.status !== "בשינוע") {
+          alert("יש לאסוף את תחילה את המוצר");
+          return;
+        }
+      
+        if (eventData && eventData.eventCounter) {
+          const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
+          const StatusString = "נמסר";
+          const deliveredTime = firebase.firestore.Timestamp.now();
+          
+          try {
+            await docRef.update({
+              status: StatusString,
+              deliveredTime: deliveredTime // add deliveredTime field with current time
+            });
+        
+            // Update Volunteer document
+            const volunteerDocRef = firebase.firestore().collection("Volunteers").doc(eventData.takenBy);
+        
+            await volunteerDocRef.update({
+              "totalEvents": firebase.firestore.FieldValue.increment(1), // increment total events by 1
+              "monthlyEvents": firebase.firestore.FieldValue.increment(1), // increment monthly events by 1
+              latestEvent: deliveredTime // update latestEvent field with deliveredTime
+            });
+      
+            // Filter out the delivered event from the volunteer's TakenEvents array
+            const volunteerDoc = await volunteerDocRef.get();
+            const updatedTakenEvents = volunteerDoc.data().TakenEvents.filter((e) => e !== eventData.eventCounter);
+        
+            await firebase.firestore().collection("Volunteers").doc(eventData.takenBy).update({ 
+              TakenEvents: updatedTakenEvents 
+            }).then(() => {
+              location.reload();
+            }).catch((error) => {
+              console.log("Error updating TakenEvents array:", error);
+            });
+            console.log("TakenEvents array updated successfully!");
+      
+            alert("מוצר נמסר בהצלחה! תודה רבה!");
+          } catch (error) {
+            console.error("Error updating documents: ", error);
+          }
+        } else {
+          console.error("Error: eventData or eventData.eventCounter is undefined");
+        }
+       
+      });
+      
+      
+      CancelByVolunteerEvent.addEventListener('click',async () => {
+          if (eventData && eventData.eventCounter) {
+              {
+              const volunteerDocRef = firebase.firestore().collection("Volunteers").doc(eventData.takenBy);
+              const volunteerDoc = await volunteerDocRef.get();
+              const docRef = firebase.firestore().collection("Open Events").doc(eventData.eventCounter.toString());
+              StatusString="פתוח";
+              docRef.update({
+                status: StatusString,
+                takenBy:"",
+                takenAt:"",
+                deliveredTime:"",
+                pickupTime:""
+              }).catch((error) => {
+                console.error("שגיאה בעדכון המסמך: ", error);
+              });
+              const updatedTakenEvents = volunteerDoc.data().TakenEvents.filter((e) => e !== eventData.eventCounter);
+              firebase.firestore().collection("Volunteers").doc(eventData.takenBy).update({ 
+              TakenEvents: updatedTakenEvents 
+              }).then(() => {
+                  console.log("TakenEvents array updated successfully!");
+                  location.reload();
+                }).catch((error) => {
+                  console.log("Error updating TakenEvents array:", error);
+                });
+            }
+          }
+         
+      })
+
+
+
+
+
+      AssignBtn.addEventListener('click', () => {
+        let modal = document.getElementById("volunteersModal");
+        let searchInput = document.getElementById("searchInputModal");
+    
+        // Clear previous search input
+        searchInput.value = '';
+    
+        // Get the <span> element that closes the modal
+        let span = document.getElementsByClassName("close")[0];
+    
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+    
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    
+        // Fetch volunteers and add them to the modal
+        db.collection('Volunteers').get().then((querySnapshot) => {
+            let volunteersList = document.getElementById('volunteersList');
+            let volunteers = [];
+    
+            querySnapshot.forEach((doc) => {
+                volunteers.push(doc.data());
+            });
+    
+            // Function to display the volunteers
+            const displayVolunteers = (volunteersArray) => {
+                volunteersList.innerHTML = '';
+    
+                volunteersArray.forEach((volunteer) => {
+                    let btn = document.createElement("button");
+                    btn.id = "modal_Btn";
+                    btn.innerHTML = volunteer.firstName + " " + volunteer.lastName;
+                    btn.onclick = function() {
+                        // Store the selected email
+                        let selectedEmail = volunteer.email;
+    
+                        // Perform the operation here
+                        const currentTime = firebase.firestore.Timestamp.now();
+                        db.collection("Volunteers").doc(selectedEmail).update({
+                            TakenEvents: firebase.firestore.FieldValue.arrayUnion(eventData.eventCounter)
+                        }).then(() => {
+                            const docRef = db.collection("Open Events").doc(eventData.eventCounter.toString());
+                            const StatusString = "נלקח";
+    
+                            docRef.update({
+                                status: StatusString,
+                                takenBy: selectedEmail,
+                                takenAt: currentTime
+                            })
+                            location.reload();
+                        }).catch((error) => {
+                            console.error("Error updating document: ", error);
+                        });
+    
+                        // Close the modal
+                        modal.style.display = "none";
+                    };
+    
+                    volunteersList.appendChild(btn);
+                    
+                });
+            };
+    
+            // Display all volunteers initially
+            displayVolunteers(volunteers);
+    
+            // Add an input event listener to the search input
+            searchInput.addEventListener('input', function () {
+                // Get the search query
+                let searchString = this.value.toLowerCase();
+    
+                // Filter the volunteers based on the search query
+                let filteredVolunteers = volunteers.filter((volunteer) => {
+                    let fullName = `${volunteer.firstName.toLowerCase()} ${volunteer.lastName.toLowerCase()}`;
+                    return fullName.includes(searchString);
+                });
+    
+                // Display the filtered volunteers
+                displayVolunteers(filteredVolunteers);
+            });
+        });
+    
+        modal.style.display = "block";
+        
+    });
+    
+    
+
+
+      detailsList.appendChild(buttonContainer);
+
+
+
+
+
+
+
+
 
       EditEvent.addEventListener('click', () => {
         // Replace the text content with editable input fields
@@ -603,3 +851,6 @@ function incrementTransports() {
   });
 
 }
+
+
+

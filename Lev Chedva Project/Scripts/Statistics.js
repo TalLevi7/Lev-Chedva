@@ -89,7 +89,7 @@ document.getElementById('fetchStats').addEventListener('click', () => {
     let selectedMonth = document.getElementById('monthSelector').value;
     let selectedYear = document.getElementById('yearSelector').value;
     let docId = selectedMonth + ' ' + selectedYear;
-
+    statistics.querySelector('h2').textContent= 'דו"ח לחודש: '+ monthTranslation[selectedMonth] + ' ' + selectedYear;
     db.collection("Monthly Statistics").doc(docId).get().then((doc) => {
         if (doc.exists) {
             console.log("Document data:", doc.data());
@@ -262,13 +262,13 @@ document.getElementById('yearlyReportBtn').addEventListener('click', async () =>
 
         let reportDiv = document.getElementById('yearlyReport');
         reportDiv.innerHTML = `<h2> דוח שנתי לשנת ${selectedYear}:</h2>
-                               <p>השאלות: ${report.borrows}</p>
-                               <p>מוצרים חדשים: ${report.newProducts}</p>
-                               <p>מוצרים מלאי: ${report.products}</p>
-                               <p>משפחות: ${report.families}</p>
-                               <p>מתנדבים: ${volunteers}</p>
-                               <p>מתנדבים חדשים: ${report.newVolunteers}</p>
-                               <p>שינועים: ${report.transports}</p>`;
+                               השאלות: ${report.borrows}<br>
+                               מוצרים מלאי: ${report.products}<br>
+                               מוצרים חדשים: ${report.newProducts}<br>
+                               משפחות: ${report.families}<br>
+                               מתנדבים: ${volunteers}<br>
+                               מתנדבים חדשים: ${report.newVolunteers}<br>
+                               שינועים: ${report.transports}`;
 
          const toolsDoc = await firebase.firestore().collection("Yearly Statistics").doc(selectedYear).get();  
          const yearly=document.getElementById("yearly");
@@ -379,3 +379,17 @@ generateChartButton.addEventListener('click', async () => {
 
 
 
+    const monthTranslation = {
+        "January": "ינואר",
+        "February": "פברואר",
+        "March": "מרץ",
+        "April": "אפריל",
+        "May": "מאי",
+        "June": "יוני",
+        "July": "יולי",
+        "August": "אוגוסט",
+        "September": "ספטמבר",
+        "October": "אוקטובר",
+        "November": "נובמבר",
+        "December": "דצמבר"
+      };

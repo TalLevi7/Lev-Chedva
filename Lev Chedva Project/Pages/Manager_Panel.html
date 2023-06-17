@@ -17,17 +17,17 @@
       </a>
     </div>
       <h1>פאנל מנהל</h1>
-     <button class="square-button" id="logoutButton">יציאה</button>
+      <h2>שינוע</h2>
       <div id="group1" class="button-container">
-        <h2>שינוע</h2>
+       
         <button class="square-button"><a href="../Pages/New_Event.html">יצירת אירוע חדש</a></button>
         <button class="square-button"><a href="../Pages/Events_In_Action.html">אירועים בטיפול</a></button>
         <button class="square-button"><a href="../Pages/Volunteer_Events.html">אירועים שלי</a></button>
         <button class="square-button"><a href="../Pages/Volunteer_Transport_Panel.html">אירועים פתוחים מתנדב</a></button>
       </div>
-      
+      <h2>מלאי וניהול מוצרים</h2>
       <div id="group2" class="button-container">
-        <h2>מלאי וניהול מוצרים</h2>
+
         <button class="square-button"><a href="../Pages/Inventory.html">מלאי</a></button>
         <button class="square-button"><a href="../Pages/New_Product_ Insert.HTML">הוסף מוצר</a></button>
         <button class="square-button"><a href="../Pages/Borrow_Event.html">השאל מוצר </a></button>
@@ -36,25 +36,34 @@
         <button class="square-button"><a href="../Pages/reservation_list.html"> מוצרים מוזמנים</a></button>
         <button class="square-button"><a href="../Pages/Borrowed_Items.html">מוצרים מושאלים</a></button>
       </div>
-  
+      <h2>ניהול</h2>
       <div id="group3" class="button-container">
-        <h2>ניהול</h2>
+        
       <button class="square-button"><a href="../Pages/Volunteer_List.html">רשימת מתנדבים</a></button>
       <button class="square-button"><a href="../Pages/Statistics.html">סטטיסטיקות העמותה</a></button>
-      <button class="square-button"><a href="../Pages/Control_Panel.html">פאנל שליטה</a></button>
-      <button class="square-button"><a href="../Pages/Telephone_Panel.html">פאנל טלפניות</a></button>
-      <button class="square-button"><a href="../Pages/Borrow_List.html">פניות להשאלה</a></button>
-      <button class="square-button"><a href="../Pages/Donation_List.html">פניות לתרומה</a></button>
+        <div id="Waiting_Notification">
+        <button class="square-button"><a href="../Pages/Control_Panel.html">פאנל שליטה</a></button>
       </div>
-      
+    
+      <button class="square-button"><a href="../Pages/Telephone_Panel.html">פאנל טלפניות</a></button>
+      <div id="Borrow_Notification">
+      <button class="square-button"><a href="../Pages/Borrow_List.html">פניות להשאלה</a></button>
+      </div>
+      <div id="Donation_Notification">
+      <button class="square-button"><a href="../Pages/Donation_List.html">פניות לתרומה</a></button>
+    </div>
+      </div>
+      <h2>ארכיבים</h2>
       <div id="group4" class="button-container">
-        <h2>ארכיבים</h2>
+       
         <button class="square-button"><a href="../Pages/Closed_Events.html">אירועים סגורים</a></button>
         <button class="square-button"><a href="../Pages/reservation_archive.html"> ארכיב הזמנות</a></button>
         <button class="square-button"><a href="../Pages/Borrowed_Archive.html">ארכיב השאלות</a></button>
         <button class="square-button"><a href="../Pages/Borrow_App_Archive.html"> ארכיב פניות להשאלה</a></button>
-        <button class="square-button"><a href="../Pages/Donation_App_Archive.html"> ארכיב פניות לתרומה</a></button>
+        <button class="square-button"><a href="../Pages/Donataion_App_Archive.html"> ארכיב פניות לתרומה</a></button>
+        <button class="square-button"><a href="../Pages/Volunteer_Archive.html"> ארכיב מתנדבים</a></button>
       </div>
+      <button class="square-button" id="logoutButton">יציאה</button>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
       <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
@@ -138,7 +147,113 @@ logoutButton.addEventListener('click', function() {
     }
 }
 
-// Call the function
+function checkVolunteersWaiting() {
+    const db = firebase.firestore();
+    db.collection("Volunteers Waiting").get().then((querySnapshot) => {
+        let waitingDiv = document.getElementById('Waiting_Notification');
+        let icon = document.getElementById('icon');
+
+        if (!querySnapshot.empty) {
+            // The collection is not empty.
+            waitingDiv.style.display = 'block'; // Show the div
+
+            if (!icon) { // If icon doesn't exist, create it
+                icon = document.createElement('img');
+                icon.id = "icon";
+                icon.src = '../Pictures/notification.png';
+                icon.alt = 'Notification Icon';
+                icon.width = 25;
+                icon.height = 25;
+                waitingDiv.appendChild(icon); // Append the img to the div
+            }
+        } else {
+        
+            if (icon) {
+                // If icon exists, remove it
+                waitingDiv.removeChild(icon);
+            }
+        }
+    }).catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+}
+
+
+function checkBorrowList() {
+    const db = firebase.firestore();
+    db.collection("Borrow_List").get().then((querySnapshot) => {
+        let waitingDiv = document.getElementById('Borrow_Notification');
+        let icon = document.getElementById('icon_borrow');
+
+        if (!querySnapshot.empty) {
+            // The collection is not empty.
+            waitingDiv.style.display = 'block'; // Show the div
+
+            if (!icon) { // If icon doesn't exist, create it
+                icon = document.createElement('img');
+                icon.id = "icon_borrow";
+                icon.src = '../Pictures/notification.png';
+                icon.alt = 'Notification Icon';
+                icon.width = 25;
+                icon.height = 25;
+                waitingDiv.appendChild(icon); // Append the img to the div
+            }
+        } else {
+            // waitingDiv.style.display = 'none';
+            if (icon) {
+                // If icon exists, remove it
+                waitingDiv.removeChild(icon);
+            }
+        }
+    }).catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+}
+
+
+
+
+
+
+
+function checkDonationList() {
+    const db = firebase.firestore();
+    db.collection("Donation_List").get().then((querySnapshot) => {
+        let waitingDiv = document.getElementById('Donation_Notification');
+        let icon = document.getElementById('icon_donation');
+
+        if (!querySnapshot.empty) {
+            // The collection is not empty.
+            waitingDiv.style.display = 'block'; // Show the div
+
+            if (!icon) { // If icon doesn't exist, create it
+                icon = document.createElement('img');
+                icon.id = "icon_donation";
+                icon.src = '../Pictures/notification.png';
+                icon.alt = 'Notification Icon';
+                icon.width = 25;
+                icon.height = 25;
+                waitingDiv.appendChild(icon); // Append the img to the div
+            }
+        } else {
+         
+            if (icon) {
+                // If icon exists, remove it
+                waitingDiv.removeChild(icon);
+            }
+        }
+    }).catch((error) => {
+        console.log("Error getting documents: ", error);
+    });
+}
+
+
+
+checkDonationList();
+checkBorrowList();
+checkVolunteersWaiting()
+
+
 updateInventoryAndVolunteerCounts();
 
       </script>

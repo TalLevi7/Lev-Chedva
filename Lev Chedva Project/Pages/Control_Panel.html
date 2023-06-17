@@ -24,7 +24,7 @@
         <button id="write-messages">כתוב הודעה</button>
         <button id="show-messages">צפה בהודעות</button>
         <button id="loadVolunteers">נרשמים ממתינים</button>    
-    
+        <button id="edit-keywords">ערוך מילות מפתח</button>
     
         <div id="location-management" style="display:none;">
             <h2>ערוך מחסנים</h2>
@@ -35,6 +35,19 @@
             <button id="add-location">הוסף מחסן</button>
         </div>
         </div>
+
+        <div id="keyword-management" style="display:none;">
+            <h2>ערוך מילות מפתח</h2>
+            <select id="keyword-dropdown"></select>
+            <div>
+            <button id="edit-keyword">ערוך מילת מפתח</button>
+            <button id="delete-keyword">מחק מילת מפתח</button>
+            <button id="add-keyword">הוסף מילת מפתח</button>
+        </div>
+        </div>
+
+
+
     
         <div id="message-management" style="display:none;">
             <h2>כתוב הודעה</h2>
@@ -52,6 +65,9 @@
                 
                 <label for="checkbox4">שינוע</label>
                 <input type="checkbox" id="checkbox4" value="42">
+
+                <label for="checkbox5">מסדרי מחסנים</label>
+                <input type="checkbox" id="checkbox5" value="44">
                 
             </div>
             <button id="save-message">שמור</button>

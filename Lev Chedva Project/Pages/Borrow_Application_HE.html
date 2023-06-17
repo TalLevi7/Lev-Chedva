@@ -18,21 +18,27 @@
     <form>
           <h1>טופס השאלת ציוד</h1>
       <label class = "form_labels" for="contact-name">:שם מלא</label>
-      <input class = "form_fill_boxes" type="text" id="contact-name" name="contact-name" required><br><br>
+      <input class = "form_fill_boxes" type="text" id="contact-name" pattern="[a-z,A-Z,\u05D0-\u05EA,\s]*" name="contact-name" required><br><br>
       
       <label class = "form_labels" for="contact-number">:מספר טלפון ליצירת קשר</label>
-      <input class = "form_fill_boxes" type="tel" id="contact-number" name="contact-number" required><br><br>
+
+      <input class = "form_fill_boxes" type="tel" id="contact-number" pattern="[0-9]{9,10}" name="contact-number" required><br><br>
+      
+         <label class = "form_labels" for="contact-number">:מספר טלפון נוסף ליצירת קשר</label>
+      <input class = "form_fill_boxes" type="tel" id="contact-number2"  pattern="[0-9]{9,10}"  name="contact-number2" required><br><br>
+      
       
       <label class = "form_labels" for="patient-name">:שם המטופל</label>
-      <input class = "form_fill_boxes" type="text" id="patient-name" name="patient-name" required><br><br>
+      <input class = "form_fill_boxes" type="text" id="patient-name" pattern="[a-z,A-Z,\u05D0-\u05EA,\s]*" name="patient-name" required><br><br>
       
       <label class = "form_labels" for="patient-number">:מספר הטלפון של המטופל</label>
-      <input class = "form_fill_boxes" type="tel" id="patient-number" name="patient-number" required><br><br>
+      <input class = "form_fill_boxes" type="tel" id="patient-number" pattern="[0-9]{9,10}" name="patient-number" required><br><br>
       
+
       <label class = "form_labels" for="address">:כתובת</label>
-      <textarea class = "form_fill_boxes" id="address" name="address" required></textarea><br><br>
+      <textarea class = "form_fill_boxes" id="address" name="address" ></textarea><br><br>
                 
-      <input type="button" value="שלח" onclick="submitData()">
+      <input type="submit" value="שלח">
     </form>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -49,15 +55,65 @@
   // Get form elements
   const contactNameInput = document.getElementById("contact-name");
   const contactNumberInput = document.getElementById("contact-number");
+  const contactNumberInput2 = document.getElementById("contact-number2");
   const patientNameInput = document.getElementById("patient-name");
   const patientNumberInput = document.getElementById("patient-number");
   const addressInput = document.getElementById("address");
   
+
+        // Add submit event listener
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+      
+          firebase.firestore().collection("Tools").doc("Events Counter")
+            .get()
+            .then((doc) => {
+              var eventCounter;
+      
+              eventCounter = doc.data().Counter;
+              console.log("Event Counter value:", eventCounter);
+              const incrementedCounter = eventCounter + 1;
+              firebase.firestore().collection("Tools").doc("Events Counter").update({ Counter: incrementedCounter });
+              return eventCounter;
+            })
+            .then((eventCounter) => {
+              // Get form values
+              const contactName = contactNameInput.value;
+              const contactNumber = contactNumberInput.value;
+              const patientName = patientNameInput.value;
+              const patientNumber = patientNumberInput.value;
+              const address = addressInput.value;
+              eventCounter = eventCounter + 1;
+              // Save the form data to Firestore
+              db.collection("Borrow_List").add({
+                contact_name: contactName,
+                contact_number: contactNumber,
+                patient_name: patientName,
+                patient_number: patientNumber,
+                address: address,
+                date: firebase.firestore.Timestamp.fromDate(new Date()), // Current date and time
+            })
+            .then(() => {
+            console.log("Form data saved successfully!");
+            // Clear the form inputs after submission
+            contactNameInput.value = "";
+            contactNumberInput.value = "";
+            patientNameInput.value = "";
+            patientNumberInput.value = "";
+            addressInput.value = "";
+            })
+            .catch((error) => {
+            console.error("Error saving form data: ", error);
+            });
+        });
+    });
+
   // Function to submit form data to Firestore
   function submitData() {
     // Get the values from the form
     const contactName = contactNameInput.value;
     const contactNumber = contactNumberInput.value;
+    const contactNumber2 = contactNumberInput2.value;
     const patientName = patientNameInput.value;
     const patientNumber = patientNumberInput.value;
     const address = addressInput.value;
@@ -65,6 +121,7 @@
   // Loop through the delivery type options and check which one is selected
   
   
+
   // Save the form data to Firestore
   db.collection("Borrow_List").add({
       contact_name: contactName,
@@ -75,13 +132,9 @@
       date: firebase.firestore.Timestamp.fromDate(new Date()), // Current date and time
   })
   .then(() => {
-  console.log("Form data saved successfully!");
-  // Clear the form inputs after submission
-  contactNameInput.value = "";
-  contactNumberInput.value = "";
-  patientNameInput.value = "";
-  patientNumberInput.value = "";
-  addressInput.value = "";
+  alert("!בקשתך נשלחה בהצלחה");
+  window.location.href = "../Pages/MainPage/index.html";
+
   })
   .catch((error) => {
   console.error("Error saving form data: ", error);

@@ -45,6 +45,7 @@ auth.onAuthStateChanged(user => {
                 console.log(autorizations);
                 createButtons(autorizations);
                 loadMessages(autorizations);
+                checkVolunteerStats(email);
               }
             });
         }
@@ -56,6 +57,46 @@ auth.onAuthStateChanged(user => {
 });
 
 
+function checkVolunteerStats(email) {
+  const db = firebase.firestore();
+  db.collection("Volunteers").doc(email).get().then((doc) => {
+      // check if the document exists and the fields are not empty
+      if (doc.exists && doc.data().latestEvent && doc.data().monthlyEvents && doc.data().totalEvents) {
+          // convert firestore timestamp to Date object
+          let latestEventDate = new Date(doc.data().latestEvent.seconds * 1000);
+          // Convert to Israeli date format dd/mm/yyyy
+          let dateString = latestEventDate.getDate() + '/' + (latestEventDate.getMonth() + 1) + '/' + latestEventDate.getFullYear();
+
+          // Access the stats div
+          let statsDiv = document.getElementById('Stats');
+          statsDiv.style.display = 'block';
+
+          // Create an HTML string to display the data
+          let statsHtml = `
+              <p>שינוע אחרון: ${dateString}</p>
+              <p>שינועים החודש: ${doc.data().monthlyEvents}</p>
+              <p>אירועים בסה"כ: ${doc.data().totalEvents}</p>
+          `;
+
+          // Set the innerHTML of the stats div to the HTML string
+          statsDiv.innerHTML = statsHtml;
+
+      } else {
+          // One of the fields is empty, do nothing
+          console.log("One or more fields are empty");
+
+          console.log(doc.data().monthlyEvents,doc.data().totalEvents);
+      }
+  }).catch((error) => {
+      console.log("Error getting document:", error);
+  });
+}
+
+
+checkVolunteerStats();
+
+
+
 function createButtons(autorizations) {
   let navbar = document.getElementById('navbar');
 
@@ -65,20 +106,20 @@ function createButtons(autorizations) {
     "12": { text: "אירועים פתוחים", href: "Volunteer_Transport_Panel.html" },
     "13": { text: "האירועים שלי", href: "Volunteer_Events.html" },
     "14": { text: "אירועים סגורים", href: "Closed_Events.html" },
-    // "15": { text: "סטיסטיקה שלי", href: "href_for_12.html" },
     "20": { text: "הוסף מוצר למלאי", href: "New_Product_ Insert.HTML" },
     "21": { text: "החזרת מוצר", href: "Return_Item.html" },
     "22": { text: "השאלת מוצר", href: "Borrow_Event.html" },
     "23": { text: "צפה במלאי", href: "Inventory.html" },
     "24": { text: "מוצרים מושאלים", href: "Borrowed_Items.html" },
-    //"25": { text: "ארכיב השאלות", href: "Closed_Events.html" },
+    "25": { text: "ארכיב השאלות", href:"Borrowed_Archive.html" },
     "26": { text: "צור הזמנה עתידית", href: "reservation.html" },
-    //"27": { text: "הזמנות עתידיות",href: "Closed_Events.html" },
-    //"28": { text: "צפה בבקשות השאלה",href: "Closed_Events.html" },
-    //"29": { text: "צפה בבקשות תרומה":, href: "Closed_Events.html" },
+    "27": { text: "הזמנות עתידיות",href: "reservation_list.html" },
+    "28": { text: "צפה בבקשות השאלה",href: "Borrow_List.html" },
+    "29": { text: "צפה בבקשות תרומה", href: "Donation_List.html" },
     "30": { text: "פאנל טלפניות", href: "Telephone_Panel.html" },
-
-    // Add more mappings here...
+    "31": { text: "ארכיב בקשות תרומה", href: "Donation_App_Archive.html" },
+    "32": { text: "ארכיב בקשות השאלה", href: "Borrow_App_Archive.html" },
+    "33": { text: "ארכיב הזמנות", href: "reservation_archive.html" },
   };
 
   const mobileButtons = ["12", "13"];

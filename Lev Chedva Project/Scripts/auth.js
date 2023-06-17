@@ -19,11 +19,10 @@ function validateUserAndRedirect() {
             if (authorizations.includes("000")) {
               // If the "Authorizations" array contains "000", redirect to page A
               window.location.href = "../Pages/Manager_Panel.html";
-            } else  if (authorizations.includes("13")){
+            } else {
               // If the "Authorizations" array does not contain "000", redirect to page B
               window.location.href = "../Pages/Volunteer_Dashboard.html";
-            }else{
-              window.location.href = "../Pages/MainPage/index.html";
+          
             }
           } else {
             // If the document doesn't exist, log an error and redirect to an error page

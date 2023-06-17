@@ -26,6 +26,8 @@
                         <th>שם המוצר</th>
                         <th>תאריך פתיחה</th>
                         <th>תאריך סגירה</th>
+                        <th>כתובת מקור</th>
+                        <th>כתובת יעד </th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -69,6 +71,10 @@ async function displaydata(doc){
     let productName = data.eventData.ProductName;
     let eventCounter = data.eventData.eventCounter;
     let timestamp = data.eventData.timestamp;
+    let Source=data.eventData.Source_Address;
+    let Destination=data.eventData.Destination_Address;
+
+
                         let closedate=data.eventData.CloseDate;
                     // Check if timestamp exists
                     let dateString = '';
@@ -88,12 +94,19 @@ async function displaydata(doc){
                     productNameCell.textContent = productName;
                     dateCell.textContent = dateString;
                     ClosedateCell.textContent=closedate;
-                    
+                    const SourceCell = document.createElement('td');
+                    const DestinationCell = document.createElement('td');
+                    SourceCell.textContent=Source;
+                    DestinationCell.textContent=Destination;
+
+
                     // Append cells to the row
                     row.appendChild(eventCounterCell);
                     row.appendChild(productNameCell);
                     row.appendChild(dateCell);
                     row.appendChild(ClosedateCell);
+                    row.appendChild(SourceCell);
+                    row.appendChild(DestinationCell);                    
                     // Append row to the table
                     table.appendChild(row);
     

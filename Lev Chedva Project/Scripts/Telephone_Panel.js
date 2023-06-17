@@ -7,34 +7,65 @@ function clearTable() {
     itemTableBody.innerHTML = '';
 }
 
+
+let currentAuthorizations = []; // global variable
+
+firebase.auth().onAuthStateChanged(async (user) => {
+  if (user) {
+    // User is signed in, retrieve authorizations
+    try {
+      const doc = await db.collection("Volunteers").doc(user.email).get();
+      if (doc.exists) {
+        currentAuthorizations = doc.data().Authorizations;
+      
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+    }
+  } else {
+    // User is signed out
+    console.log("No user is signed in.");
+  }
+});
+
+
+
+
 async function fetchAndDisplayBorrowedItems() {
     clearTable();
     const currentDate = new Date();
     const inputDate = new Date(dateInput.value);
     const borrowedItemsRef = db.collection('Borrowed Items');
-    const snapshot = await borrowedItemsRef.get();
+    
+    // Show the spinner
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'block';
 
-    const tableBody = document.getElementById('itemTableBody');
+    try {
+        const snapshot = await borrowedItemsRef.get();
+        const tableBody = document.getElementById('itemTableBody');
 
-    for (let doc of snapshot.docs) {
-        const data = doc.data();
-        const borrowedItems = data.borrowTickets;
-        let shouldShowDoc = false; // This variable will be true if at least one ticket matches the date requirement
+        for (let doc of snapshot.docs) {
+            const data = doc.data();
+            const borrowedItems = data.borrowTickets;
+            let shouldShowDoc = false; // This variable will be true if at least one ticket matches the date requirement
 
-        // Use a for...of loop here so we can use 'await' inside it
-        for (let item of borrowedItems) {
-            const itemRef = db.collection('Borrow Tickets').doc(item.toString());
-            const itemData = (await itemRef.get()).data();
+            // Use a for...of loop here so we can use 'await' inside it
+            for (let item of borrowedItems) {
+                const itemRef = db.collection('Borrow Tickets').doc(item.toString());
+                const itemData = (await itemRef.get()).data();
 
-            // Check if the 'borrowingUntil' date falls within the range
-            const borrowingUntilDate = new Date(itemData.borrowingUntil);
-          
+                // Check if the 'borrowingUntil' date falls within the range
+                const borrowingUntilDate = new Date(itemData.borrowingUntil);
 
-            if (borrowingUntilDate <= inputDate && borrowingUntilDate >= currentDate) {
-                shouldShowDoc = true;
-                break;
+                if (borrowingUntilDate <= inputDate && borrowingUntilDate >= currentDate) {
+                    console.log(borrowingUntilDate,inputDate);
+                    shouldShowDoc = true;
+                    break;
+                }
             }
-        }
 
         if (shouldShowDoc) {
             // Create row for each doc
@@ -46,15 +77,8 @@ async function fetchAndDisplayBorrowedItems() {
             row.appendChild(idCell);
         
             // Create cell for contact button
-            const buttonCell = document.createElement('td');
             const contactButton = document.createElement('button');
             contactButton.textContent = 'יצרתי קשר';
-        
-            // Add contact button to its cell
-            buttonCell.appendChild(contactButton);
-        
-            // Add button cell to the row
-            row.appendChild(buttonCell);
         
             // Create cell for lastTalk field
             const contactCell = document.createElement('td');
@@ -62,10 +86,53 @@ async function fetchAndDisplayBorrowedItems() {
                 // If 'lastTalk' field exists, display its value
                 contactCell.textContent = data.lastTalk;
             }
+            contactCell.appendChild(contactButton);
             row.appendChild(contactCell);
+
+            // Create cell for Remarks field
+            const RemarksCell = document.createElement('td');    
+            const remarksButton = document.createElement('button');
+            remarksButton.textContent = 'הערות';
+
+            RemarksCell.textContent=doc.data().remarks;
+            RemarksCell.appendChild(remarksButton);
+            remarksButton.addEventListener('click', async () => {
+            let remarks = data.remarks || ''; // default to empty string if there is no existing remark
+
+            // Create an input field
+            const remarksInput = document.createElement('input');
+            remarksInput.type = 'text';
+            remarksInput.value = remarks; // prefill the input field with existing remark if there is one
+            RemarksCell.appendChild(remarksInput);
+
+            const submitButton = document.createElement('button');
+            submitButton.textContent = 'שמור';
+            RemarksCell.appendChild(submitButton);
+
+            submitButton.addEventListener('click', async () => {
+                // Get the document reference
+                const docRef = borrowedItemsRef.doc(doc.id);
+                
+                // Update the document with the user inputS
+                await docRef.update({ remarks: remarksInput.value });
+
+                RemarksCell.textContent= remarksInput.value;
+                RemarksCell.appendChild(remarksButton);
+                // RemarksCell.removeChild(submitButton);
+            
+            });
+            });
+
+
+
+            row.appendChild(RemarksCell);
+
+
+
         
             // Add functionality to the contact button
-            contactButton.addEventListener('click', async () => {
+            contactButton.addEventListener('click', async (event) => {
+                event.stopPropagation();
                 const currentDate = new Date().toLocaleDateString(); // Get current date in local format
                 contactCell.textContent = currentDate;
         
@@ -110,8 +177,13 @@ async function fetchAndDisplayBorrowedItems() {
                 displayTicketRow(detailsTable, itemData, item.toString());
             }
         }
-        
     }
+} catch (error) {
+    console.error('An error occurred:', error);
+} finally {
+    // Hide the spinner
+    spinner.style.display = 'none';
+}
 }
 
 async function displayTicketRow(detailsTable, ticketData, itemId) {
@@ -199,6 +271,7 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
     // Create the update button
     const updateButton = document.createElement('button');
     updateButton.textContent = 'ערוך';
+    if(currentAuthorizations.includes("000"))
     ticketDetailsCell.appendChild(updateButton);
   
     detailsTable.appendChild(ticketDetailsRow);
