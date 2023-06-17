@@ -66,14 +66,6 @@ function checkVolunteerStats(email) {
           let latestEventDate = new Date(doc.data().latestEvent.seconds * 1000);
           // Convert to Israeli date format dd/mm/yyyy
           let dateString = latestEventDate.getDate() + '/' + (latestEventDate.getMonth() + 1) + '/' + latestEventDate.getFullYear();
-
-          // Access the stats div
-          let statsDiv = document.getElementById('Stats');
-          statsDiv.style.display = 'block';
-
-          // Set the innerHTML of the stats div to the HTML string
-          statsDiv.innerHTML = statsHtml;
-
       } else {
           // One of the fields is empty, do nothing
           console.log("One or more fields are empty");
