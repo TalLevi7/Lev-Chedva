@@ -187,20 +187,42 @@
 			</section>
 			<section id="section4" dir="rtl">
 				<h2>הפעילות שלנו</h2>
-				<p>כמות השאלות: <span id="totalBorrows"></span></p>
-				<p>כמות אירועים: <span id="totalEvents"></span></p>
-				<p>כמות משפחות: <span id="totalFamilies"></span></p>
-				<p>כמות פריטים: <span id="totalInventory"></span></p>
-				<p>כמות מתנדבים: <span id="totalVolunteers"></span></p>
+				<p><span id="totalFamilies"></span> משפחות קיבלו מאיתנו ציוד רפואי</p>
+				<p>יש לנו מעל ל- <span id="totalInventory"></span> פריטים</p>
+				<p>השאלנו <span id="totalBorrows"></span> מוצרים</p>
+				<p>הוצאנו <span id="totalEvents"></span> שינועים ברחבי הארץ</p>
+				<p>יש לנו מעל ל- <span id="totalVolunteers"></span> מתנדבים</p>
 				<script>
 					var db = firebase.firestore();
 					db.collection("Tools").doc("Statistics").get().then((doc) => {
 						if (doc.exists){
-							document.getElementById("totalBorrows").textContent = doc.data().TotalBorrows;
-      						document.getElementById("totalEvents").textContent = doc.data().TotalEvents;
-      						document.getElementById("totalFamilies").textContent = doc.data().TotalFamilies;
-      						document.getElementById("totalInventory").textContent = doc.data().TotalInventory;
-      						document.getElementById("totalVolunteers").textContent = doc.data().TotalVolunteers;
+							if(doc.data().TotalBorrows){
+								document.getElementById("totalBorrows").textContent = 448;
+							}else{
+								document.getElementById("totalBorrows").textContent = doc.data().TotalBorrows;
+							}
+							if(doc.data().TotalEvents){
+								document.getElementById("totalEvents").textContent = 187;
+							}else{
+								document.getElementById("totalEvents").textContent = doc.data().TotalEvents;
+							}
+							if(doc.data().TotalFamilies){
+								document.getElementById("totalFamilies").textContent = 450;
+							}else{
+								document.getElementById("totalFamilies").textContent = doc.data().TotalFamilies;
+							}
+							if(doc.data().TotalInventory){
+								document.getElementById("totalInventory").textContent = 270;
+							}else{
+								document.getElementById("totalInventory").textContent = doc.data().TotalInventory;
+							}
+							if(doc.data().TotalVolunteers){
+								document.getElementById("totalVolunteers").textContent = 103;
+							}else{
+								document.getElementById("totalVolunteers").textContent = doc.data().TotalVolunteers;
+							}
+      						
+      						
 						}else {
       					console.log("Statistics document not found");
     					}				

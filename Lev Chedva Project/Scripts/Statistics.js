@@ -4,7 +4,9 @@ let monthNames = ["January", "February", "March", "April", "May", "June", "July"
 let currentMonthYear = monthNames[date.getMonth()] + ' ' + date.getFullYear();
 let numOfProducts;
 let numOfVolunteers;
-
+let isStatsVisible = false; // Variable to track the visibility state of the statistics
+let isYearlyReportVisible = false; // Variable to track the visibility state of the yearly report
+let isTransportVisible = false; // Variable to track the visibility state of the transport table
 
 db.collection("Monthly Statistics").doc(currentMonthYear).get().then((doc) => {
     if (doc.exists) {
@@ -41,7 +43,6 @@ function populateYear() {
 populateYear();
 
 
-
 function populateYearReport() {
     let currentYear = (new Date()).getFullYear();
 
@@ -70,8 +71,21 @@ setInterval(() => {
 
 document.getElementById('fetchStats').addEventListener('click', () => {
     let statistics = document.getElementById('statistics');
-    statistics.style.display="block";
-    statistics.querySelector('h2').style.display = 'block';
+    let statsTitle = statistics.querySelector('h2');
+    if (isStatsVisible) {
+        // Hide the statistics
+        statistics.style.display = "none";
+        statsTitle.style.display = 'none';
+        isStatsVisible = false;
+    } else {
+        // Show the statistics
+        statistics.style.display = "block";
+        statsTitle.style.display = 'block';
+        isStatsVisible = true;
+        statistics.style.display="block";
+        statistics.querySelector('h2').style.display = 'block';
+    }
+   
     let selectedMonth = document.getElementById('monthSelector').value;
     let selectedYear = document.getElementById('yearSelector').value;
     let docId = selectedMonth + ' ' + selectedYear;
@@ -115,15 +129,17 @@ document.getElementById('fetchStats').addEventListener('click', () => {
     });
 });
 
-
-
-
 document.getElementById('transportBtn').addEventListener('click', () => {
-    // Get reference to the 'Volunteers' collection
     let volunteersRef = firebase.firestore().collection('Volunteers');
     let tablehead = document.getElementById('volunteerTable');
     // Clear the table body
     let tableBody = document.getElementById('volunteerTable').getElementsByTagName('tbody')[0];
+    if(isTransportVisible){
+        tableBody.innerHTML = '';
+        tablehead.style.display="none";
+        isTransportVisible = false;
+    }else{
+        // Get reference to the 'Volunteers' collection
     tableBody.innerHTML = '';
     tablehead.style.display="block";
     // Get all documents in the collection
@@ -155,6 +171,9 @@ document.getElementById('transportBtn').addEventListener('click', () => {
     }).catch((error) => {
         console.log("Error getting documents: ", error);
     });
+        isTransportVisible = true;
+    }
+    
 });
 
 document.getElementById('yearlyReportBtn').addEventListener('click', async () => {
@@ -253,10 +272,15 @@ document.getElementById('yearlyReportBtn').addEventListener('click', async () =>
 
          const toolsDoc = await firebase.firestore().collection("Yearly Statistics").doc(selectedYear).get();  
          const yearly=document.getElementById("yearly");
-         yearly.style.display="block";
-         
 
-        CreateGraph(toolsDoc,'keywordsChartYearly');                       
+         if(isYearlyReportVisible){
+            yearly.style.display="none";
+            isYearlyReportVisible = false;
+         }else{
+            yearly.style.display="block";
+            CreateGraph(toolsDoc,'keywordsChartYearly');  
+            isYearlyReportVisible = true;                     
+         }
     }).catch((error) => {
         console.log("Error getting documents: ", error);
     });
@@ -266,17 +290,28 @@ document.getElementById('yearlyReportBtn').addEventListener('click', async () =>
 
 
 const generateChartButton = document.getElementById('generateChartButton');
+let isGraphVisible = false; // Variable to track the graph's visibility state
+
 generateChartButton.addEventListener('click', async () => {
-
     let TotalGraph = document.getElementById('Total Graph');
-    TotalGraph.style.display = "block";
-    TotalGraph.querySelector('h2').style.display = 'block';
-    const toolsDoc = await firebase.firestore().collection("Tools").doc("Statistics").get();
-    CreateGraph(toolsDoc,'keywordsChart');
+    let graphTitle = TotalGraph.querySelector('h2');
 
+    if (isGraphVisible) {
+        // Hide the graph
+        TotalGraph.style.display = "none";
+        graphTitle.style.display = 'none';
+        isGraphVisible = false;
+    } else {
+        // Show the graph
+        TotalGraph.style.display = "block";
+        graphTitle.style.display = 'block';
+        isGraphVisible = true;
+        TotalGraph.querySelector('h2').style.display = 'block';
+        const toolsDoc = await firebase.firestore().collection("Tools").doc("Statistics").get();
+        CreateGraph(toolsDoc,'keywordsChart');
+    }
 });
-     
-     
+
     async function CreateGraph(docId,chartId) {
         console.log(chartId);
         try {
