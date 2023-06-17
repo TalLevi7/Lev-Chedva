@@ -1,3 +1,16 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* Rest of your existing CSS styles */
 
 
 #navbar {
@@ -184,4 +197,24 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.stats-box {
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.stats-line {
+  display: flex;
+  align-items: center;
+}
+
+.stats-label {
+  margin-right: 5px;
+  font-weight: bold;
 }

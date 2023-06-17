@@ -1,5 +1,9 @@
 const auth = firebase.auth();
 const db = firebase.firestore();
+var statsBox = document.querySelector('.stats-box');
+var monthlyBorrowsElement = document.getElementById('monthlyBorrows');
+var totalEventsElement = document.getElementById('totalEvents');
+var lastEventElement = document.getElementById('lastEvent');
 
 auth.onAuthStateChanged(user => {
   if (user) {
@@ -29,6 +33,12 @@ auth.onAuthStateChanged(user => {
             .then(doc => {
               if (doc.exists) {
                 let data = doc.data();
+                monthlyBorrowsElement.textContent = data.monthlyEvents;
+                totalEventsElement.textContent = data.totalEvents;
+                var lastEventTimestamp = data.latestEvent.toDate();
+                var lastEventDate = new Date(lastEventTimestamp);
+                var options = { year: 'numeric', month: 'long', day: 'numeric', locale: 'he-IL' };
+                lastEventElement.textContent = lastEventDate.toLocaleDateString('he-IL', options);
                 document.getElementById('username').textContent = `${data.firstName} ${data.lastName}`;
                 let autorizations = data.Authorizations;
                 autorizations.sort();
