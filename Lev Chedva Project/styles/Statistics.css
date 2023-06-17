@@ -83,7 +83,7 @@ canvas {
   flex-wrap: wrap;
   justify-content: center; /* Center the buttons horizontally */
   align-items: center; /* Center the buttons vertically */
-  margin-top: 400px; /* Add some top margin for spacing */
+  margin-top: 300px; /* Add some top margin for spacing */
 }
 
 #controlsContainer > * {

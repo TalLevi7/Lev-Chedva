@@ -50,10 +50,6 @@ button {
     border-radius: 8px;
 }
 
-
-
-
-
 button:hover {
     opacity: 0.8;
 }
@@ -203,23 +199,17 @@ textarea {
     font-size: 14px;
   }
   
-html, body {
-  height: 98% !important;
-}
-
-#edit-keywords{
-    position: relative;
-    bottom:0.65rem;
-}
-
 #edit-locations,
 #write-messages,
 #show-messages,
 #loadVolunteers,
 #edit-keywords
 {
-    width: 150px;
+    width: 250px;
     height: 100px;
     font-size: 24px;
 }
+
+
+
   

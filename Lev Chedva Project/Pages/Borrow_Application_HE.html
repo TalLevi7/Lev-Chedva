@@ -17,30 +17,32 @@
     </div>
     <form>
       <h1>טופס השאלת ציוד</h1>
-      <label class="form_labels" for="contact-name">:שם מלא</label>
+      <label class="form_labels" for="contact-name">שם מלא:</label>
       <input class="form_fill_boxes" type="text" id="contact-name" name="contact-name" required>
       <small id="contact-name-error" class="error-message"></small><br><br>
 
-      <label class="form_labels" for="contact-number">:מספר טלפון ליצירת קשר</label>
+      <label class="form_labels" for="contact-number">מספר טלפון ליצירת קשר:</label>
       <input class="form_fill_boxes" type="tel" id="contact-number" name="contact-number" required>
       <small id="contact-number-error" class="error-message"></small><br><br>
 
-      <label class="form_labels" for="contact-number2">:מספר טלפון נוסף ליצירת קשר</label>
+      <label class="form_labels" for="contact-number2">מספר טלפון נוסף ליצירת קשר:</label>
       <input class="form_fill_boxes" type="tel" id="contact-number2" name="contact-number2" required>
       <small id="contact-number2-error" class="error-message"></small><br><br>
 
-      <label class = "form_labels" for="patient-name">:שם המטופל</label>
+      <label class = "form_labels" for="patient-name">שם המטופל:</label>
       <input class = "form_fill_boxes" type="text" id="patient-name" name="patient-name">
       <small id="patient-name-error" class="error-message"></small><br><br>
 
-      <label class = "form_labels" for="patient-number">:מספר הטלפון של המטופל</label>
+      <label class = "form_labels" for="patient-number">מספר הטלפון של המטופל:</label>
       <input class = "form_fill_boxes" type="tel" id="patient-number" name="patient-number">
       <small id="patient-number-error" class="error-message"></small><br><br>
 
-      <label class = "form_labels" for="address">:כתובת</label>
+      <label class = "form_labels" for="address">כתובת:</label>
       <textarea class = "form_fill_boxes" id="address" name="address" ></textarea><br><br>
-
-      <input type="button" value="שלח" onclick="submitData()">
+      <div class="button-container">
+        <input type="button" value="שלח" onclick="submitData()">
+      </div>
+      
     </form>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
