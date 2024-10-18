@@ -2,21 +2,30 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Borrowed Tickets Display</title>
-    <link rel="stylesheet" href="../styles/Telephone_Panel.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מוצרים מושאלים</title>
+    <link rel="stylesheet" href="../styles/Borrowed_Items.css">
 </head>
 <body>
+    <div class="logo-container">
+        <a href="#" onclick="validateUserAndRedirect(); return false;">
+          <img src="../Pictures/logoLevChedva.png" alt="Logo" />
+        </a>
+      </div>
     <h1>מוצרים מושאלים</h1>
-    <input type="text" id="searchInput" placeholder="Search">
-<button id="searchButton">חפש</button>
+    <div id="searchContainer">
+        <input type="text" id="searchInput" placeholder="חיפוש..">
+        <button id="searchButton">חפש</button>
+      </div>
 
     <div id="tableContainer">
         <table id="itemTable">
             <thead>
                 <tr>
-                    <th>מספר קטגורי</th>
                     <th>שם המוצר</th>
                     <th>כמות</th>
+                    <th>שם איש קשר</th>
+                    <th id="remarks">הערות</th>
                 </tr>
             </thead>
             <tbody id="itemTableBody">
@@ -28,38 +37,140 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="../firebase.js"></script>
-  
+    <script src="../Scripts/auth.js"></script>
     <script>
         const db = firebase.firestore();
-    
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const searchInput = document.getElementById('searchInput');
-            const searchButton = document.getElementById('searchButton');
-    
-            searchButton.addEventListener('click', async () => {
-                const searchValue = searchInput.value;
-                await searchAndDisplayBorrowedTickets(searchValue);
-            });
-    
-            searchAndDisplayBorrowedTickets('');
-        });
-    
-        async function searchAndDisplayBorrowedTickets(searchValue) {
+
+document.addEventListener('DOMContentLoaded', async (event) => {
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    searchButton.addEventListener('click', async () => {
+        const searchValue = searchInput.value;
+        await searchAndDisplayBorrowedTickets(searchValue);
+    });
+
+    await searchAndDisplayBorrowedTickets('');
+});
+
+async function searchAndDisplayBorrowedTickets(searchValue) {
     const borrowedTicketsRef = db.collection('Borrow Tickets');
     let docs;
 
     if (searchValue !== '') {
-        docs = await searchAcrossCollection(searchValue, borrowedTicketsRef); // Include borrowedTicketsRef as an argument
+        docs = await searchAcrossCollection(searchValue, borrowedTicketsRef);
     } else {
-        docs = (await borrowedTicketsRef.get()).docs;
+        const snapshot = await borrowedTicketsRef.get();
+        docs = snapshot.docs;
     }
-    
-
-    
 
     const tableBody = document.getElementById('itemTableBody');
-    tableBody.innerHTML = ''; 
-    const hebrewLabels = {
+    tableBody.innerHTML = '';
+
+    for (let doc of docs) {
+        const data = doc.data();
+
+        const row = document.createElement('tr');
+
+        const inventoryRef = db.collection('inventory').doc(data.categorialNumber);
+        const inventoryData = (await inventoryRef.get()).data();
+
+        const cell1 = document.createElement('td');
+        cell1.textContent = inventoryData.categorial_number;
+        row.appendChild(cell1);
+
+        const cell2 = document.createElement('td');
+        cell2.textContent = data.quantity;
+        row.appendChild(cell2);
+
+        const cell3 = document.createElement('td');
+        cell3.textContent = data.contactName;
+        row.appendChild(cell3);
+
+        const cell4 = document.createElement('td');
+        cell4.textContent = data.remarks;
+        row.appendChild(cell4);
+
+        tableBody.appendChild(row);
+
+        const detailsRow = document.createElement('tr');
+        const detailsCell = document.createElement('td');
+        detailsCell.style.textAlign = 'right';
+        detailsCell.colSpan = 4;
+
+        const detailsList = document.createElement('ul');
+
+        const translatedData = translateToHebrew(data);
+
+        for (let [key, value] of Object.entries(translatedData)) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${key}: ${value}`;
+            detailsList.appendChild(listItem);
+        }
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'עריכה';
+        editButton.addEventListener('click', async () => {
+            if (editButton.textContent === 'עריכה') {
+                detailsList.childNodes.forEach(listItem => {
+                    const label = listItem.textContent.split(': ')[0];
+                    const key = reverseLabels[label];
+                    let inputField;
+                    if (label === 'remarks' || label === 'הערות') {
+                        inputField = document.createElement('textarea');
+                    } else {
+                        inputField = document.createElement('input');
+                    }
+                    inputField.value = data[key];
+                    if (key === 'contactId') {
+                        inputField.readOnly = true;
+                    }
+                    listItem.textContent = `${label}: `;
+                    listItem.appendChild(inputField);
+                });
+                editButton.textContent = 'שמירה';
+            } else if (editButton.textContent === 'שמירה') {
+                let updatedData = {};
+                detailsList.childNodes.forEach(listItem => {
+                    if (listItem !== editButton) {
+                        const label = listItem.textContent.split(': ')[0];
+                        const key = reverseLabels[label];
+                        const value = listItem.children[0].value;
+                        updatedData[key] = value;
+                        listItem.textContent = `${label}: ${value}`;
+                    }
+                });
+
+                const ticketRef = borrowedTicketsRef.doc(doc.id);
+                try {
+                    await ticketRef.update(updatedData);
+                    alert('עדכון הצליח');
+                    editButton.textContent = 'עריכה';
+                } catch (err) {
+                    console.error('Error updating document: ', err);
+                }
+            }
+        });
+
+        detailsList.appendChild(editButton);
+        detailsCell.appendChild(detailsList);
+        detailsRow.appendChild(detailsCell);
+        tableBody.appendChild(detailsRow);
+
+        detailsRow.style.display = 'none';
+
+        row.addEventListener('click', () => {
+            if (detailsRow.style.display === 'none') {
+                detailsRow.style.display = '';
+            } else {
+                detailsRow.style.display = 'none';
+            }
+        });
+    }
+}
+
+
+const hebrewLabels = {
         borrowingUntil: 'עד תאריך',
         contactName: 'שם איש קשר',
         quantity: 'כמות',
@@ -71,125 +182,47 @@
         categorialNumber: 'מספר סידורי',
         patientName: 'שם המטופל',
         loaning_volunteer: 'שם המתנדב',
-        product_name:'שם המוצר'
+        product_name: 'שם המוצר',
+        remarks: 'הערות',
+        companion_accessories: 'אביזרים נלווים'
         // Add more labels as necessary
     };
 
-    const reverseLabels = {}; // Reverse mapping object for translating back to original keys
-    Object.entries(hebrewLabels).forEach(([key, value]) => {
-        reverseLabels[value] = key;
-    });
 
-    for (let doc of docs) {
-            const data = doc.data();
+    function translateToHebrew(data) {
+  const translatedData = {};
 
-        // Create row for each doc
-        const row = document.createElement('tr');
-        const cell1 = document.createElement('td');
-        cell1.textContent =data.categorialNumber;
-        row.appendChild(cell1);
+  for (let [key, value] of Object.entries(data)) {
+    if (key === 'borrowingFrom') {
+      const date = new Date(value);
 
-        const inventoryRef = db.collection('inventory').doc(data.categorialNumber);
-        const inventoryData = (await inventoryRef.get()).data();
-;
+      if (isNaN(date)) {
+        translatedData[hebrewLabels[key]] = 'לא הוזן תאריך';
+      } else {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
 
-
-        const cell2 = document.createElement('td');
-        cell2.textContent = inventoryData.product_name;
-        row.appendChild(cell2);
-
-        const cell3 = document.createElement('td');
-        cell3.textContent = data.quantity;
-        row.appendChild(cell3);
-
-        tableBody.appendChild(row);
-
-        const detailsRow = document.createElement('tr')
-        const detailsCell = document.createElement('td');
-        detailsCell.colSpan = 4; // Span across all columns
-
-        // Create a list for the details
-        const detailsList = document.createElement('ul');
-
-        // Translate Firestore data to Hebrew
-        const translatedData = translateToHebrew(data);
-
-        // Add each field to the list
-        for (let [key, value] of Object.entries(translatedData)) {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${hebrewLabels[key]}: ${value}`;
-            detailsList.appendChild(listItem);
-        }
-
-        // Add Edit button
-        const editButton = document.createElement('button');
-        editButton.textContent = 'עריכה';
-        editButton.addEventListener('click', async () => {
-    if (editButton.textContent === 'עריכה') {
-        // Replace list items with input fields
-        detailsList.childNodes.forEach(listItem => {
-            const inputField = document.createElement('input');
-            const label = listItem.textContent.split(': ')[0];
-            const key = reverseLabels[label]; // Translate back to the original key
-            inputField.value = data[key];
-            listItem.textContent = `${label}: `;
-            listItem.appendChild(inputField);
-        });
-        editButton.textContent = 'שמירה';
-    } else if (editButton.textContent === 'שמירה') {
-        // Replace input fields with new values and update data
-        let updatedData = {};
-        detailsList.childNodes.forEach(listItem => {
-    if (listItem !== editButton) {  // Add this condition
-        const label = listItem.textContent.split(': ')[0];
-        const key = reverseLabels[label]; // Translate back to the original key
-        const value = listItem.children[0].value;
-        updatedData[key] = value;
-        listItem.textContent = `${label}: ${value}`;
+        translatedData[hebrewLabels[key]] = `${day}/${month}/${year}`;
+      }
+    } else {
+      translatedData[hebrewLabels[key]] = value;
     }
-});
+  }
 
-
-        // Update data in Firestore
-        console.log(doc.id);
-        const ticketRef = borrowedTicketsRef.doc(doc.id);
-        try {
-            await ticketRef.update(updatedData);
-            alert('Document successfully updated!');
-            editButton.textContent = 'עריכה'; // Move this line here
-        } catch (err) {
-            console.error('Error updating document: ', err);
-        }
-    }
-});
-
-
-        detailsList.appendChild(editButton);
-        detailsCell.appendChild(detailsList);
-        detailsRow.appendChild(detailsCell);
-        tableBody.appendChild(detailsRow);
-        
-        // Hide details by default
-        detailsRow.style.display = 'none';
-
-        // Show/hide details on click
-        row.addEventListener('click', () => {
-            if (detailsRow.style.display === 'none') {
-                detailsRow.style.display = '';
-            } else {
-                detailsRow.style.display = 'none';
-            }
-        });
-    }
+  return translatedData;
 }
 
-function translateToHebrew(data) {
-    // Replace with your own translation logic
-    return data;
+
+const reverseLabels = {};
+
+for (let [key, value] of Object.entries(hebrewLabels)) {
+  reverseLabels[value] = key;
 }
 
-async function searchAcrossCollection(searchTerm, borrowedTicketsRef) { 
-    let matchedDocs = []; 
+
+async function searchAcrossCollection(searchTerm, borrowedTicketsRef) {
+    let matchedDocs = [];
     try {
         const snapshot = await borrowedTicketsRef.get();
         snapshot.forEach((doc) => {
@@ -197,21 +230,25 @@ async function searchAcrossCollection(searchTerm, borrowedTicketsRef) {
                 const data = doc.data();
                 for (let key in data) {
                     if (typeof data[key] === 'string' && data[key].toLowerCase().includes(searchTerm.toLowerCase())) {
-                        matchedDocs.push(doc); // push the whole document instead of just the data
+                        matchedDocs.push(doc);
                         break;
                     }
                 }
             } else {
-                console.log("No such document!");
+                console.log("אין מסמך כזה");
             }
         });
     } catch (error) {
         console.log("Error getting documents:", error);
     }
 
-    return matchedDocs; // Return the matched documents
+    return matchedDocs;
 }
 
-</script>
+
+    
+    </script>
+    </div>
 </body>
+
 </html>

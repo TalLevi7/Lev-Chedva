@@ -7,46 +7,67 @@ function clearTable() {
     itemTableBody.innerHTML = '';
 }
 
+
+let currentAuthorizations = []; // global variable
+
+firebase.auth().onAuthStateChanged(async (user) => {
+  if (user) {
+    // User is signed in, retrieve authorizations
+    try {
+      const doc = await db.collection("Volunteers").doc(user.email).get();
+      if (doc.exists) {
+        currentAuthorizations = doc.data().Authorizations;
+      
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error getting document:", error);
+    }
+  } else {
+    // User is signed out
+    console.log("No user is signed in.");
+  }
+});
+
+
+
+
 async function fetchAndDisplayBorrowedItems() {
     clearTable();
     const currentDate = new Date();
     const inputDate = new Date(dateInput.value);
     const borrowedItemsRef = db.collection('Borrowed Items');
-    const snapshot = await borrowedItemsRef.get();
+    
+    // Show the spinner
+    const spinner = document.getElementById('spinner');
+    spinner.style.display = 'block';
 
-    const tableBody = document.getElementById('itemTableBody');
+    try {
+        const snapshot = await borrowedItemsRef.get();
+        const tableBody = document.getElementById('itemTableBody');
 
-    for (let doc of snapshot.docs) {
-        const data = doc.data();
-        const borrowedItems = data.borrowTickets;
-<<<<<<< HEAD
-        let shouldShowDoc = false; // This variable will be true if at least one ticket matches the date requirement
+        for (let doc of snapshot.docs) {
+            const data = doc.data();
+            const borrowedItems = data.borrowTickets;
+            let shouldShowDoc = false; // This variable will be true if at least one ticket matches the date requirement
 
-        // Use a for...of loop here so we can use 'await' inside it
-=======
-        let shouldShowDoc = false; 
+            // Use a for...of loop here so we can use 'await' inside it
+            for (let item of borrowedItems) {
+                const itemRef = db.collection('Borrow Tickets').doc(item.toString());
+                const itemData = (await itemRef.get()).data();
 
->>>>>>> refs/remotes/origin/main
-        for (let item of borrowedItems) {
-            const itemRef = db.collection('Borrow Tickets').doc(item.toString());
-            const itemData = (await itemRef.get()).data();
+                // Check if the 'borrowingUntil' date falls within the range
+                const borrowingUntilDate = new Date(itemData.borrowingUntil);
 
-<<<<<<< HEAD
-            // Check if the 'borrowingUntil' date falls within the range
-            const borrowingUntilDate = new Date(itemData.borrowingUntil);
-          
-=======
-            const borrowingUntilDate = new Date(itemData.borrowingUntil);
->>>>>>> refs/remotes/origin/main
-
-            if (borrowingUntilDate <= inputDate && borrowingUntilDate >= currentDate) {
-                shouldShowDoc = true;
-                break;
+                if (borrowingUntilDate <= inputDate && borrowingUntilDate >= currentDate) {
+                    console.log(borrowingUntilDate,inputDate);
+                    shouldShowDoc = true;
+                    break;
+                }
             }
-        }
 
         if (shouldShowDoc) {
-<<<<<<< HEAD
             // Create row for each doc
             const row = document.createElement('tr');
         
@@ -56,92 +77,91 @@ async function fetchAndDisplayBorrowedItems() {
             row.appendChild(idCell);
         
             // Create cell for contact button
-            const buttonCell = document.createElement('td');
             const contactButton = document.createElement('button');
             contactButton.textContent = 'יצרתי קשר';
-        
-            // Add contact button to its cell
-            buttonCell.appendChild(contactButton);
-        
-            // Add button cell to the row
-            row.appendChild(buttonCell);
         
             // Create cell for lastTalk field
             const contactCell = document.createElement('td');
             if (data.lastTalk) {
                 // If 'lastTalk' field exists, display its value
-                contactCell.textContent =  "נוצר קשר בתאריך:"+data.lastTalk;
+                contactCell.textContent = data.lastTalk;
             }
+            contactCell.appendChild(contactButton);
             row.appendChild(contactCell);
+
+            // Create cell for Remarks field
+            const RemarksCell = document.createElement('td');    
+            const remarksButton = document.createElement('button');
+            remarksButton.textContent = 'הערות';
+
+            RemarksCell.textContent=doc.data().remarks;
+            RemarksCell.appendChild(remarksButton);
+            remarksButton.addEventListener('click', async () => {
+            let remarks = data.remarks || ''; // default to empty string if there is no existing remark
+
+            // Create an input field
+            const remarksInput = document.createElement('input');
+            remarksInput.type = 'text';
+            remarksInput.value = remarks; // prefill the input field with existing remark if there is one
+            RemarksCell.appendChild(remarksInput);
+
+            const submitButton = document.createElement('button');
+            submitButton.textContent = 'שמור';
+            RemarksCell.appendChild(submitButton);
+
+            submitButton.addEventListener('click', async () => {
+                // Get the document reference
+                const docRef = borrowedItemsRef.doc(doc.id);
+                
+                // Update the document with the user inputS
+                await docRef.update({ remarks: remarksInput.value });
+
+                RemarksCell.textContent= remarksInput.value;
+                RemarksCell.appendChild(remarksButton);
+                // RemarksCell.removeChild(submitButton);
+            
+            });
+            });
+
+
+
+            row.appendChild(RemarksCell);
+
+
+
         
             // Add functionality to the contact button
-            contactButton.addEventListener('click', async () => {
+            contactButton.addEventListener('click', async (event) => {
+                event.stopPropagation();
                 const currentDate = new Date().toLocaleDateString(); // Get current date in local format
                 contactCell.textContent = currentDate;
         
                 // Update the 'lastTalk' field in Firestore
-=======
-            const row = document.createElement('tr');
-
-            const idCell = document.createElement('td');
-            idCell.textContent = doc.data().Name;
-            row.appendChild(idCell);
-
-            const buttonCell = document.createElement('td');
-            const contactButton = document.createElement('button');
-            contactButton.textContent = 'יצרתי קשר';
-
-            buttonCell.appendChild(contactButton);
-            row.appendChild(buttonCell);
-
-            const contactCell = document.createElement('td');
-            if (data.lastTalk) {
-                contactCell.textContent =  "נוצר קשר בתאריך:"+data.lastTalk;
-            }
-            row.appendChild(contactCell);
-
-            contactButton.addEventListener('click', async () => {
-                const currentDate = new Date().toLocaleDateString();
-                contactCell.textContent = currentDate;
->>>>>>> refs/remotes/origin/main
                 await borrowedItemsRef.doc(doc.id).update({
                     lastTalk: currentDate
                 });
             });
-<<<<<<< HEAD
         
             // Add row to the table body
             tableBody.appendChild(row);
         
-            // Create a details row and cell for each doc
-=======
-
-            tableBody.appendChild(row);
-
->>>>>>> refs/remotes/origin/main
+           // Create a details row and cell for each doc
             const detailsRow = document.createElement('tr');
             const detailsCell = document.createElement('td');
             detailsCell.colSpan = 3;
-        
-<<<<<<< HEAD
+
             // Create a nested table for the details
-=======
->>>>>>> refs/remotes/origin/main
             const detailsTable = document.createElement('table');
+            detailsTable.classList.add('details-table'); // Add the 'details-table' class
+
             detailsCell.appendChild(detailsTable);
             detailsRow.appendChild(detailsCell);
             tableBody.appendChild(detailsRow);
-<<<<<<< HEAD
-        
+
             // Hide details by default
             detailsRow.style.display = 'none';
         
             // Show/hide details on click
-=======
-
-            detailsRow.style.display = 'none';
-
->>>>>>> refs/remotes/origin/main
             row.addEventListener('click', () => {
                 if (detailsRow.style.display === 'none') {
                     detailsRow.style.display = '';
@@ -149,54 +169,23 @@ async function fetchAndDisplayBorrowedItems() {
                     detailsRow.style.display = 'none';
                 }
             });
-<<<<<<< HEAD
         
             // Fetch and display all tickets of the doc
-=======
-
->>>>>>> refs/remotes/origin/main
             for (let item of borrowedItems) {
                 const itemRef = db.collection('Borrow Tickets').doc(item.toString());
                 const itemData = (await itemRef.get()).data();
                 displayTicketRow(detailsTable, itemData, item.toString());
             }
-<<<<<<< HEAD
         }
-        
-=======
-
-            // Remarks cell
-            const remarksCell = document.createElement('td');
-            const remarksInput = document.createElement('textarea');
-            remarksInput.type = 'text';
-            remarksInput.value = doc.data().remarks || '';
-            remarksInput.style.width = '200px';
-            remarksInput.style.height = '50px';
-            remarksInput.style.textAlign = 'right'; // Align text to the right
-            remarksInput.style.overflow = 'auto';
-            const saveButton = document.createElement('button');
-            saveButton.textContent = 'שמור';
-
-            remarksCell.appendChild(remarksInput);
-            remarksCell.appendChild(saveButton);
-            row.appendChild(remarksCell);
-
-            saveButton.addEventListener('click', async () => {
-                await borrowedItemsRef.doc(doc.id).update({
-                    remarks: remarksInput.value
-                });
-            });
-        }
->>>>>>> refs/remotes/origin/main
     }
+} catch (error) {
+    console.error('An error occurred:', error);
+} finally {
+    // Hide the spinner
+    spinner.style.display = 'none';
+}
 }
 
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/main
 async function displayTicketRow(detailsTable, ticketData, itemId) {
     const row = document.createElement('tr');
   
@@ -211,13 +200,19 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
         const productData = inventorySnapshot.data();
         productNameCell.textContent = productData.product_name;
     } else {
-        productNameCell.textContent = 'Product Not Found';
+        productNameCell.textContent = 'לא נמצא מוצר';
     }
   
     row.appendChild(productNameCell);
   
     const untilDateCell = document.createElement('td');
-    untilDateCell.textContent = ticketData.borrowingUntil;
+    const borrowingUntilDate = new Date(ticketData.borrowingUntil);
+    const formattedDate = borrowingUntilDate.toLocaleDateString('he-IL');
+    if (isNaN(borrowingUntilDate)) {
+        untilDateCell.textContent = 'לא הוזן תאריך';
+    } else {
+        untilDateCell.textContent = formattedDate;
+    }
     row.appendChild(untilDateCell);
   
     // Append row to the details table
@@ -231,23 +226,42 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
     // Create a list for the details
     const detailsList = document.createElement('ul');
     const hebrewLabels = {
-        borrowingUntil: 'עד תאריך',
+        patientName: 'שם המטופל',
         contactName: 'שם איש קשר',
-        quantity: 'כמות',
-        contactPhone: 'טלפון איש קשר',
-        contactPhone2: 'טלפון איש קשר נוסף',
         contactId: 'ת.ז. איש קשר',
         address: 'כתובת',
+        contactPhone: 'טלפון איש קשר',
+        contactPhone2: 'טלפון איש קשר נוסף',
+        quantity: 'כמות',
         borrowingFrom: 'הושאל בתאריך',
-        categorialNumber: 'מספר סידורי',
-        patientName: 'שם המטופל',
+        borrowingUntil: 'עד תאריך',
         loaning_volunteer: 'שם המתנדב'
         // Add more labels as necessary
     };
     const reverseLabels = {}; // Reverse mapping object for translating back to original keys
     Object.entries(hebrewLabels).forEach(([key, value]) => {
         const listItem = document.createElement('li');
-        listItem.textContent = `${value}: ${ticketData[key]}`;
+        if (key === 'borrowingUntil') {
+            const borrowingUntilLabel = value;
+            const borrowingUntilDate = new Date(ticketData[key]);
+            const formattedDate = borrowingUntilDate.toLocaleDateString('he-IL');
+            if (isNaN(borrowingUntilDate)) {
+                listItem.textContent = `${borrowingUntilLabel}: לא הוזן תאריך`;
+            } else {
+                listItem.textContent = `${borrowingUntilLabel}: ${formattedDate}`;
+            }
+        } else if (key === 'borrowingFrom') {
+            const borrowingFromLabel = value;
+            const borrowingFromDate = new Date(ticketData[key]);
+            const formattedDate = borrowingFromDate.toLocaleDateString('he-IL');
+            if (isNaN(borrowingFromDate)) {
+                listItem.textContent = `${borrowingFromLabel}: לא הוזן תאריך`;
+            } else {
+                listItem.textContent = `${borrowingFromLabel}: ${formattedDate}`;
+            }
+        }else{
+            listItem.textContent = `${value}: ${ticketData[key]}`;
+        }
         detailsList.appendChild(listItem);
         reverseLabels[value] = key;
     });
@@ -257,6 +271,7 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
     // Create the update button
     const updateButton = document.createElement('button');
     updateButton.textContent = 'ערוך';
+    if(currentAuthorizations.includes("000"))
     ticketDetailsCell.appendChild(updateButton);
   
     detailsTable.appendChild(ticketDetailsRow);
@@ -276,7 +291,7 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
     // Add functionality to the update button
     updateButton.addEventListener('click', async () => {
         
-        if (updateButton.textContent === 'Update') {
+        if (updateButton.textContent === 'ערוך') {
             // Replace list items with input fields
             detailsList.childNodes.forEach(listItem => {
                 const inputField = document.createElement('input');
@@ -286,8 +301,8 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
                 listItem.textContent = `${label}: `;
                 listItem.appendChild(inputField);
             });
-            updateButton.textContent = 'Save';
-        } else if (updateButton.textContent === 'Save') {
+            updateButton.textContent = 'שמור';
+        } else if (updateButton.textContent === 'שמור') {
             // Replace input fields with new values and update data
             let updatedData = {};
             detailsList.childNodes.forEach(listItem => {
@@ -297,26 +312,20 @@ async function displayTicketRow(detailsTable, ticketData, itemId) {
                 updatedData[key] = value;
                 listItem.textContent = `${label}: ${value}`;
             });
-            updateButton.textContent = 'Update';
+            updateButton.textContent = 'ערוך';
   
             // Update data in Firestore
             const itemRef = db.collection('Borrow Tickets').doc(itemId);
             try {
                 await itemRef.update(updatedData);
-                alert('Document successfully updated!');
+                alert('עודכן בהצלחה');
             } catch (err) {
                 console.error('Error updating document: ', err);
             }
         }
     });
   
-}
-
-
-    
+} 
 
 fetchAndDisplayBorrowedItems();
 dateInput.addEventListener('change', fetchAndDisplayBorrowedItems);
-
-
-

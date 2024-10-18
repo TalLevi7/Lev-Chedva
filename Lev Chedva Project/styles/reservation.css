@@ -1,76 +1,129 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    padding: 20px;
-    direction: rtl;
-  }
-  
-  h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  input,
-  select {
-    padding: 5px;
-    font-size: 14px;
-    margin-left: 10px;
-  }
-  
-  button {
-    padding: 5px 10px;
-    font-size: 14px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  #item-data {
-    margin-top: 20px;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    width: 100%;
-  }
-  
-  .product-details-row {
-    border-top: 1px solid #ccc;
-  }
-  
-  .product-details-row td {
-    padding: 10px;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    margin-bottom: 5px;
-  }
-  
-  #reservation-details {
-    margin-top: 20px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  @media (max-width: 768px) {
-    input,
-    select,
-    button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Assistent', sans-serif;
+  direction: rtl;
+  background-color: #f9f9f9;
+  text-align: right;
+}
+h1{
+  font-size: 40px;
+  text-align: center;
+  font-family: 'Assistent', sans-serif;
+  -webkit-text-stroke: 0.5px black;
+  -webkit-text-fill-color: #d25757;
+}
+#container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-container img {
+  max-width: 150px;
+}
+
+label {
+  font-size: 18px;
+  text-align: right;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="tel"],
+input[type="date"],
+#remarks {
+  font-size: 18px;
+  padding: 8px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+
+}
+
+button {
+  background-color: #d25757;
+  color: white;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-right: 10px;
+  margin: 4px;
+  width: 200px;
+  height: 50px;
+  text-align: center;
+  border: 1.5px solid rgb(99, 98, 98);
+}
+
+#search-button,
+#ticket-search-btn {
+  border: 1.5px solid rgb(99, 98, 98);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px;
+}
+
+button:hover {
+  background-color: #c61f1f;
+}
+
+#item-data,
+#item-details {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  border-radius: 4px;
+  width: 300px;
+  margin: 20px 0;
+}
+
+pre {
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+}
+.autocomplete {
+  margin-bottom: 40px; 
+}
+
+.autocomplete-results {
+  position: relative;
+  top: 150%;
+  width: 100%;
+  border: 1px solid #aaa;
+  z-index: 1000;
+}
+
+.autocomplete-results div {
+  padding: 10px;
+  cursor: pointer;
+  background: #fff;
+  border-bottom: 1px solid #aaa;
+}
+
+.autocomplete-results div:hover {
+  background: #f0f0f0;
+}
